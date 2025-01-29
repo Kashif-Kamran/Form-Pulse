@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { BrowserRouter } from "react-router-dom";
+import { AppRouter } from "@/routes";
 function App() {
   return (
-    <div className="">
-      <Button> Click Me</Button>
-    </div>
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
   );
 }
 
