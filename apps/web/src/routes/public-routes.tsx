@@ -7,10 +7,10 @@ import {
   VERIFY_OTP,
   CONFIRM_PASSWORD,
 } from "@/constants/app-routes";
-import { Login } from "@/pages/login/login";
-import { Register } from "@/pages/register/register";
-import { VerifyOtp } from "@/pages/verify-otp/verify-otp";
-import { ConfirmPassword } from "@/pages/confirm-password/confirm-password";
+import { Login } from "@/pages/auth/login/login";
+import { Register } from "@/pages/auth/register/register";
+import { VerifyOtp } from "@/pages/auth/verify-otp/verify-otp";
+import { ConfirmPassword } from "@/pages/auth/confirm-password/confirm-password";
 
 const PublicRouteGuard = () => {
   return !isAuthenticated ? <Outlet /> : <Navigate to={HOME} />;
