@@ -22,7 +22,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
       ...inputPropsWithoutClassName
     } = inputFeildProps;
     const inputContainerStyles = cn(
-      "flex justify-center items-center gap-2 rounded-md px-4 border-2 border-muted px-[14px] py-[8px] shadow-sm text-md transition-all duration-300",
+      "flex justify-center items-center gap-2 rounded-md px-4 border-2 border-muted px-[14px] shadow-sm text-md transition-all duration-300 border-[1px] border-black",
       errorText
         ? "border-destructive-foreground focus-within:border-destructive"
         : "focus-within:border-primary",
@@ -30,7 +30,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
     );
 
     return (
-      <div className="flex flex-col gap-[6px] w-full transition-all duration-300">
+      <div className="flex flex-col gap-[6px] w-full transition-all duration-300 ">
         {label && <Label className="">{label}</Label>}
         <div className={inputContainerStyles}>
           {leftIcon && (

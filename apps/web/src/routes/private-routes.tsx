@@ -5,15 +5,17 @@ const PirvateRouteGuard = () => {
   return isAuthenticated ? <Outlet /> : <Navigate to={LOGIN} />;
 };
 
-const privateRoutes: RouteObject = {
-  element: <PirvateRouteGuard />,
-  children: [
-    {
-      path: HOME,
-      index: true,
-      element: <>Home Page</>,
-    },
-  ],
-};
+const privateRoutes: RouteObject[] = [
+  {
+    element: <PirvateRouteGuard />,
+    children: [
+      {
+        path: HOME,
+        index: true,
+        element: <>Home Page</>,
+      },
+    ],
+  },
+];
 
 export { privateRoutes };

@@ -1,6 +1,6 @@
 import InputField, { InputFieldProps } from "./input-field";
 import { Button } from "@/components/ui/button";
-import { EyeIcon, EyeOffIcon, LockKeyhole } from "lucide-react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import React, { useState } from "react";
 
 const TogglePasswordButton = ({
@@ -37,7 +37,6 @@ const PasswordFeild = React.forwardRef<HTMLInputElement, PasswordFeildProps>(
 
     return (
       <InputField
-        leftIcon={<LockKeyhole />}
         rightIcon={
           <TogglePasswordButton
             showPassword={showPassword}
