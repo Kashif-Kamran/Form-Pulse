@@ -1,6 +1,7 @@
 import { Outlet, RouteObject, Navigate } from "react-router-dom";
 import { isAuthenticated } from "./local-is-auth-check";
 import { HOME, LOGIN } from "@/constants/app-routes";
+import Dashboard from "@/pages/dashboard/dashboard";
 const PirvateRouteGuard = () => {
   return isAuthenticated ? <Outlet /> : <Navigate to={LOGIN} />;
 };
@@ -12,7 +13,7 @@ const privateRoutes: RouteObject[] = [
       {
         path: HOME,
         index: true,
-        element: <>Home Page</>,
+        element: <Dashboard />,
       },
     ],
   },
