@@ -1,10 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Navbar from "@/components/custom-ui/navbar";
+import { Button } from "@/components/ui/button";
 
 function Sidebar({ className }: { className?: string }) {
   return (
     <div
-      className={`bg-gray-300 w-full rounded-lg border-[1px] border-gray-500 p-4 ${className}`}
+      className={`bg-gray-300 w-full rounded-lg border-[1px] border-gray-500 p-4 h-full ${className}`}
     >
       {/* Avatar */}
       <div className="flex gap-4 p-4">
@@ -17,9 +18,11 @@ function Sidebar({ className }: { className?: string }) {
           <h1 className="text-xs p-0">Admin</h1>
         </div>
       </div>
-      {/* Navbar */}
-      <div className="navbar">
-        <Navbar />
+      <Navbar />
+      <div className="absolute bottom-6 left-4">  
+        <Button className="text-black" variant={"link"}>
+          Help Center
+        </Button>
       </div>
     </div>
   );

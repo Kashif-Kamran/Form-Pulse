@@ -2,8 +2,12 @@ import { NavLink } from "react-router-dom";
 import {
   ANIMALS_PROFILE,
   DIET_MANAGEMENT,
+  EDUCATIONAL_RESOURCERS,
   FEED_INVENTORY,
+  HEALTH_MONITORING,
   HOME,
+  REPORTS,
+  SETTINGS,
 } from "@/constants/app-routes";
 
 type NavItem = {
@@ -24,6 +28,22 @@ const navItems: NavItem[] = [
   {
     label: "Feed Inventory",
     to: FEED_INVENTORY,
+  },
+  {
+    label: "Health Monitoring",
+    to: HEALTH_MONITORING,
+  },
+  {
+    label: "Reports",
+    to: REPORTS,
+  },
+  {
+    label: "Educational Resources",
+    to: EDUCATIONAL_RESOURCERS,
+  },
+  {
+    label: "Settings",
+    to: SETTINGS,
   },
 ];
 
@@ -46,5 +66,5 @@ export default function Sidebar() {
         </NavLink>
       ))}
     </nav>
-  ); 
+  );
 }

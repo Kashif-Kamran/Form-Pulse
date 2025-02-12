@@ -3,9 +3,13 @@ import { isAuthenticated } from "./local-is-auth-check";
 import {
   ANIMALS_PROFILE,
   DIET_MANAGEMENT,
+  EDUCATIONAL_RESOURCERS,
   FEED_INVENTORY,
+  HEALTH_MONITORING,
   HOME,
   LOGIN,
+  REPORTS,
+  SETTINGS,
 } from "@/constants/app-routes";
 import Dashboard from "@/pages/dashboard/dashboard";
 import AppLayout from "@/layout/app-layout";
@@ -37,6 +41,22 @@ const privateRoutes: RouteObject[] = [
           {
             path: FEED_INVENTORY,
             element: <div> Feed Inventory</div>,
+          },
+          {
+            path: HEALTH_MONITORING,
+            element: <div>Health Monitoring</div>,
+          },
+          {
+            path: EDUCATIONAL_RESOURCERS,
+            element: <div>Educational Resources</div>,
+          },
+          {
+            path: REPORTS,
+            element: <div>Reports</div>,
+          },
+          {
+            path: SETTINGS,
+            element: <div>Settings</div>,
           },
         ],
       },
