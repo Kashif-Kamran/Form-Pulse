@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { TypedConfigService } from './configuration/configuration.module';
-import { GlobalResponseInterceptor } from './common/global-response.interceptor';
+import { GlobalResponseInterceptor } from './common/interceptors/global-response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
