@@ -3,6 +3,7 @@ import { RegisterUserRequestDto } from '../auth.dtos';
 import { UserModel } from 'src/database';
 import { InjectModel } from '@nestjs/mongoose';
 import { IUser, UserRoles } from 'src/domain/IUser';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class RegisterUserUseCase {
@@ -18,8 +19,11 @@ export class RegisterUserUseCase {
       throw new ConflictException('User with this email already exists.');
 
     // hash the password
+    const hashedPassword = await bcrypt.hash(registerUserDto.password, 10);
+
     const creationPayload: IUser = {
       ...registerUserDto,
+      password: hashedPassword,
       role: UserRoles.Caretaker,
     };
 

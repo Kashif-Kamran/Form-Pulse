@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserModel } from 'src/database';
 import { IUser } from 'src/domain/IUser';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class LoginUserUseCase {
@@ -18,8 +19,11 @@ export class LoginUserUseCase {
       .exec();
 
     if (!user) throw new UnauthorizedException('Invalid email ');
-    if (user.password !== loginUserDto.password)
-      throw new UnauthorizedException('Invalid password');
+    const isPasswordValid = await bcrypt.compare(
+      loginUserDto.password,
+      user.password,
+    );
+    if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
 
     const jwtPayload = {
       sub: user._id.toString(),
