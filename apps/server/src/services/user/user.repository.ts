@@ -8,12 +8,13 @@ export class UserRepository {
   constructor(@InjectModel('User') private readonly userModel: UserModel) {}
 
   private toDomainEntity(userDocument: UserDocument): User {
-    return new User(
-      userDocument._id.toString(),
-      userDocument.name,
-      userDocument.email,
-      userDocument.password,
-    );
+    return new User({
+      id: userDocument._id.toString(),
+      name: userDocument.name,
+      email: userDocument.email,
+      password: userDocument.password,
+      role: userDocument.role,
+    });
   }
 
   async create(user: User): Promise<User> {
@@ -21,7 +22,6 @@ export class UserRepository {
       ...user,
       password: user.getPassword(),
     });
-    console.log('User Document : ', userDocument);
     const savedUser = await userDocument.save();
     return this.toDomainEntity(savedUser);
   }

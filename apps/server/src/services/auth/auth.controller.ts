@@ -31,7 +31,7 @@ export class AuthController {
     return this.loginUserUC.execute(loginUserDto);
   }
 
-  @Get('/profile')
+  @Get('profile')
   @UseGuards(AuthGuard)
   async profile(@Request() request) {
     const user = await request.user;

@@ -1,13 +1,18 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import dbConfig from 'src/configuration/db.config';
+import envConfigurations, { ConfigSchema } from './env.config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
+export class TypedConfigService extends ConfigService<ConfigSchema> {}
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       expandVariables: true,
-      load: [dbConfig],
+      load: [envConfigurations],
     }),
   ],
+  providers: [TypedConfigService],
+  exports: [TypedConfigService],
 })
 export class ConfigurationModule {}

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../user.entity';
+import { User, UserRoles } from '../user.entity';
 import { CreateUserRequestDto } from '../user.dtos';
 import { UserRepository } from '../user.repository';
 
@@ -8,12 +8,13 @@ export class CreateUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
   async execute(createUserDto: CreateUserRequestDto): Promise<User> {
-    const user = new User(
-      '',
-      createUserDto.name,
-      createUserDto.email,
-      createUserDto.password,
-    );
+    const user = new User({
+      id: '',
+      name: createUserDto.name,
+      email: createUserDto.email,
+      password: createUserDto.password,
+      role: UserRoles.Caretaker,
+    });
 
     return this.userRepository.create(user);
   }

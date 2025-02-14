@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { User } from '../../user/user.entity';
+import { User, UserRoles } from '../../user/user.entity';
 import { RegisterUserRequestDto } from '../auth.dtos';
 import { UserRepository } from 'src/services/user/user.repository';
 
@@ -14,12 +14,13 @@ export class RegisterUserUseCase {
       throw new ConflictException('User with this email already exists.');
 
     // hash the password
-    const newUser = new User(
-      '', // will be set by mongodb
-      registerUserDto.name,
-      registerUserDto.email,
-      registerUserDto.password,
-    );
+    const newUser = new User({
+      id: '', // will be set by mongodb
+      name: registerUserDto.name,
+      email: registerUserDto.email,
+      password: registerUserDto.password,
+      role: UserRoles.Caretaker,
+    });
 
     const creationDbResponse = this.userRepository.create(newUser);
     return (await creationDbResponse).getPublicFeils();
