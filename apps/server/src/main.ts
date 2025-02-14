@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { asapScheduler } from 'rxjs';
 import { TypedConfigService } from './configuration/configuration.module';
+import { GlobalResponseInterceptor } from './common/global-response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,7 +14,8 @@ async function bootstrap() {
     }),
   );
   const port = typedConfigService.get('PORT');
-  app.useGlobalInterceptors();
+  app.useGlobalInterceptors(new GlobalResponseInterceptor());
+
   await app.listen(port);
 }
 bootstrap();

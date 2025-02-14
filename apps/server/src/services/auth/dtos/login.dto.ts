@@ -1,0 +1,3 @@
+class LoginRequestDto {}
+
+class LoginResponseDto {}

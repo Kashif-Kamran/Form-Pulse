@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TypedConfigService } from 'src/configuration/configuration.module';
+// Schemas
+import { UserSchema } from './models/user.model';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { TypedConfigService } from 'src/configuration/configuration.module';
       }),
       inject: [ConfigService],
     }),
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
+  exports: [MongooseModule],
 })
 export class DatabaseModule {}
