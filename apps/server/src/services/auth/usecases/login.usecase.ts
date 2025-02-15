@@ -3,7 +3,7 @@ import { LoginUserDto } from '../auth.dtos';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserModel } from 'src/database';
-import { IUser } from 'src/domain/IUser';
+import { IUser } from 'src/domain';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

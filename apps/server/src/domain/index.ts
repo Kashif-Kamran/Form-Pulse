@@ -16,3 +16,18 @@ export interface IUser {
   password: string;
   role: UserRolesType;
 }
+
+export interface Animal {
+  _id?: mongoose.Types.ObjectId;
+  name: string;
+  species: string;
+  breed: string;
+  age: number;
+  weight: number;
+  healthStatus: string;
+  activityLevel: string;
+  specialDietRequirement: string;
+  medicalHistory: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
