@@ -77,6 +77,27 @@ function RemindersCard() {
                 <Switch />
               </TableCell>
             </TableRow>
+            <TableRow>
+              <TableCell>Vet Appointment</TableCell>
+              <TableCell>9:00AM</TableCell>
+              <TableCell>
+                <Switch />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Vet Appointment</TableCell>
+              <TableCell>9:00AM</TableCell>
+              <TableCell>
+                <Switch />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Vet Appointment</TableCell>
+              <TableCell>9:00AM</TableCell>
+              <TableCell>
+                <Switch />
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </CardContent>
