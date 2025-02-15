@@ -8,6 +8,8 @@ import {
 import { LoginUserUseCase } from './usecases/login.usecase';
 import { RegisterUserUseCase } from './usecases/register.usecase';
 import { DatabaseModule } from 'src/database/database.module';
+import { AuthGuard } from './guards/auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -25,6 +27,13 @@ import { DatabaseModule } from 'src/database/database.module';
   ],
 
   controllers: [AuthController],
-  providers: [LoginUserUseCase, RegisterUserUseCase],
+  providers: [
+    LoginUserUseCase,
+    RegisterUserUseCase,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AuthModule {}
