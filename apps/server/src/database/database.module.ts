@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TypedConfigService } from 'src/configuration/configuration.module';
 // Schemas
 import { UserSchema } from './models/user.model';
+import { AnimalSchema } from './models/animal.model';
 
 @Module({
   imports: [
@@ -14,7 +15,10 @@ import { UserSchema } from './models/user.model';
       }),
       inject: [ConfigService],
     }),
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: 'User', schema: UserSchema },
+      { name: 'Animal', schema: AnimalSchema },
+    ]),
   ],
   exports: [MongooseModule],
 })

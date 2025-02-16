@@ -17,17 +17,17 @@ export interface IUser {
   role: UserRolesType;
 }
 
-export interface Animal {
+export interface IAnimal {
   _id?: mongoose.Types.ObjectId;
   name: string;
-  species: string;
+  species: string; // Schema has enum as type
   breed: string;
   age: number;
   weight: number;
   healthStatus: string;
-  activityLevel: string;
+  activityLevel: string; // Schema has enum as type
   specialDietRequirement: string;
   medicalHistory: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
