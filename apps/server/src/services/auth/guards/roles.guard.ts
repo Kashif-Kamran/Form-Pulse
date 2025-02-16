@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRolesType } from 'src/domain/IUser';
+import { UserRolesType } from 'src/domain';
 import { Request } from 'express';
 
 @Injectable()

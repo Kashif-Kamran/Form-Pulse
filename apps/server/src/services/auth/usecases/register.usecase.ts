@@ -2,7 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { RegisterUserRequestDto } from '../auth.dtos';
 import { UserModel } from 'src/database';
 import { InjectModel } from '@nestjs/mongoose';
-import { IUser, UserRoles } from 'src/domain/IUser';
+import { IUser, UserRoles } from 'src/domain';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
