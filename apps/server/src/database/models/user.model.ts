@@ -16,7 +16,7 @@ export class User implements IUser {
   password: string;
 
   @Prop()
-  role: UserRolesType;
+  roles: UserRolesType[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

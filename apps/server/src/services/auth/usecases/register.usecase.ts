@@ -24,7 +24,7 @@ export class RegisterUserUseCase {
     const creationPayload: IUser = {
       ...registerUserDto,
       password: hashedPassword,
-      role: UserRoles.Caretaker,
+      roles: [UserRoles.Caretaker],
     };
 
     const creationDbResponse = await this.userModel.create(creationPayload);
@@ -32,7 +32,7 @@ export class RegisterUserUseCase {
     return {
       _id: creationDbResponse._id,
       name: creationDbResponse.name,
-      role: creationDbResponse.role,
+      roles: creationDbResponse.roles,
       email: creationDbResponse.email,
     };
   }

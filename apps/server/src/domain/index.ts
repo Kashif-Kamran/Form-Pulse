@@ -14,7 +14,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  role: UserRolesType;
+  roles: UserRolesType[];
 }
 
 export interface IAnimal {
