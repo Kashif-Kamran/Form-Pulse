@@ -78,7 +78,7 @@ const animals = [
 function AnimalListTable() {
   return (
     <div className="flex flex-col overflow-hidden bg-white rounded-xl">
-      <ScrollArea className="h-90% ">
+      <ScrollArea className="h-full">
         <Table>
           <TableHeader className="bg-[#E2E2E2]">
             <TableHead className="pl-6">Name</TableHead>
