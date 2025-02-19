@@ -11,7 +11,7 @@ const ANIMALS_PROFILE = "/animal-profiles";
 const DIET_MANAGEMENT = "/diet-management";
 const FEED_INVENTORY = "/feed-inventory";
 const HEALTH_MONITORING = "/monitor-health";
-const REPORTS = "/reports";
+const REPORTS = "/reorts";
 const EDUCATIONAL_RESOURCERS = "/educational-resources";
 const SETTINGS = "/settings";
 
