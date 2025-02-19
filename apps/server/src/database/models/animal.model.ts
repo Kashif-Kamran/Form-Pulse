@@ -29,9 +29,6 @@ export class Animal implements IAnimal {
 
   @Prop()
   specialDietRequirement: string;
-
-  @Prop()
-  medicalHistory: string;
 }
 
 export const AnimalSchema = SchemaFactory.createForClass(Animal);
