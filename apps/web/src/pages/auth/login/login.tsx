@@ -13,8 +13,8 @@ import { Button } from "@/components/ui/button";
 import PasswordFeild from "@/components/custom-ui/form-feilds/password-field";
 
 import InputField from "@/components/custom-ui/form-feilds/input-field";
-import { Link, useNavigate } from "react-router-dom";
-import { REGISTER, VERIFY_OTP } from "@/constants/app-routes";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { REGISTER, VERIFY_OTP, HOME } from "@/constants/app-routes";
 import { useEmailPassLogin } from "@/hooks/api/auth.hook";
 
 const LoginSchema = z.object({
@@ -26,6 +26,10 @@ type LoginData = z.infer<typeof LoginSchema>;
 
 export const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || HOME;
+
   const { mutateAsync } = useEmailPassLogin();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -51,7 +55,8 @@ export const Login = () => {
 
   const handleSubmit = async (data: LoginData) => {
     try {
-      mutateAsync(data);
+      await mutateAsync(data);
+      navigate(from, { replace: true });
     } catch (error) {
       console.log(error);
     }

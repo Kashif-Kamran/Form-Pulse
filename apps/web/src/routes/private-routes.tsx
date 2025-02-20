@@ -1,4 +1,4 @@
-import { Outlet, RouteObject, Navigate } from "react-router-dom";
+import { Outlet, RouteObject, Navigate, useLocation } from "react-router-dom";
 import { isAuthenticated } from "./local-is-auth-check";
 import {
   ANIMALS_PROFILE,
@@ -14,13 +14,35 @@ import {
 import Dashboard from "@/pages/dashboard/dashboard";
 import AppLayout from "@/layout/app-layout";
 import AnimalList from "@/pages/animals/animal-list/animal-list";
-const PirvateRouteGuard = () => {
-  return isAuthenticated ? <Outlet /> : <Navigate to={LOGIN} />;
+import { Spinner } from "@/components/ui/spinnner";
+import { useMe } from "@/hooks/api/profile.hook";
+
+const ProtectedRoute = () => {
+  const { data, isLoading } = useMe();
+  const location = useLocation();
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner className="text-ui-fg-interactive" />
+      </div>
+    );
+  }
+
+  if (!data) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return <Outlet />;
 };
+
+// const PirvateRouteGuard = () => {
+//   return isAuthenticated ? <Outlet /> : <Navigate to={LOGIN} />;
+// };
 
 const privateRoutes: RouteObject[] = [
   {
-    element: <PirvateRouteGuard />,
+    element: <ProtectedRoute />,
 
     children: [
       {

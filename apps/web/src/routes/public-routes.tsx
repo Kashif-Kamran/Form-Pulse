@@ -13,7 +13,8 @@ import { VerifyOtp } from "@/pages/auth/verify-otp/verify-otp";
 import { ConfirmPassword } from "@/pages/auth/confirm-password/confirm-password";
 
 const PublicRouteGuard = () => {
-  return !isAuthenticated ? <Outlet /> : <Navigate to={HOME} />;
+  // return !isAuthenticated ? <Outlet /> : <Navigate to={HOME} />;
+  return <Outlet />;
 };
 
 const publicRoutes: RouteObject[] = [
