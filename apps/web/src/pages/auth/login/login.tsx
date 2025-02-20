@@ -15,6 +15,7 @@ import PasswordFeild from "@/components/custom-ui/form-feilds/password-field";
 import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { Link, useNavigate } from "react-router-dom";
 import { REGISTER, VERIFY_OTP } from "@/constants/app-routes";
+import { useEmailPassLogin } from "@/hooks/api/auth.hook";
 
 const LoginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -25,6 +26,7 @@ type LoginData = z.infer<typeof LoginSchema>;
 
 export const Login = () => {
   const navigate = useNavigate();
+  const { mutateAsync } = useEmailPassLogin();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -47,8 +49,12 @@ export const Login = () => {
     navigate(VERIFY_OTP(email));
   };
 
-  const handleSubmit = (data: LoginData) => {
-    console.log("Data ; ", data);
+  const handleSubmit = async (data: LoginData) => {
+    try {
+      mutateAsync(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="h-full flex bg-gray-200">

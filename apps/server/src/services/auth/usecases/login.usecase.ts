@@ -30,6 +30,10 @@ export class LoginUserUseCase {
     };
 
     const jwtToken = await this.jwtService.signAsync(jwtPayload);
-    return { accessToken: jwtToken };
+    return {
+      access: {
+        token: jwtToken,
+      },
+    };
   }
 }
