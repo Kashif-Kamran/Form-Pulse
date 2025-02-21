@@ -14,8 +14,8 @@ import PasswordFeild from "@/components/custom-ui/form-feilds/password-field";
 import { useRegisterUser } from "@/hooks/api/auth.hook";
 
 import InputField from "@/components/custom-ui/form-feilds/input-field";
-import { Link } from "react-router-dom";
-import { LOGIN } from "@/constants/app-routes";
+import { Link, useNavigate } from "react-router-dom";
+import { LOGIN, VERIFY_OTP } from "@/constants/app-routes";
 import {
   Select,
   SelectContent,
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 
 import { UserRoles } from "@/types/api/common";
+import { useToast } from "@/hooks/use-toast";
 const RegisterSchema = z
   .object({
     username: z
@@ -50,6 +51,8 @@ type RegisterData = z.infer<typeof RegisterSchema>;
 
 export const Register = () => {
   const { mutateAsync: registerUser } = useRegisterUser();
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -69,7 +72,17 @@ export const Register = () => {
         name: data.username,
         roles: [data.role],
       };
-      await registerUser(payload);
+      await registerUser(payload, {
+        onSuccess: () => {
+          toast({
+            title: "Verification OTP has been sent on email.",
+          });
+          navigate(VERIFY_OTP(payload.email));
+        },
+        onError: (error) => {
+          toast({ title: error.message, variant: "destructive" });
+        },
+      });
     } catch (error) {
       console.log("Error : ", error);
     }

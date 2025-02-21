@@ -60,6 +60,26 @@ export const useRegisterUser = (
   });
 };
 
+type VerifyOtpRequest = {
+  email: string;
+  otp: number;
+};
+
+type VerifyOtpResponse = {
+  message: string;
+};
+export const useVerifyOtp = (
+  options?: UseMutationOptions<VerifyOtpResponse, Error, VerifyOtpRequest>
+) => {
+  return useMutation({
+    mutationFn: (payload: VerifyOtpRequest) =>
+      postRequest<VerifyOtpResponse>("/auth/verify-otp", payload),
+    onSuccess: async (data, variables, context) => {
+      options?.onSuccess?.(data, variables, context);
+    },
+    ...options,
+  });
+};
 // export const useCreateAuthUser = (
 //   options?: UseMutationOptions<AuthResponse, Error, EmailPassReq>
 // ) => {

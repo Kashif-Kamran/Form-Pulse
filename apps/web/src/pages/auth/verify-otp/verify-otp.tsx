@@ -4,16 +4,48 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { CONFIRM_PASSWORD } from "@/constants/app-routes";
+import { LOGIN } from "@/constants/app-routes";
+import { useVerifyOtp } from "@/hooks/api/auth.hook";
+import { useToast } from "@/hooks/use-toast";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 export const VerifyOtp = () => {
-  const naivgate = useNavigate();
+  const [value, setValue] = useState<string>("");
+  const { mutateAsync: verifyOtp } = useVerifyOtp();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const { email } = useParams<{ email: string }>();
 
-  const handleContinue = () => {
-    naivgate(CONFIRM_PASSWORD(email));
+  const handleContinue = async () => {
+    try {
+      if (!email)
+        return toast({
+          title: "Invalid email, please enter valid email in location path",
+          variant: "destructive",
+        });
+      if (isNaN(Number(value)))
+        return toast({
+          title: "Otp should be a 6 digit number",
+          variant: "destructive",
+        });
+
+      const payload = { otp: Number(value), email };
+      console.log(payload);
+      await verifyOtp(payload, {
+        onSuccess: (data) => {
+          toast({ title: data.message });
+          navigate(LOGIN);
+        },
+      });
+    } catch (error: any) {
+      await toast({
+        title: error?.message ?? "Something went wrong",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -30,7 +62,12 @@ export const VerifyOtp = () => {
             Enter the OTP sent to <strong>{email}</strong>
           </h1>
           <div className=" flex flex-col items-center">
-            <InputOTP maxLength={6}>
+            <InputOTP
+              value={value}
+              onChange={(value) => setValue(value)}
+              maxLength={6}
+              pattern={REGEXP_ONLY_DIGITS}
+            >
               <InputOTPGroup>
                 <InputOTPSlot index={0} />
                 <InputOTPSlot index={1} />
