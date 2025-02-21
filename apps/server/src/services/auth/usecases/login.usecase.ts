@@ -18,13 +18,16 @@ export class LoginUserUseCase {
       .lean()
       .exec();
 
-    if (!user) throw new UnauthorizedException('Invalid email ');
+    if (!user) throw new UnauthorizedException('Invalid email or password');
     const isPasswordValid = await bcrypt.compare(
       loginUserDto.password,
       user.password,
     );
-    if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
+    if (!isPasswordValid)
+      throw new UnauthorizedException('Invalid email or password');
 
+    if (!user.isVerified)
+      throw new UnauthorizedException('Please verify your email first');
     const jwtPayload = {
       sub: user._id.toString(),
     };

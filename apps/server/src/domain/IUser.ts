@@ -14,4 +14,5 @@ export interface IUser {
   email: string;
   password: string;
   roles: UserRolesType[];
+  isVerified: boolean;
 }

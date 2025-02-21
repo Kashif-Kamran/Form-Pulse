@@ -17,6 +17,9 @@ export class User implements IUser {
 
   @Prop()
   roles: UserRolesType[];
+
+  @Prop({ default: false })
+  isVerified: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -10,7 +10,7 @@ export class RegisterUserUseCase {
   constructor(@InjectModel('User') private readonly userModel: UserModel) {}
   async execute(
     registerUserDto: RegisterUserRequestDto,
-  ): Promise<Omit<IUser, 'password'>> {
+  ): Promise<Pick<IUser, '_id' | 'name' | 'roles' | 'email' | 'isVerified'>> {
     const exsits: IUser = await this.userModel
       .findOne({ email: registerUserDto.email })
       .lean()
@@ -25,6 +25,7 @@ export class RegisterUserUseCase {
       ...registerUserDto,
       password: hashedPassword,
       roles: [UserRoles.Caretaker],
+      isVerified: false,
     };
 
     const creationDbResponse = await this.userModel.create(creationPayload);
@@ -34,6 +35,7 @@ export class RegisterUserUseCase {
       name: creationDbResponse.name,
       roles: creationDbResponse.roles,
       email: creationDbResponse.email,
+      isVerified: creationDbResponse.isVerified,
     };
   }
 }
