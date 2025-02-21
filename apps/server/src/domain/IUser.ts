@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 export const UserRoles = {
-  Admin: 'ADMIN',
-  Nutritionist: 'NUTRITIONIST',
-  Veterinarian: 'VETERINARIAN',
-  Caretaker: 'CARE_TAKER',
+  Admin: 'Admin',
+  Nutritionist: 'Nutritionist',
+  Veterinarian: 'Veterinarian',
+  Caretaker: 'Care Taker',
 } as const;
 
 export type UserRolesType = (typeof UserRoles)[keyof typeof UserRoles];
