@@ -3,6 +3,7 @@ import {
   IsArray,
   IsEmail,
   IsIn,
+  IsInt,
   IsNotEmpty,
   Length,
 } from 'class-validator';
@@ -26,6 +27,16 @@ export class RegisterUserRequestDto {
     each: true,
   })
   roles: UserRolesType[];
+}
+
+export class VerifyOtpReq {
+  @IsNotEmpty({})
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @IsInt()
+  otp: Number;
 }
 
 export class LoginUserDto {

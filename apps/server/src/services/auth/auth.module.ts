@@ -11,10 +11,13 @@ import { DatabaseModule } from 'src/database/database.module';
 import { AuthGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
+import { EmailModule } from '../email/email.module';
+import { VerifyOtpUseCase } from './usecases/verify-otp.usecase';
 
 @Module({
   imports: [
     DatabaseModule,
+    EmailModule,
     JwtModule.registerAsync({
       imports: [ConfigurationModule],
       inject: [TypedConfigService],
@@ -31,6 +34,7 @@ import { RolesGuard } from './guards/roles.guard';
   providers: [
     LoginUserUseCase,
     RegisterUserUseCase,
+    VerifyOtpUseCase,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

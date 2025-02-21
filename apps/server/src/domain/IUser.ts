@@ -14,5 +14,6 @@ export interface IUser {
   email: string;
   password: string;
   roles: UserRolesType[];
+  verificationOtp?: Number | null;
   isVerified: boolean;
 }

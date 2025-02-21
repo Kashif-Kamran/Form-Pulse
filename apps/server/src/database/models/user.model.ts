@@ -20,6 +20,9 @@ export class User implements IUser {
 
   @Prop({ default: false })
   isVerified: boolean;
+
+  @Prop({ default: null })
+  verificationOtp?: Number | null;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
