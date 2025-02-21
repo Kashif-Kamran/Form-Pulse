@@ -27,7 +27,6 @@ export class RegisterUserUseCase {
     if (exsits)
       throw new ConflictException('User with this email already exists.');
 
-    console.log('Register user  :', registerUserDto);
     const hashedPassword = await bcrypt.hash(registerUserDto.password, 10);
     const verificationOpt = this.generateOtp();
 
