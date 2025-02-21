@@ -11,11 +11,22 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import PasswordFeild from "@/components/custom-ui/form-feilds/password-field";
+import { useRegisterUser } from "@/hooks/api/auth.hook";
 
 import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { Link } from "react-router-dom";
 import { LOGIN } from "@/constants/app-routes";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
+import { UserRoles } from "@/types/api/common";
 const RegisterSchema = z
   .object({
     username: z
@@ -38,6 +49,7 @@ const RegisterSchema = z
 type RegisterData = z.infer<typeof RegisterSchema>;
 
 export const Register = () => {
+  const { mutateAsync: registerUser } = useRegisterUser();
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -49,8 +61,18 @@ export const Register = () => {
     },
   });
 
-  const handleSubmit = (data: RegisterData) => {
-    console.log("Data ; ", data);
+  const handleSubmit = async (data: RegisterData) => {
+    try {
+      const payload = {
+        email: data.email,
+        password: data.password,
+        name: data.username,
+        roles: [data.role],
+      };
+      await registerUser(payload);
+    } catch (error) {
+      console.log("Error : ", error);
+    }
   };
   return (
     <div className="h-full flex bg-gray-200">
@@ -122,7 +144,28 @@ export const Register = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <InputField placeholder="Role" {...field} />
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select Role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Roles</SelectLabel>
+                            {Object.values(UserRoles)
+                              .filter((role) => role !== UserRoles.Admin)
+                              .map((role) => {
+                                return (
+                                  <SelectItem key={role} value={role}>
+                                    {role}
+                                  </SelectItem>
+                                );
+                              })}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

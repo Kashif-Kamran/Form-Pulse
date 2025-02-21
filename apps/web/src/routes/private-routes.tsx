@@ -1,5 +1,4 @@
 import { Outlet, RouteObject, Navigate, useLocation } from "react-router-dom";
-import { isAuthenticated } from "./local-is-auth-check";
 import {
   ANIMALS_PROFILE,
   DIET_MANAGEMENT,
@@ -30,7 +29,7 @@ const ProtectedRoute = () => {
   }
 
   if (!data) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to={LOGIN} state={{ from: location }} replace />;
   }
 
   return <Outlet />;

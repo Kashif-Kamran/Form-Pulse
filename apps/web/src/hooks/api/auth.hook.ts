@@ -1,8 +1,14 @@
-import { AuthResponse, EmailPassReq } from "@/types/api";
+import {
+  AuthResponse,
+  EmailPassReq,
+  RegisterUserReq,
+  RegisterUserResponse,
+} from "@/types/api";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
 import { queryClient } from "@/lib/query-client";
 import { client } from "@/lib/client/client";
+import { postRequest } from "@/lib/client/common";
 const API_TOKEN_KEY = "token";
 
 const handleAuthSuccess = async (data: AuthResponse) => {
@@ -41,14 +47,27 @@ export const useLogout = (
   });
 };
 
-export const useCreateAuthUser = (
-  options?: UseMutationOptions<AuthResponse, Error, EmailPassReq>
+export const useRegisterUser = (
+  options?: UseMutationOptions<RegisterUserResponse, Error, RegisterUserReq>
 ) => {
   return useMutation({
-    mutationFn: (payload) => client.auth.register(payload),
+    mutationFn: (payload: RegisterUserReq) =>
+      postRequest<RegisterUserResponse>("/auth/register", payload),
     onSuccess: async (data, variables, context) => {
       options?.onSuccess?.(data, variables, context);
     },
     ...options,
   });
 };
+
+// export const useCreateAuthUser = (
+//   options?: UseMutationOptions<AuthResponse, Error, EmailPassReq>
+// ) => {
+//   return useMutation({
+//     mutationFn: (payload) => client.auth.register(payload),
+//     onSuccess: async (data, variables, context) => {
+//       options?.onSuccess?.(data, variables, context);
+//     },
+//     ...options,
+//   });
+// };

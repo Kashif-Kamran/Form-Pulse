@@ -16,6 +16,7 @@ import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { REGISTER, VERIFY_OTP, HOME } from "@/constants/app-routes";
 import { useEmailPassLogin } from "@/hooks/api/auth.hook";
+import { useToast } from "@/hooks/use-toast";
 
 const LoginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -27,10 +28,11 @@ type LoginData = z.infer<typeof LoginSchema>;
 export const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { toast } = useToast();
+  const { mutateAsync } = useEmailPassLogin();
 
   const from = location.state?.from?.pathname || HOME;
 
-  const { mutateAsync } = useEmailPassLogin();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -55,10 +57,22 @@ export const Login = () => {
 
   const handleSubmit = async (data: LoginData) => {
     try {
-      await mutateAsync(data);
+      await mutateAsync(data, {
+        onError: (error: any) => {
+          toast({
+            title: error.message,
+            variant: "destructive",
+          });
+        },
+      });
       navigate(from, { replace: true });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.statusCode !== 401) {
+        toast({
+          title: "Something went wrong, Please try again later.",
+          variant: "destructive",
+        });
+      }
     }
   };
   return (

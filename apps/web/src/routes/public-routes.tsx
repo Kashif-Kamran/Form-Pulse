@@ -1,5 +1,4 @@
-import { Outlet, RouteObject, Navigate } from "react-router-dom";
-import { isAuthenticated } from "./local-is-auth-check";
+import { Outlet, RouteObject, Navigate, useLocation } from "react-router-dom";
 import {
   LOGIN,
   REGISTER,
@@ -11,9 +10,25 @@ import { Login } from "@/pages/auth/login/login";
 import { Register } from "@/pages/auth/register/register";
 import { VerifyOtp } from "@/pages/auth/verify-otp/verify-otp";
 import { ConfirmPassword } from "@/pages/auth/confirm-password/confirm-password";
+import { useMe } from "@/hooks/api/profile.hook";
+import { Spinner } from "@/components/ui/spinnner";
 
 const PublicRouteGuard = () => {
-  // return !isAuthenticated ? <Outlet /> : <Navigate to={HOME} />;
+  const { data, isLoading } = useMe();
+  const location = useLocation();
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner className="text-ui-fg-interactive" />
+      </div>
+    );
+  }
+
+  if (data) {
+    return <Navigate to={HOME} state={{ from: location }} replace />;
+  }
+
   return <Outlet />;
 };
 
