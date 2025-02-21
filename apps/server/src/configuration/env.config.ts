@@ -9,6 +9,8 @@ export const configSchema = z.object({
   JWT_EXPIRES_IN: z.string(),
   PORT: z.coerce.number(),
   NODE_ENV: z.enum(['development', 'production', 'test']),
+  EMAIL_FROM: z.string().email(),
+  EMAIL_CLIENT_PASSWORD: z.string(),
 });
 
 export type ConfigSchema = z.infer<typeof configSchema>;
