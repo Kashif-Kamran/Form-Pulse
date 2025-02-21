@@ -10,22 +10,22 @@ import {
   REPORTS,
   SETTINGS,
 } from "@/constants/app-routes";
-import Dashboard from "@/pages/dashboard/dashboard";
-import AppLayout from "@/layout/app-layout";
-import AnimalList from "@/pages/animals/animal-list/animal-list";
-import { Spinner } from "@/components/ui/spinnner";
+import FallbackSpinnerScreen from "@/components/custom-ui/fallback-spinner";
 import { useMe } from "@/hooks/api/profile.hook";
+import { Suspense, lazy } from "react";
+
+const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
+const AppLayout = lazy(() => import("@/layout/app-layout"));
+const AnimalList = lazy(
+  () => import("@/pages/animals/animal-list/animal-list")
+);
 
 const ProtectedRoute = () => {
   const { data, isLoading } = useMe();
   const location = useLocation();
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Spinner className="text-ui-fg-interactive" />
-      </div>
-    );
+    return <FallbackSpinnerScreen />;
   }
 
   if (!data) {
@@ -35,50 +35,82 @@ const ProtectedRoute = () => {
   return <Outlet />;
 };
 
-// const PirvateRouteGuard = () => {
-//   return isAuthenticated ? <Outlet /> : <Navigate to={LOGIN} />;
-// };
-
 const privateRoutes: RouteObject[] = [
   {
     element: <ProtectedRoute />,
 
     children: [
       {
-        element: <AppLayout />,
+        element: (
+          <Suspense fallback={<FallbackSpinnerScreen />}>
+            <AppLayout />
+          </Suspense>
+        ),
         children: [
           {
             path: HOME,
             index: true,
-            element: <Dashboard />,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <Dashboard />
+              </Suspense>
+            ),
           },
           {
             path: ANIMALS_PROFILE,
-            element: <AnimalList />,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <AnimalList />
+              </Suspense>
+            ),
           },
           {
             path: DIET_MANAGEMENT,
-            element: <div>Diet Management </div>,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <div>Diet Management</div>
+              </Suspense>
+            ),
           },
           {
             path: FEED_INVENTORY,
-            element: <div> Feed Inventory</div>,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <div>Feed Inventory</div>
+              </Suspense>
+            ),
           },
           {
             path: HEALTH_MONITORING,
-            element: <div>Health Monitoring</div>,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <div>Health Monitoring</div>
+              </Suspense>
+            ),
           },
           {
             path: EDUCATIONAL_RESOURCERS,
-            element: <div>Educational Resources</div>,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <div>Educational Resources</div>
+              </Suspense>
+            ),
           },
           {
             path: REPORTS,
-            element: <div>Reports</div>,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <div>Reports</div>
+              </Suspense>
+            ),
           },
           {
             path: SETTINGS,
-            element: <div>Settings</div>,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <div>Settings</div>
+              </Suspense>
+            ),
           },
         ],
       },
