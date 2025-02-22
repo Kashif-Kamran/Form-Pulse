@@ -1,7 +1,7 @@
 import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { Button } from "@/components/ui/button";
 import { SearchIcon } from "lucide-react";
-import AnimalListTable from "./components/tables/animal-list-table";
+import AnimalListTable from "../components/tables/animal-list-table";
 import { useAnimals } from "@/hooks/api/animal.hook";
 function AnimalList() {
   const { results = [] } = useAnimals();
