@@ -13,6 +13,7 @@ import {
 } from "@/constants/app-routes";
 import Dashboard from "@/pages/dashboard/dashboard";
 import AppLayout from "@/layout/app-layout";
+import AnimalProfiles from "@/pages/animal-profiles/animal-profiles";
 const PirvateRouteGuard = () => {
   return isAuthenticated ? <Outlet /> : <Navigate to={LOGIN} />;
 };
@@ -32,7 +33,7 @@ const privateRoutes: RouteObject[] = [
           },
           {
             path: ANIMALS_PROFILE,
-            element: <div>Animal Profiles</div>,
+            element: <AnimalProfiles />,
           },
           {
             path: DIET_MANAGEMENT,
