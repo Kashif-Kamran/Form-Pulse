@@ -3,6 +3,8 @@ import {
   EmailPassReq,
   RegisterUserReq,
   RegisterUserResponse,
+  VerifyOtpRequest,
+  VerifyOtpResponse,
 } from "@/types/api";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
@@ -60,14 +62,6 @@ export const useRegisterUser = (
   });
 };
 
-type VerifyOtpRequest = {
-  email: string;
-  otp: number;
-};
-
-type VerifyOtpResponse = {
-  message: string;
-};
 export const useVerifyOtp = (
   options?: UseMutationOptions<VerifyOtpResponse, Error, VerifyOtpRequest>
 ) => {
@@ -80,14 +74,3 @@ export const useVerifyOtp = (
     ...options,
   });
 };
-// export const useCreateAuthUser = (
-//   options?: UseMutationOptions<AuthResponse, Error, EmailPassReq>
-// ) => {
-//   return useMutation({
-//     mutationFn: (payload) => client.auth.register(payload),
-//     onSuccess: async (data, variables, context) => {
-//       options?.onSuccess?.(data, variables, context);
-//     },
-//     ...options,
-//   });
-// };

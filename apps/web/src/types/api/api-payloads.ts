@@ -15,3 +15,8 @@ export type RegisterUserResponse = {
   email: string;
   roles: UserRolesType[];
 };
+
+export type VerifyOtpRequest = {
+  email: string;
+  otp: number;
+};

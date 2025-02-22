@@ -9,6 +9,6 @@ export class CreateAnimalUseCase {
 
   async execute(createAnimalDto: CreateAnimalRequestDto) {
     const animalDocument = new this.animalModel(createAnimalDto);
-    await animalDocument.save();
+    return await animalDocument.save();
   }
 }

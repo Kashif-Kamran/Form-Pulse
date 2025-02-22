@@ -2,7 +2,9 @@ import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { Button } from "@/components/ui/button";
 import { SearchIcon } from "lucide-react";
 import AnimalListTable from "./components/tables/animal-list-table";
+import { useAnimals } from "@/hooks/api/animal.hook";
 function AnimalList() {
+  const { results = [] } = useAnimals();
   return (
     <div className="space-y-4 flex flex-col h-full">
       <InputField
@@ -18,9 +20,9 @@ function AnimalList() {
           </Button>
         }
       />
-      <AnimalListTable />
+      <AnimalListTable results={results} />
       <div className="pl-4">
-        <Button className="py-5"> Add New Entry</Button>
+        <Button className="py-5">Add New Entry</Button>
       </div>
     </div>
   );
