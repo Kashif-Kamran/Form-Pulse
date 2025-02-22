@@ -13,6 +13,7 @@ import {
 import FallbackSpinnerScreen from "@/components/custom-ui/fallback-spinner";
 import { useMe } from "@/hooks/api/profile.hook";
 import { Suspense, lazy } from "react";
+import { ErrorBoundary } from "@/assets/common/error-boundary";
 
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
 const AppLayout = lazy(() => import("@/layout/app-layout"));
@@ -38,7 +39,7 @@ const ProtectedRoute = () => {
 const privateRoutes: RouteObject[] = [
   {
     element: <ProtectedRoute />,
-
+    errorElement: <ErrorBoundary />,
     children: [
       {
         element: (
