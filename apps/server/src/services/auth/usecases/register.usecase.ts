@@ -2,7 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { RegisterUserRequestDto } from '../auth.dtos';
 import { UserModel } from 'src/database';
 import { InjectModel } from '@nestjs/mongoose';
-import { IUser, UserRoles } from 'src/domain';
+import { IUser, RoleType, UserResponse } from '@repo/shared';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/services/email/email.service';
 
@@ -19,7 +19,7 @@ export class RegisterUserUseCase {
 
   async execute(
     registerUserDto: RegisterUserRequestDto,
-  ): Promise<Pick<IUser, '_id' | 'name' | 'roles' | 'email' | 'isVerified'>> {
+  ): Promise<UserResponse> {
     const exsits: IUser = await this.userModel
       .findOne({ email: registerUserDto.email })
       .lean()
@@ -30,10 +30,10 @@ export class RegisterUserUseCase {
     const hashedPassword = await bcrypt.hash(registerUserDto.password, 10);
     const verificationOpt = this.generateOtp();
 
-    const creationPayload: IUser = {
+    const creationPayload: Partial<IUser> = {
       ...registerUserDto,
       password: hashedPassword,
-      roles: [UserRoles.Caretaker],
+      roles: [RoleType.CareTaker],
       isVerified: false,
       verificationOtp: verificationOpt,
     };
@@ -53,7 +53,7 @@ export class RegisterUserUseCase {
     });
 
     return {
-      _id: creationDbResponse._id,
+      id: creationDbResponse.id,
       name: creationDbResponse.name,
       roles: creationDbResponse.roles,
       email: creationDbResponse.email,

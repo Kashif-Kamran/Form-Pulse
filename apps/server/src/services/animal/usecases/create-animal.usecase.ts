@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateAnimalRequestDto } from '../dtos';
+import { CreateAnimalDto } from '../dtos';
 import { AnimalModel } from 'src/database';
 
 export class CreateAnimalUseCase {
@@ -7,7 +7,7 @@ export class CreateAnimalUseCase {
     @InjectModel('Animal') private readonly animalModel: AnimalModel,
   ) {}
 
-  async execute(createAnimalDto: CreateAnimalRequestDto) {
+  async execute(createAnimalDto: CreateAnimalDto) {
     const animalDocument = new this.animalModel(createAnimalDto);
     return await animalDocument.save();
   }

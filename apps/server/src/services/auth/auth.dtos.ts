@@ -7,8 +7,13 @@ import {
   IsNotEmpty,
   Length,
 } from 'class-validator';
-import { UserRoles, UserRolesType } from 'src/domain';
-export class RegisterUserRequestDto {
+import {
+  CreateUserReq,
+  EmailPassReq,
+  RoleType,
+  VerifyOtpReq,
+} from '@repo/shared';
+export class RegisterUserRequestDto implements CreateUserReq {
   @IsNotEmpty()
   @Length(3, 30)
   name: string;
@@ -23,23 +28,23 @@ export class RegisterUserRequestDto {
 
   @IsArray()
   @ArrayNotEmpty()
-  @IsIn([UserRoles.Caretaker, UserRoles.Nutritionist, UserRoles.Veterinarian], {
+  @IsIn([RoleType.CareTaker, RoleType.Nutritionist, RoleType.Veterinarian], {
     each: true,
   })
-  roles: UserRolesType[];
+  roles: RoleType[];
 }
 
-export class VerifyOtpReq {
+export class OtpVerificationDto implements VerifyOtpReq {
   @IsNotEmpty({})
   @IsEmail()
   email: string;
 
   @IsNotEmpty()
   @IsInt()
-  otp: Number;
+  otp: number;
 }
 
-export class LoginUserDto {
+export class LoginUserDto implements EmailPassReq {
   @IsEmail()
   email: string;
 

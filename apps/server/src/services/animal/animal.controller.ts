@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
-import { CreateAnimalRequestDto } from './dtos';
+import { CreateAnimalDto } from './dtos';
 import { CreateAnimalUseCase } from './usecases/create-animal.usecase';
 import { ListAnimalsUseCase } from './usecases/list-animals.usecase';
 
@@ -16,7 +16,7 @@ export class AnimalController {
   }
 
   @Post()
-  async createAnimal(@Body() createAnimalDto: CreateAnimalRequestDto) {
+  async createAnimal(@Body() createAnimalDto: CreateAnimalDto) {
     return this.createAnimalUseCase.execute(createAnimalDto);
   }
 
