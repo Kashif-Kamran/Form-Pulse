@@ -1,6 +1,7 @@
 import {
   IAccessAndRefreshTokens,
   IAnimal,
+  IFeedInventory,
   IUser,
 } from "../interfaces/resources";
 import {
@@ -25,3 +26,8 @@ export type UserProfileResponse = ResourceResponse<
 export type AnimalResponse = Omit<IAnimal, "createdAt" | "updatedAt">;
 export type GetAnimalResponse = SingleItemResponse<AnimalResponse>;
 export type AnimalListResponse = ListResponse<AnimalResponse>;
+
+// Feed Inventory
+export type FeedInventoryPublic = Omit<IFeedInventory, "_id">;
+export type FeedItemResponse = SingleItemResponse<FeedInventoryPublic>;
+export type FeedInventoryListResponse = ListResponse<FeedInventoryPublic>;

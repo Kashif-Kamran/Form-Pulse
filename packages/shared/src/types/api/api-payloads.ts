@@ -1,4 +1,4 @@
-import { IAnimal, IUser } from "../interfaces/resources";
+import { IAnimal, IFeedInventory, IUser } from "../interfaces/resources";
 import { ListResponse } from "./api-operations";
 
 // Auth
@@ -16,4 +16,10 @@ export type RegisterUserReq = CreateUserReq;
 export type CreateAnimalReq = Omit<
   IAnimal,
   "_id" | "id" | "createdAt" | "updatedAt"
+>;
+
+// Feed Inventory
+export type CreateFeedInventoryItem = Pick<
+  IFeedInventory,
+  "availableQuantity" | "name" | "unitPrice"
 >;

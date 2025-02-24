@@ -33,8 +33,9 @@ export interface IAnimal {
 }
 
 export interface IFeedInventory {
+  _id: any;
   id: string;
   name: string;
-  quentity: number;
+  availableQuantity: number;
   unitPrice: number;
 }
