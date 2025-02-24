@@ -3,8 +3,15 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './services/auth/auth.module';
 import { ConfigurationModule } from './configuration/configuration.module';
 import { AnimalModule } from './services/animal/animal.module';
+import { AccountsModule } from './services/accounts/account.module';
 
 @Module({
-  imports: [ConfigurationModule, DatabaseModule, AuthModule, AnimalModule],
+  imports: [
+    ConfigurationModule,
+    DatabaseModule,
+    AuthModule,
+    AnimalModule,
+    AccountsModule,
+  ],
 })
 export class AppModule {}

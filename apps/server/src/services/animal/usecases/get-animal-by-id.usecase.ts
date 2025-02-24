@@ -16,7 +16,6 @@ export class GETAnimalByIdUsecase {
     if (!animal) {
       throw new Error('Animal not found');
     }
-
     const { _id, createdAt, updatedAt, ...animalPayload } = animal;
     return animal.toObject();
   }
