@@ -1,15 +1,20 @@
 {
   "name": "@repo/shared",
   "version": "1.0.0",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p tsconfig.cjs.json && tsc -p tsconfig.esm.json",
+    "dev": "concurrently --names \"CJS,ESM\" --prefix-colors \"red,blue\" \"tsc -w -p tsconfig.cjs.json\" \"tsc -w -p tsconfig.esm.json\""
   },
   "author": "",
   "license": "ISC",
   "description": "",
-  "dependencies": {}
+  "dependencies": {
+    "tsup": "^8.3.6"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
 }
