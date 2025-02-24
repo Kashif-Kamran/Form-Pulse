@@ -3,8 +3,9 @@ import { LoginUserDto } from '../auth.dtos';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserModel } from 'src/database';
-import { IUser } from 'src/domain';
 import * as bcrypt from 'bcrypt';
+import { UserDocument } from 'src/database/models/user.model';
+import { AuthResponse } from '@repo/shared';
 
 @Injectable()
 export class LoginUserUseCase {
@@ -12,11 +13,10 @@ export class LoginUserUseCase {
     @InjectModel('User') private readonly userModel: UserModel,
     private readonly jwtService: JwtService,
   ) {}
-  async execute(loginUserDto: LoginUserDto): Promise<any> {
-    const user: IUser = await this.userModel
-      .findOne({ email: loginUserDto.email })
-      .lean()
-      .exec();
+  async execute(loginUserDto: LoginUserDto): Promise<AuthResponse> {
+    const user: UserDocument = await this.userModel.findOne({
+      email: loginUserDto.email,
+    });
 
     if (!user) throw new UnauthorizedException('Invalid email or password');
     const isPasswordValid = await bcrypt.compare(
@@ -29,7 +29,7 @@ export class LoginUserUseCase {
     if (!user.isVerified)
       throw new UnauthorizedException('Please verify your email first');
     const jwtPayload = {
-      sub: user._id.toString(),
+      sub: user._id,
     };
 
     const jwtToken = await this.jwtService.signAsync(jwtPayload);

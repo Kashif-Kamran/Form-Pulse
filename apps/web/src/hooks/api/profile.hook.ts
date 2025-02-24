@@ -1,13 +1,18 @@
 import { getRequest } from "@/lib/client/common";
-import { ProfileResponse } from "@/types/api";
+import { UserProfileResponse } from "@repo/shared";
 import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
 
 export const useMe = (
-  options?: UseQueryOptions<ProfileResponse, Error, ProfileResponse, QueryKey>
+  options?: UseQueryOptions<
+    UserProfileResponse,
+    Error,
+    UserProfileResponse,
+    QueryKey
+  >
 ) => {
   const { data, ...rest } = useQuery({
     queryKey: ["accounts/me"],
-    queryFn: () => getRequest<ProfileResponse>("/accounts/me"),
+    queryFn: () => getRequest<UserProfileResponse>("/accounts/me"),
     ...options,
   });
 

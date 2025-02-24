@@ -5,8 +5,7 @@ import { TypedConfigService } from 'src/configuration/configuration.module';
 // Schemas
 import { UserSchema } from './models/user.model';
 import { AnimalSchema } from './models/animal.model';
-import { MedicalHistorySchema } from './models/medical-history.model';
-import { DietPlanSchema } from './models/diet-plan.model';
+import { FeedInventorySchema } from './models/feed-inventory.model';
 
 @Module({
   imports: [
@@ -20,8 +19,7 @@ import { DietPlanSchema } from './models/diet-plan.model';
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchema },
       { name: 'Animal', schema: AnimalSchema },
-      { name: 'MedicalHistory', schema: MedicalHistorySchema },
-      { name: 'DietPlan', schema: DietPlanSchema },
+      { name: 'FeedInventory', schema: FeedInventorySchema },
     ]),
   ],
   exports: [MongooseModule],

@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { IAnimal } from "@/types/api";
+import { IAnimal } from "@repo/shared";
 import { Trash2Icon } from "lucide-react";
 
 export interface AnimalListTableProps {

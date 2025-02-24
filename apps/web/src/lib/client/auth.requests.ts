@@ -1,5 +1,5 @@
 // import { AuthResponse, EmailPassReq } from "@repo/shared";
-import { AuthResponse, EmailPassReq } from "@/types/api";
+import { AuthResponse, EmailPassReq } from "@repo/shared";
 import { postRequest } from "./common";
 
 async function register(payload: EmailPassReq) {
