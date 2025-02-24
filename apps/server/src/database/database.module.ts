@@ -5,6 +5,7 @@ import { TypedConfigService } from 'src/configuration/configuration.module';
 // Schemas
 import { UserSchema } from './models/user.model';
 import { AnimalSchema } from './models/animal.model';
+import { FeedInventorySchema } from './models/feed-inventory.model';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AnimalSchema } from './models/animal.model';
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchema },
       { name: 'Animal', schema: AnimalSchema },
+      { name: 'FeedInventory', schema: FeedInventorySchema },
     ]),
   ],
   exports: [MongooseModule],
