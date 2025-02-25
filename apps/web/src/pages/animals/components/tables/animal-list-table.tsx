@@ -32,7 +32,7 @@ function AnimalListTable({ results }: AnimalListTableProps) {
             {results.length === 0 && <h1 className="p-4">No Animals Found</h1>}
             {results.length > 0 &&
               results.map((animal) => (
-                <TableRow key={animal._id}>
+                <TableRow key={animal.id}>
                   <TableCell className="pl-6">{animal.name}</TableCell>
                   <TableCell>{animal.age}</TableCell>
                   <TableCell>{animal.breed}</TableCell>

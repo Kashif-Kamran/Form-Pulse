@@ -1,7 +1,7 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateAnimalDto } from '../dtos';
 import { AnimalModel } from 'src/database';
-import { AnimalResponse } from '@repo/shared';
+import { AnimalPublic } from '@repo/shared';
 import { mapDocumentToResponse } from '../mappers/document-to-response.mapper';
 import { AnimalDocument } from 'src/database/models/animal.model';
 export class CreateAnimalUseCase {
@@ -9,7 +9,7 @@ export class CreateAnimalUseCase {
     @InjectModel('Animal') private readonly animalModel: AnimalModel,
   ) {}
 
-  async execute(createAnimalDto: CreateAnimalDto): Promise<AnimalResponse> {
+  async execute(createAnimalDto: CreateAnimalDto): Promise<AnimalPublic> {
     const animalDocument = new this.animalModel(createAnimalDto);
     const creationResponse: AnimalDocument = await animalDocument.save();
     return mapDocumentToResponse(creationResponse);

@@ -39,3 +39,17 @@ export interface IFeedInventory {
   availableQuantity: number;
   unitPrice: number;
 }
+
+export interface IDietPlan {
+  _id?: any;
+  id: string;
+  animal: string;
+  startTime: Date;
+  duration: Date;
+  recipes: {
+    feed: string;
+    quantity: number;
+    _id?: any;
+    id: string;
+  }[];
+}

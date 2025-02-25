@@ -6,6 +6,7 @@ import { TypedConfigService } from 'src/configuration/configuration.module';
 import { UserSchema } from './models/user.model';
 import { AnimalSchema } from './models/animal.model';
 import { FeedInventorySchema } from './models/feed-inventory.model';
+import { DietPlan, DietPlanSchema } from './models/diet-plan.model';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { FeedInventorySchema } from './models/feed-inventory.model';
       { name: 'User', schema: UserSchema },
       { name: 'Animal', schema: AnimalSchema },
       { name: 'FeedInventory', schema: FeedInventorySchema },
+      { name: 'DietPlan', schema: DietPlanSchema },
     ]),
   ],
   exports: [MongooseModule],

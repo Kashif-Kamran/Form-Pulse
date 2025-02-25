@@ -1,4 +1,9 @@
-import { IAnimal, IFeedInventory, IUser } from "../interfaces/resources";
+import {
+  IAnimal,
+  IDietPlan,
+  IFeedInventory,
+  IUser,
+} from "../interfaces/resources";
 import { ListResponse } from "./api-operations";
 
 // Auth
@@ -23,3 +28,11 @@ export type CreateFeedInventoryItem = Pick<
   IFeedInventory,
   "availableQuantity" | "name" | "unitPrice"
 >;
+
+// Diet Plan
+export type CreateDietPlanReq = Omit<
+  IDietPlan,
+  "_id" | "id" | "recipes" | "animal"
+> & {
+  recipes: Omit<IDietPlan["recipes"][number], "_id" | "id">[];
+};
