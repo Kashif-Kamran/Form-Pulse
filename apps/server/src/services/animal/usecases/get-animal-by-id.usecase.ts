@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { AnimalModel } from 'src/database';
-import { IAnimal } from 'src/domain';
+import { GetAnimalResponse } from '@repo/shared';
+import { AnimalDocument } from 'src/database/models/animal.model';
 
 @Injectable()
 export class GETAnimalByIdUsecase {
@@ -9,13 +10,13 @@ export class GETAnimalByIdUsecase {
     @InjectModel('Animal') private readonly animalModel: AnimalModel,
   ) {}
 
-  async execute(id: string): Promise<IAnimal> {
-    const animal = await this.animalModel.findById(id);
+  async execute(id: string): Promise<GetAnimalResponse> {
+    const animal: AnimalDocument = await this.animalModel.findById(id);
 
     if (!animal) {
       throw new Error('Animal not found');
     }
-
-    return animal;
+    const { _id, createdAt, updatedAt, ...animalPayload } = animal;
+    return animal.toObject();
   }
 }

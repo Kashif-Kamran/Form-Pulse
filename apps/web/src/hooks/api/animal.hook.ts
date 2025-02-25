@@ -1,17 +1,17 @@
 import { getRequest } from "@/lib/client/common";
-import { AniamlsListResponse } from "@/types/api";
+import { AnimalListResponse } from "@repo/shared";
 import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
 
 export const useAnimals = (
   options?: UseQueryOptions<
-    AniamlsListResponse,
+    AnimalListResponse,
     Error,
-    AniamlsListResponse,
+    AnimalListResponse,
     QueryKey
   >
 ) => {
   const { data, ...rest } = useQuery({
-    queryFn: () => getRequest<AniamlsListResponse>("/animals"),
+    queryFn: () => getRequest<AnimalListResponse>("/animals"),
     queryKey: ["animals", "list"],
     ...options,
   });

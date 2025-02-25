@@ -1,4 +1,4 @@
-import { IUser } from 'src/domain';
+import { IUser } from '@repo/shared';
 
 declare module 'express' {
   interface Request {

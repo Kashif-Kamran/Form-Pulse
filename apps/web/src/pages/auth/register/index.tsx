@@ -12,10 +12,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import PasswordFeild from "@/components/custom-ui/form-feilds/password-field";
 import { useRegisterUser } from "@/hooks/api/auth.hook";
-
 import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { Link, useNavigate } from "react-router-dom";
 import { LOGIN, VERIFY_OTP } from "@/constants/app-routes";
+import { RoleType } from "@repo/shared";
 import {
   Select,
   SelectContent,
@@ -26,8 +26,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { UserRoles } from "@/types/api/common";
 import { useToast } from "@/hooks/use-toast";
+
 const RegisterSchema = z
   .object({
     username: z
@@ -67,7 +67,7 @@ const Register = () => {
         email: data.email,
         password: data.password,
         name: data.username,
-        roles: [data.role],
+        roles: [data.role as RoleType],
       };
       await registerUser(payload, {
         onSuccess: () => {
@@ -164,8 +164,8 @@ const Register = () => {
                         <SelectContent>
                           <SelectGroup>
                             <SelectLabel>Roles</SelectLabel>
-                            {Object.values(UserRoles)
-                              .filter((role) => role !== UserRoles.Admin)
+                            {Object.values(RoleType)
+                              .filter((role) => role !== RoleType.Admin)
                               .map((role) => {
                                 return (
                                   <SelectItem key={role} value={role}>

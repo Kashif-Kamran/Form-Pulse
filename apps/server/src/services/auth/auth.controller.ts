@@ -2,13 +2,12 @@ import { Controller, Post, Get, Body, HttpCode, Request } from '@nestjs/common';
 import {
   LoginUserDto,
   RegisterUserRequestDto,
-  VerifyOtpReq,
+  OtpVerificationDto,
 } from './auth.dtos';
 import { LoginUserUseCase } from './usecases/login.usecase';
 import { RegisterUserUseCase } from './usecases/register.usecase';
 import { Public } from './decorators/public.decorator';
 import { VerifyOtpUseCase } from './usecases/verify-otp.usecase';
-import { registerSchema } from 'class-validator';
 
 @Controller('auth')
 export class AuthController {
@@ -35,7 +34,7 @@ export class AuthController {
   @Post('verify-otp')
   @HttpCode(200)
   @Public()
-  async verifyOtp(@Body() verifyOtpDto: VerifyOtpReq) {
+  async verifyOtp(@Body() verifyOtpDto: OtpVerificationDto) {
     return this.verifyOtpUseCase.execute(verifyOtpDto);
   }
 }

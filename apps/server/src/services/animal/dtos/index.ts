@@ -1,7 +1,7 @@
+import { CreateAnimalReq } from '@repo/shared';
 import { IsNotEmpty, IsNumber, Length } from 'class-validator';
-import { IAnimal } from 'src/domain';
 
-export class CreateAnimalRequestDto implements Partial<Omit<IAnimal, '_id'>> {
+export class CreateAnimalDto implements CreateAnimalReq {
   @IsNotEmpty()
   @Length(3, 30)
   name: string;
@@ -20,7 +20,7 @@ export class CreateAnimalRequestDto implements Partial<Omit<IAnimal, '_id'>> {
   medicalHistory: string;
 
   @IsNumber()
-  weight?: number;
+  weight: number;
 
   @Length(3, 12)
   activityLevel: string;

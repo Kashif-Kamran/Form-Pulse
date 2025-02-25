@@ -2,13 +2,13 @@ import {
   AuthResponse,
   EmailPassReq,
   RegisterUserReq,
-  RegisterUserResponse,
-  VerifyOtpRequest,
+  UserResponse,
+  VerifyOtpReq,
   VerifyOtpResponse,
-} from "@/types/api";
+} from "@repo/shared";
+
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
-import { queryClient } from "@/lib/query-client";
 import { client } from "@/lib/client/client";
 import { postRequest } from "@/lib/client/common";
 const API_TOKEN_KEY = "token";
@@ -32,29 +32,12 @@ export const useEmailPassLogin = (
   });
 };
 
-export const useLogout = (
-  options?: UseMutationOptions<void, Error, { token: string }>
-) => {
-  return useMutation({
-    mutationFn: (payload) => client.auth.logout(payload),
-    onSettled(data, error, variables, context) {
-      localStorage.removeItem(API_TOKEN_KEY);
-      options?.onSettled?.(data, error, variables, context);
-      /**
-       * When the user logs out, we want to clear the query cache
-       */
-      queryClient.clear();
-    },
-    ...options,
-  });
-};
-
 export const useRegisterUser = (
-  options?: UseMutationOptions<RegisterUserResponse, Error, RegisterUserReq>
+  options?: UseMutationOptions<UserResponse, Error, RegisterUserReq>
 ) => {
   return useMutation({
     mutationFn: (payload: RegisterUserReq) =>
-      postRequest<RegisterUserResponse>("/auth/register", payload),
+      postRequest<UserResponse>("/auth/register", payload),
     onSuccess: async (data, variables, context) => {
       options?.onSuccess?.(data, variables, context);
     },
@@ -63,10 +46,10 @@ export const useRegisterUser = (
 };
 
 export const useVerifyOtp = (
-  options?: UseMutationOptions<VerifyOtpResponse, Error, VerifyOtpRequest>
+  options?: UseMutationOptions<VerifyOtpResponse, Error, VerifyOtpReq>
 ) => {
   return useMutation({
-    mutationFn: (payload: VerifyOtpRequest) =>
+    mutationFn: (payload: VerifyOtpReq) =>
       postRequest<VerifyOtpResponse>("/auth/verify-otp", payload),
     onSuccess: async (data, variables, context) => {
       options?.onSuccess?.(data, variables, context);
