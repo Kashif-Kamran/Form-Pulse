@@ -42,7 +42,7 @@ const AnimalSchema = z.object({
 type AnimalFormData = z.infer<typeof AnimalSchema>;
 
 export function CreateAnimalModel() {
-  const [open, setOpen] = useState(false); // State to control modal visibility
+  const [open, setOpen] = useState(false);
   const form = useForm<AnimalFormData>({
     resolver: zodResolver(AnimalSchema),
     defaultValues: {
@@ -57,13 +57,15 @@ export function CreateAnimalModel() {
   const { mutateAsync: createAnimal } = useCreateAnimal();
   const { toast } = useToast();
   const handleSubmit = async (data: AnimalFormData) => {
-    console.log("Animal Profile Data:", data);
     await createAnimal(data, {
       onSuccess: () => {
         toast({ title: "Animal Information Saved Successfully" });
       },
       onError: (error) => {
-        toast({ title: "Unable to save animal information" });
+        toast({
+          title: "Unable to save animal information",
+          description: error.message,
+        });
       },
     });
     setOpen(false);
