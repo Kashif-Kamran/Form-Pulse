@@ -33,10 +33,7 @@ const RegisterSchema = z
     username: z
       .string()
       .min(3, { message: "Username must be at least 3 characters" })
-      .max(20, { message: "Username must be at most 20 characters" })
-      .regex(/^[a-zA-Z0-9_]*$/, {
-        message: "Only alphanumeric characters and underscore are allowed",
-      }),
+      .max(20, { message: "Username must be at most 20 characters" }),
     email: z.string().email({ message: "Please enter a valid email address" }),
     password: z.string(),
     confirmPassword: z.string(),
