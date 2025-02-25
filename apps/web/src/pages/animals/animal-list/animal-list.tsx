@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { SearchIcon } from "lucide-react";
 import AnimalListTable from "../components/tables/animal-list-table";
 import { useAnimals } from "@/hooks/api/animal.hook";
+import { CreateAnimalModel } from "../components/create-animal-model";
 function AnimalList() {
   const { results = [] } = useAnimals();
   return (
@@ -22,7 +23,7 @@ function AnimalList() {
       />
       <AnimalListTable results={results} />
       <div className="pl-4">
-        <Button className="py-5">Add New Entry</Button>
+        <CreateAnimalModel />
       </div>
     </div>
   );

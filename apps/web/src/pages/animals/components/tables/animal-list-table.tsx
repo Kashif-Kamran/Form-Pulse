@@ -8,11 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { IAnimal } from "@repo/shared";
+import { AnimalPublic } from "@repo/shared";
 import { Trash2Icon } from "lucide-react";
 
 export interface AnimalListTableProps {
-  results: IAnimal[];
+  results: AnimalPublic[];
 }
 
 function AnimalListTable({ results }: AnimalListTableProps) {
@@ -21,15 +21,21 @@ function AnimalListTable({ results }: AnimalListTableProps) {
       <ScrollArea className="h-full">
         <Table>
           <TableHeader className="bg-[#E2E2E2]">
-            <TableHead className="pl-6">Name</TableHead>
-            <TableHead>Age</TableHead>
-            <TableHead>Breed</TableHead>
-            <TableHead>Weight</TableHead>
-            <TableHead className="text-center">Action</TableHead>
+            <TableRow>
+              <TableHead className="pl-6">Name</TableHead>
+              <TableHead>Age</TableHead>
+              <TableHead>Breed</TableHead>
+              <TableHead>Weight</TableHead>
+              <TableHead className="text-center">Action</TableHead>
+            </TableRow>
           </TableHeader>
 
           <TableBody className="flex-1">
-            {results.length === 0 && <h1 className="p-4">No Animals Found</h1>}
+            {results.length === 0 && (
+              <TableRow>
+                <TableCell className="p-4">No Animals Found</TableCell>
+              </TableRow>
+            )}
             {results.length > 0 &&
               results.map((animal) => (
                 <TableRow key={animal.id}>
