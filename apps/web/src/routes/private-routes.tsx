@@ -11,11 +11,39 @@ import {
   REPORTS,
   SETTINGS,
 } from "@/constants/app-routes";
+<<<<<<< Updated upstream
 import Dashboard from "@/pages/dashboard/dashboard";
 import AppLayout from "@/layout/app-layout";
 import AnimalProfiles from "@/pages/animal-profiles/animal-profiles";
 const PirvateRouteGuard = () => {
   return isAuthenticated ? <Outlet /> : <Navigate to={LOGIN} />;
+=======
+import FallbackSpinnerScreen from "@/components/custom-ui/fallback-spinner";
+import { useMe } from "@/hooks/api/profile.hook";
+import { Suspense, lazy } from "react";
+import { ErrorBoundary } from "@/common/error-boundary";
+
+const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
+const AppLayout = lazy(() => import("@/layout/app-layout"));
+const AnimalList = lazy(
+  () => import("@/pages/animals/animal-list/animal-list")
+);
+const CreateAnimal = lazy(() => import("@/pages/animals/create-animal"));
+
+const ProtectedRoute = () => {
+  const { data, isLoading } = useMe();
+  const location = useLocation();
+
+  if (isLoading) {
+    return <FallbackSpinnerScreen />;
+  }
+
+  if (!data) {
+    return <Navigate to={LOGIN} state={{ from: location }} replace />;
+  }
+
+  return <Outlet />;
+>>>>>>> Stashed changes
 };
 
 const privateRoutes: RouteObject[] = [
@@ -33,7 +61,16 @@ const privateRoutes: RouteObject[] = [
           },
           {
             path: ANIMALS_PROFILE,
+<<<<<<< Updated upstream
             element: <AnimalProfiles />,
+=======
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <AnimalList />
+                <CreateAnimal/>
+              </Suspense>
+            ),
+>>>>>>> Stashed changes
           },
           {
             path: DIET_MANAGEMENT,
