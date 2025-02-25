@@ -3,39 +3,33 @@ import { HydratedDocument, Model, Types } from 'mongoose';
 import { IAnimal } from '@repo/shared';
 import { toJSONSchemaConfig, toObjectSchemaConfig } from '../common';
 
-export type AnimalDocument = HydratedDocument<IAnimal>;
+export type AnimalDocument = HydratedDocument<Animal>;
 
 @Schema({
   virtuals: true,
   toObject: toObjectSchemaConfig,
   toJSON: toJSONSchemaConfig,
+  timestamps: true,
 })
 export class Animal implements IAnimal {
   declare _id: Types.ObjectId;
+  declare createdAt: Date;
+  declare updatedAt: Date;
 
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({ required: true })
   species: string;
 
-  @Prop()
+  @Prop({ required: true })
   breed: string;
 
-  @Prop()
+  @Prop({ required: true })
   age: number;
 
-  @Prop()
+  @Prop({ required: true })
   weight: number;
-
-  @Prop()
-  healthStatus: string;
-
-  @Prop()
-  activityLevel: string;
-
-  @Prop()
-  specialDietRequirement: string;
 
   get id(): string {
     return this._id.toString();

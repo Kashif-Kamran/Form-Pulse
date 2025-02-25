@@ -25,11 +25,11 @@ export interface IAnimal {
   breed: string;
   age: number;
   weight: number;
-  healthStatus: string;
-  activityLevel: string;
-  specialDietRequirement: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  // healthStatus: string;
+  // activityLevel: string;
+  // specialDietRequirement: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IFeedInventory {

@@ -19,14 +19,4 @@ export class AnimalController {
   async createAnimal(@Body() createAnimalDto: CreateAnimalDto) {
     return this.createAnimalUseCase.execute(createAnimalDto);
   }
-
-  @Get(':id')
-  async getAnimalById() {
-    // return this.getAnimalByIdUseCase.execute();
-  }
-
-  @Put(':id')
-  async updateAnimal() {
-    // return this.updateAnimalUseCase.execute();
-  }
 }

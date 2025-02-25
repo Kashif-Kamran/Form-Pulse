@@ -26,7 +26,7 @@ export type UserProfileResponse = ResourceResponse<
 
 // Animals
 export type AnimalPublic = Omit<IAnimal, "createdAt" | "updatedAt">;
-export type GetAnimalResponse = ResourceResponse<AnimalPublic>;
+export type AnimalResponse = ResourceResponse<AnimalPublic>;
 export type AnimalListResponse = ResourceListResponse<AnimalPublic>;
 
 // Feed Inventory

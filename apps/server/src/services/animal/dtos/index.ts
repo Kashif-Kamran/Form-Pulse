@@ -13,20 +13,8 @@ export class CreateAnimalDto implements CreateAnimalReq {
   @IsNotEmpty()
   breed: string;
 
-  @IsNotEmpty()
-  healthStatus: string;
-
-  @IsNotEmpty()
-  medicalHistory: string;
-
   @IsNumber()
   weight: number;
-
-  @Length(3, 12)
-  activityLevel: string;
-
-  @Length(5, 100)
-  specialDietRequirement: string;
 
   @Length(3, 10)
   species: string;
