@@ -8,6 +8,8 @@ const CONFIRM_PASSWORD = (email?: string) =>
 // Application Routes
 const HOME = "/";
 const ANIMALS_PROFILE = "/animal-profiles";
+const ANIMAL_DETAIL = (animalId?: string) =>
+  `/animal-profiles/${animalId ?? ":animalId"}`;
 const DIET_MANAGEMENT = "/diet-management";
 const FEED_INVENTORY = "/feed-inventory";
 const HEALTH_MONITORING = "/monitor-health";
@@ -28,4 +30,5 @@ export {
   REPORTS,
   EDUCATIONAL_RESOURCERS,
   SETTINGS,
+  ANIMAL_DETAIL,
 };

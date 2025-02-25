@@ -1,5 +1,6 @@
 import { Outlet, RouteObject, Navigate, useLocation } from "react-router-dom";
 import {
+  ANIMAL_DETAIL,
   ANIMALS_PROFILE,
   DIET_MANAGEMENT,
   EDUCATIONAL_RESOURCERS,
@@ -15,6 +16,7 @@ import { useMe } from "@/hooks/api/profile.hook";
 import { Suspense, lazy } from "react";
 import { ErrorBoundary } from "@/common/error-boundary";
 
+const AnimalProfile = lazy(() => import("@/pages/animals/animal-profile"));
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
 const AppLayout = lazy(() => import("@/layout/app-layout"));
 const AnimalList = lazy(
@@ -62,6 +64,14 @@ const privateRoutes: RouteObject[] = [
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
                 <AnimalList />
+              </Suspense>
+            ),
+          },
+          {
+            path: ANIMAL_DETAIL(),
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <AnimalProfile />
               </Suspense>
             ),
           },
