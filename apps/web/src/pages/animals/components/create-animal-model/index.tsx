@@ -65,6 +65,7 @@ export function CreateAnimalModel() {
         toast({
           title: "Unable to save animal information",
           description: error.message,
+          variant: "destructive",
         });
       },
     });
