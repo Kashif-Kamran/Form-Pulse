@@ -1,7 +1,7 @@
 import { AnimalDocument } from 'src/database/models/animal.model';
-import { AnimalResponse } from '@repo/shared';
+import { AnimalPublic } from '@repo/shared';
 
-function mapDocumentToResponse(doc: AnimalDocument): AnimalResponse {
+function mapDocumentToResponse(doc: AnimalDocument): AnimalPublic {
   return {
     _id: doc._id,
     id: doc._id,

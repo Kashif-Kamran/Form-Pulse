@@ -5,6 +5,7 @@ import { ConfigurationModule } from './configuration/configuration.module';
 import { AnimalModule } from './services/animal/animal.module';
 import { AccountsModule } from './services/accounts/account.module';
 import { FeedInventoryModule } from './services/feed-inventory/feed-inventory.module';
+import { DietPlanModule } from './services/diet-plan/diet-plan.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { FeedInventoryModule } from './services/feed-inventory/feed-inventory.mo
     AnimalModule,
     AccountsModule,
     FeedInventoryModule,
+    DietPlanModule,
   ],
 })
 export class AppModule {}
