@@ -47,6 +47,7 @@ function AnimalListTable({ results }: AnimalListTableProps) {
                     <Button
                       className="h-8 w-8 text-destructive hover:bg-destructive hover:text-destructive-foreground p-[6px]"
                       variant="ghost"
+                      disabled
                     >
                       <Trash2Icon className="h-full w-full" />
                     </Button>

@@ -68,13 +68,14 @@ export function CreateAnimalModel() {
         });
       },
     });
+    form.reset();
     setOpen(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add New Animal</Button>
+        <Button className="h-full">Add New Animal</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader className="bg-primary rounded-md p-4 text-primary-foreground mt-4">
