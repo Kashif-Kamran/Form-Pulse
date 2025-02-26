@@ -31,6 +31,78 @@ function DietListTable() {
       date: "2023-09-03",
       dietTimePeriod: "7:00 AM - 9:00 AM",
     },
+    {
+      id: "1",
+      animal: "Lion",
+      date: "2023-09-01",
+      dietTimePeriod: "8:00 AM - 10:00 AM",
+    },
+    {
+      id: "2",
+      animal: "Elephant",
+      date: "2023-09-02",
+      dietTimePeriod: "9:00 AM - 11:00 AM",
+    },
+    {
+      id: "3",
+      animal: "Giraffe",
+      date: "2023-09-03",
+      dietTimePeriod: "7:00 AM - 9:00 AM",
+    },
+    {
+      id: "1",
+      animal: "Lion",
+      date: "2023-09-01",
+      dietTimePeriod: "8:00 AM - 10:00 AM",
+    },
+    {
+      id: "2",
+      animal: "Elephant",
+      date: "2023-09-02",
+      dietTimePeriod: "9:00 AM - 11:00 AM",
+    },
+    {
+      id: "3",
+      animal: "Giraffe",
+      date: "2023-09-03",
+      dietTimePeriod: "7:00 AM - 9:00 AM",
+    },
+    {
+      id: "1",
+      animal: "Lion",
+      date: "2023-09-01",
+      dietTimePeriod: "8:00 AM - 10:00 AM",
+    },
+    {
+      id: "2",
+      animal: "Elephant",
+      date: "2023-09-02",
+      dietTimePeriod: "9:00 AM - 11:00 AM",
+    },
+    {
+      id: "3",
+      animal: "Giraffe",
+      date: "2023-09-03",
+      dietTimePeriod: "7:00 AM - 9:00 AM",
+    },
+    {
+      id: "1",
+      animal: "Lion",
+      date: "2023-09-01",
+      dietTimePeriod: "8:00 AM - 10:00 AM",
+    },
+    {
+      id: "2",
+      animal: "Elephant",
+      date: "2023-09-02",
+      dietTimePeriod: "9:00 AM - 11:00 AM",
+    },
+    {
+      id: "3",
+      animal: "Giraffe",
+      date: "2023-09-03",
+      dietTimePeriod: "7:00 AM - 9:00 AM",
+    },
   ];
 
   // Row click handler (for example, to view details)
