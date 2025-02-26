@@ -1,59 +1,96 @@
+import { useAnimalById } from "@/hooks/api/animal.hook";
+import { useParams } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import InputField from "@/components/custom-ui/form-feilds/input-field";
+
 function AnimalProfile() {
-  return (
-    <div className="w-[95%] mx-auto bg-gray-100 rounded-xl shadow-md p-6 mt-8">
-      <h2 className="text-xl font-bold mb-4 font-weight-700">About Animal</h2>
-      <div className="flex justify-between space-x-4">
-        <div className="w-1/2 space-y-4">
-          <div className="flex flex-col space-y-2">
-            <label className="text-gray-700 font-bold">Category</label>
-            <input 
-              type="text" 
-              placeholder="CategoryXYZ" 
-              className="border rounded px-3 py-2 bg-gray-50"
-              
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <label className="text-gray-700 font-bold">Weight</label>
-            <input 
-              type="text" 
-              placeholder="50Kgs" 
-              className="border rounded px-3 py-2 bg-gray-50"
+  const { animalId } = useParams<{ animalId: string }>();
+  const { data, isLoading, error } = useAnimalById(animalId as string);
 
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <label className="text-gray-700 font-bold">Age</label>
-            <input 
-              type="text" 
-              placeholder="Infant" 
-              className="border rounded px-3 py-2 bg-gray-50"
+  if (isLoading) {
+    return (
+      <div className="w-full text-center py-10">Loading animal data...</div>
+    );
+  }
 
-            />
-          </div>
-        </div>
-        <div className="w-1/2 space-y-4">
-          <div className="flex flex-col space-y-2">
-            <label className="text-gray-700 font-bold">Animal</label>
-            <input 
-              type="text" 
-              placeholder="AnimalXYZ" 
-              className="border rounded px-3 py-2 bg-gray-50"
-
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <label className="text-gray-700 font-bold">Breed</label>
-            <input 
-              type="text" 
-              placeholder="BreedXYZ" 
-              className="border rounded px-3 py-2 bg-gray-50"
-
-            />
-          </div>
-        </div>
+  if (error) {
+    console.error("Error loading animal data:", error);
+    return (
+      <div className="w-full text-center py-10 text-red-500">
+        Error loading animal data: {error.message}
       </div>
-    </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="w-full text-center py-10">No animal data available.</div>
+    );
+  }
+
+  return (
+    <Card className="shadow md">
+      <CardHeader>
+        <CardTitle className="text-[1.3rem] font-semibold">
+          About Animal
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-4">
+            <div className="flex flex-col space-y-2">
+              <Label className="text-lg">Species</Label>
+              <InputField
+                type="text"
+                placeholder="CategoryXYZ"
+                value={data.species || ""}
+                disabled
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <Label className="text-lg">Weight</Label>
+              <InputField
+                type="text"
+                placeholder="50 Kgs"
+                value={data.weight ? `${data.weight} Kgs` : ""}
+                disabled
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <Label className="text-lg">Age</Label>
+              <InputField
+                type="text"
+                placeholder="Infant"
+                value={data.age !== undefined ? data.age.toString() : ""}
+                disabled
+              />
+            </div>
+          </div>
+          {/* Right Column */}
+          <div className="space-y-4">
+            <div className="flex flex-col space-y-2">
+              <Label className="text-lg">Animal</Label>
+              <InputField
+                type="text"
+                placeholder="AnimalXYZ"
+                value={data.name || ""}
+                disabled
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <Label className="text-lg">Breed</Label>
+              <InputField
+                type="text"
+                placeholder="BreedXYZ"
+                value={data.breed || ""}
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

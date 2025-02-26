@@ -8,14 +8,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ANIMAL_DETAIL } from "@/constants/app-routes";
 import { AnimalPublic } from "@repo/shared";
 import { Trash2Icon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export interface AnimalListTableProps {
   results: AnimalPublic[];
 }
 
 function AnimalListTable({ results }: AnimalListTableProps) {
+  const navigate = useNavigate();
+  function rowClick(animalId: string) {
+    navigate(ANIMAL_DETAIL(animalId));
+  }
   return (
     <div className="flex flex-col overflow-hidden bg-white rounded-xl">
       <ScrollArea className="h-full">
@@ -38,7 +44,7 @@ function AnimalListTable({ results }: AnimalListTableProps) {
             )}
             {results.length > 0 &&
               results.map((animal) => (
-                <TableRow key={animal.id}>
+                <TableRow key={animal.id} onClick={() => rowClick(animal.id)}>
                   <TableCell className="pl-6">{animal.name}</TableCell>
                   <TableCell>{animal.age}</TableCell>
                   <TableCell>{animal.breed}</TableCell>

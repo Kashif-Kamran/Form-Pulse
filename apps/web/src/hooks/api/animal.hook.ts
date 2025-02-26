@@ -45,3 +45,15 @@ export const useCreateAnimal = (
     ...options,
   });
 };
+
+export const useAnimalById = (
+  animalId: string,
+  options?: UseQueryOptions<AnimalResponse, Error, AnimalResponse, QueryKey>
+) => {
+  const { data, ...rest } = useQuery({
+    queryKey: [ANIMALS_QUERY_KEY, animalId],
+    queryFn: () => getRequest<AnimalResponse>(`/animals/${animalId}`),
+    ...options,
+  });
+  return { data, ...rest };
+};

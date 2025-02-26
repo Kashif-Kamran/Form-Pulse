@@ -26,6 +26,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
       errorText
         ? "border-destructive-foreground focus-within:border-destructive"
         : "focus-within:border-primary",
+      inputPropsWithoutClassName.disabled && "bg-gray-200 border-none",
       className
     );
 
