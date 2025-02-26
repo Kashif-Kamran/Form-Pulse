@@ -49,16 +49,16 @@ function AnimalProfile() {
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <Label className="text-lg">Weight</Label>
+              <Label className="text-lg">Weight (in kgs)</Label>
               <InputField
                 type="text"
                 placeholder="50 Kgs"
-                value={data.weight ? `${data.weight} Kgs` : ""}
+                value={data.weight ? `${data.weight}` : ""}
                 disabled
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <Label className="text-lg">Age</Label>
+              <Label className="text-lg">Age (in years)</Label>
               <InputField
                 type="text"
                 placeholder="Infant"
