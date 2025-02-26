@@ -32,15 +32,15 @@ function AnimalProfile() {
   return (
     <Card className="shadow md">
       <CardHeader>
-        <CardTitle className="text-[1.3rem] font-semibold">
-          About Animal
+        <CardTitle className="text-[1.3rem] text-primary-foreground text-center font-semibold bg-primary p-2 rounded-md">
+          Basic Animal Info
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-4">
             <div className="flex flex-col space-y-2">
-              <Label className="text-lg">Species</Label>
+              <Label className="text-[1.02rem]">Species</Label>
               <InputField
                 type="text"
                 placeholder="CategoryXYZ"
@@ -49,7 +49,7 @@ function AnimalProfile() {
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <Label className="text-lg">Weight (in kgs)</Label>
+              <Label className="text-[1.02rem]">Weight (in kgs)</Label>
               <InputField
                 type="text"
                 placeholder="50 Kgs"
@@ -58,7 +58,7 @@ function AnimalProfile() {
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <Label className="text-lg">Age (in years)</Label>
+              <Label className="text-[1.02rem]">Age (in years)</Label>
               <InputField
                 type="text"
                 placeholder="Infant"
@@ -70,7 +70,7 @@ function AnimalProfile() {
           {/* Right Column */}
           <div className="space-y-4">
             <div className="flex flex-col space-y-2">
-              <Label className="text-lg">Animal</Label>
+              <Label className="text-[1.02rem]">Animal</Label>
               <InputField
                 type="text"
                 placeholder="AnimalXYZ"
@@ -79,7 +79,7 @@ function AnimalProfile() {
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <Label className="text-lg">Breed</Label>
+              <Label className="text-[1.02rem]">Breed</Label>
               <InputField
                 type="text"
                 placeholder="BreedXYZ"

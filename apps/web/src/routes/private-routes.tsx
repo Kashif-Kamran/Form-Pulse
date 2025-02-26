@@ -20,6 +20,7 @@ const AnimalProfile = lazy(() => import("@/pages/animals/animal-profile"));
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
 const AppLayout = lazy(() => import("@/layout/app-layout"));
 const FeedInventory = lazy(() => import("@/pages/feed-inventory"));
+const DietList = lazy(() => import("@/pages/diet-management/diet-list"));
 const AnimalList = lazy(
   () => import("@/pages/animals/animal-list/animal-list")
 );
@@ -80,7 +81,7 @@ const privateRoutes: RouteObject[] = [
             path: DIET_MANAGEMENT,
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
-                <div>Diet Management</div>
+                <DietList />
               </Suspense>
             ),
           },
