@@ -55,10 +55,10 @@ export default function Sidebar() {
           key={item.to}
           to={item.to}
           className={({ isActive }: { isActive: boolean }) =>
-            `p-3 border-b-2 border-gray-400 ${
+            `p-3 border-b-2 border-gray-400 rounded-md transition-all duration-200 ${
               isActive
-                ? "bg-gray-400 text-white"
-                : "bg-transparent text-black hover:border-[1px] hover:border-gray-400 "
+                ? "bg-primary text-primary-foreground"
+                : "bg-transparent text-black hover:border-[1px] hover:border-primary "
             }`
           }
         >
