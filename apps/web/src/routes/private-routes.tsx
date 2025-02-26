@@ -19,6 +19,7 @@ import { ErrorBoundary } from "@/common/error-boundary";
 const AnimalProfile = lazy(() => import("@/pages/animals/animal-profile"));
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
 const AppLayout = lazy(() => import("@/layout/app-layout"));
+const FeedInventory = lazy(() => import("@/pages/feed-inventory"));
 const AnimalList = lazy(
   () => import("@/pages/animals/animal-list/animal-list")
 );
@@ -87,7 +88,7 @@ const privateRoutes: RouteObject[] = [
             path: FEED_INVENTORY,
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
-                <div>Feed Inventory</div>
+                <FeedInventory />
               </Suspense>
             ),
           },
