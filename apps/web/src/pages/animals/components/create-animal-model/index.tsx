@@ -80,7 +80,7 @@ export function CreateAnimalModel() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader className="bg-primary rounded-md p-4 text-primary-foreground mt-4">
-          <DialogTitle className="font-semibold">
+          <DialogTitle className="font-semibold text-center">
             Create a New Animal Profile
           </DialogTitle>
           <DialogDescription className="hidden">
