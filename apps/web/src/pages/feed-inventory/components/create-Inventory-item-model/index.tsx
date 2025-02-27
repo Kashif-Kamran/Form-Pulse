@@ -21,68 +21,64 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { useCreateAnimal } from "@/hooks/api/animal.hook";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
+import { useCreateFeedInventory } from "@/hooks/api/feed-inventory.hook";
 
-// Validation Schema using Zod
-const AnimalSchema = z.object({
+// Validation Schema using Zod for Feed Inventory Item
+const FeedInventoryItemSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  breed: z.string().min(2, { message: "Breed must be at least 2 characters" }),
-  species: z
-    .string()
-    .min(2, { message: "Species must be at least 2 characters" })
-    .max(10, { message: "Species must be at most 10 characters long" }),
-  age: z.coerce.number().min(0, { message: "Age must be a positive number" }),
-  weight: z.coerce
+  totalQuentity: z.coerce
     .number()
-    .min(0, { message: "Weight must be a positive number" }),
+    .min(0, { message: "Total Quantity must be a positive number" }),
+  totalPrice: z.coerce
+    .number()
+    .min(0, { message: "Total Price must be a positive number" }),
 });
 
-type AnimalFormData = z.infer<typeof AnimalSchema>;
+type FeedInventoryItemData = z.infer<typeof FeedInventoryItemSchema>;
 
-export function CreateAnimalModel() {
+export function CreateFeedInventoryItemModel() {
   const [open, setOpen] = useState(false);
-  const form = useForm<AnimalFormData>({
-    resolver: zodResolver(AnimalSchema),
+  const { mutateAsync: createNewFeedInventory } = useCreateFeedInventory();
+  const form = useForm<FeedInventoryItemData>({
+    resolver: zodResolver(FeedInventoryItemSchema),
     defaultValues: {
       name: "",
-      breed: "",
-      species: "",
-      age: 0,
-      weight: 0,
+      totalQuentity: 0,
+      totalPrice: 0,
     },
   });
 
-  const { mutateAsync: createAnimal } = useCreateAnimal();
   const { toast } = useToast();
-  const handleSubmit = async (data: AnimalFormData) => {
-    await createAnimal(data, {
-      onSuccess: () => {
-        toast({ title: "Animal Information Saved Successfully" });
-      },
-      onError: (error) => {
-        toast({
-          title: "Unable to save animal information",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
-    });
-    form.reset();
-    setOpen(false);
+
+  const handleSubmit = async (data: FeedInventoryItemData) => {
+    try {
+      console.log("Feed Inventory Item Data:", data);
+      await createNewFeedInventory(data);
+      toast({ title: "Feed Inventory Item created successfully" });
+    } catch (error: any) {
+      toast({
+        title: "Error creating Feed Inventory Item",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      form.reset();
+      setOpen(false);
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="h-full">Add New Animal</Button>
+        <Button className="h-full">New Feed Item</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader className="bg-primary rounded-md p-4 text-primary-foreground mt-4">
           <DialogTitle className="font-semibold text-center">
-            Create a New Animal Informations
+            Create a New Feed Inventory Item
           </DialogTitle>
           <DialogDescription className="hidden">
             Enter the details below and click save when you're done.
@@ -94,59 +90,33 @@ export function CreateAnimalModel() {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="grid grid-cols-1 lg:grid-cols-2 gap-4 py-4"
           >
+            {/* Feed Inventory Item Name */}
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem className="space-y-0">
-                  <Label className="mb-4 ">Name</Label>
+                  <Label className="">Name</Label>
                   <FormControl>
-                    <InputField placeholder="Enter Animal Name" {...field} />
+                    <InputField placeholder="Enter Feed Item Name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* Total Quantity */}
             <FormField
               control={form.control}
-              name="breed"
+              name="totalQuentity"
               render={({ field }) => (
                 <FormItem className="space-y-0">
-                  <Label className="mb-4 ">Breed</Label>
-                  <FormControl>
-                    <InputField placeholder="Enter Breed" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="species"
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <Label className="mb-4 ">Species</Label>
-                  <FormControl>
-                    <InputField placeholder="Enter Species" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="age"
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <Label className="mb-4 ">Age</Label>
+                  <Label className="">Total Quantity</Label>
                   <FormControl>
                     <InputField
-                      placeholder="Enter Age"
-                      min={0}
+                      placeholder="Enter Total Quantity"
                       type="number"
+                      min={0}
                       {...field}
                     />
                   </FormControl>
@@ -155,15 +125,16 @@ export function CreateAnimalModel() {
               )}
             />
 
+            {/* Total Price */}
             <FormField
               control={form.control}
-              name="weight"
+              name="totalPrice"
               render={({ field }) => (
-                <FormItem className="space-y-">
-                  <Label className="mb-4">Weight (kg)</Label>
+                <FormItem className="space-y-0">
+                  <Label className="">Total Price</Label>
                   <FormControl>
                     <InputField
-                      placeholder="Enter Weight (kg)"
+                      placeholder="Enter Total Price"
                       type="number"
                       min={0}
                       {...field}

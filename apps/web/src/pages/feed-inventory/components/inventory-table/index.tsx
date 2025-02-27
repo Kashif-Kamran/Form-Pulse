@@ -46,6 +46,7 @@ function InventoryTable({ results }: InventoryTableProps) {
                       className="h-8 w-8 text-destructive hover:bg-destructive hover:text-destructive-foreground p-[6px]"
                       variant="ghost"
                       onClick={() => console.log(`Deleting ${item.name}`)}
+                      disabled
                     >
                       <Trash2Icon className="h-full w-full" />
                     </Button>

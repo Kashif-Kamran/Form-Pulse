@@ -1,7 +1,7 @@
 import InventoryTable from "./components/inventory-table";
 import SearchInputFeild from "@/components/custom-ui/search-input-feild";
-import { Button } from "@/components/ui/button";
 import { useFeedInventory } from "@/hooks/api/feed-inventory.hook";
+import { CreateFeedInventoryItemModel } from "./components/create-Inventory-item-model";
 
 function InventoryList() {
   const { results = [] } = useFeedInventory();
@@ -9,7 +9,7 @@ function InventoryList() {
     <div className="space-y-4 flex flex-col h-full ">
       <div className="flex flex-row justify-center items-center gap-4">
         <SearchInputFeild placeholder="Search Feed Item..." />
-        <Button className="h-full">Add New Feed Item</Button>
+        <CreateFeedInventoryItemModel />
       </div>
       <InventoryTable results={results} />
     </div>
