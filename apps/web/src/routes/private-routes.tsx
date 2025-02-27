@@ -24,6 +24,10 @@ const DietList = lazy(() => import("@/pages/diet-management/diet-list"));
 const AnimalList = lazy(
   () => import("@/pages/animals/animal-list/animal-list")
 );
+const HealthMonitoring = lazy(
+  () => import("@/pages/health-monitoring/health-list")
+);
+
 
 const ProtectedRoute = () => {
   const { data, isLoading } = useMe();
@@ -97,7 +101,7 @@ const privateRoutes: RouteObject[] = [
             path: HEALTH_MONITORING,
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
-                <div>Health Monitoring</div>
+                <HealthMonitoring />
               </Suspense>
             ),
           },
