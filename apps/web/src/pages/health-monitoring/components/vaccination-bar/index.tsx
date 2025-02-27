@@ -19,19 +19,19 @@ const VaccinationBar = () => {
   ];
 
   return (
-    <div className="w-full mx-auto p-2" style={{ backgroundColor: '#116C2B' }}>
+    <div className="w-full mx-auto p-2" style={{ backgroundColor: '#116C2B', borderRadius: '10px' }}>
       <div className="flex justify-center">
-        <div className="w-52 border border-white" style={{ backgroundColor: '#116C2B' }}>
+        <div className="w-52 border border-white" style={{ backgroundColor: '#116C2B'}}>
           <Select
             value={selectedVaccine}
             onValueChange={(value) => setSelectedVaccine(value)}
           >
-            <SelectTrigger style={{ color: 'white' }}>
+            <SelectTrigger style={{ color: 'white', borderRadius: '0' }}>
               <SelectValue>
                 {selectedVaccine}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent style={{ borderColor: 'white' }}>
+            <SelectContent style={{ borderColor: 'white', borderRadius: '0' }}>
               {/* Add the default option */}
               <SelectItem value="Select vaccine" style={{ color: 'black' }}>
                 Select vaccine
