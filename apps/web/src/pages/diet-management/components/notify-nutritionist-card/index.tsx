@@ -17,7 +17,7 @@ export default function NotifyNutritionistCard() {
           Assign Task to Nutritionist
         </CardTitle>
       </CardHeader>
-      <CardContent className="grid  md:grid-cols-[1fr_1fr] gap-2">
+      <CardContent className="grid lg:grid-cols-[2fr_1fr] gap-2">
         <Textarea
           className=" overflow-y-auto h-[8rem] border rounded p-2 resize-none"
           placeholder="Type your message here."
