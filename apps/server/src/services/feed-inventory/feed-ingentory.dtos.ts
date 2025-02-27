@@ -1,16 +1,18 @@
-import { CreateFeedInventoryItem } from '@repo/shared';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { CreateNewFeedItemReq } from '@repo/shared';
+import { IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
 
-export class CreateFeedItemDto implements CreateFeedInventoryItem {
+export class CreateFeedItemDto implements CreateNewFeedItemReq {
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @IsNotEmpty()
   @IsNumber()
-  availableQuantity: number;
+  @IsNotEmpty()
+  @Min(0)
+  totalQuentity: number;
 
   @IsNumber()
   @IsNotEmpty()
-  unitPrice: number;
+  @Min(0)
+  totalPrice: number;
 }

@@ -36,8 +36,9 @@ export interface IFeedInventory {
   _id: any;
   id: string;
   name: string;
-  availableQuantity: number;
-  unitPrice: number;
+  remainingStock: number;
+  usedStock: number;
+  totalPrice: number;
 }
 
 export interface IDietPlan {

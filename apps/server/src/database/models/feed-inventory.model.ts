@@ -13,14 +13,17 @@ export type FeedInventoryDocument = HydratedDocument<IFeedInventory>;
 export class FeedInventory implements IFeedInventory {
   declare _id: Types.ObjectId;
 
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop()
-  availableQuantity: number;
+  @Prop({ required: true })
+  remainingStock: number;
 
-  @Prop()
-  unitPrice: number;
+  @Prop({ required: true })
+  usedStock: number;
+
+  @Prop({ required: true })
+  totalPrice: number;
 
   get id(): string {
     return this._id.toString();

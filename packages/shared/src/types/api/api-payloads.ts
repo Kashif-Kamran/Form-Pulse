@@ -24,10 +24,12 @@ export type CreateAnimalReq = Omit<
 >;
 
 // Feed Inventory
-export type CreateFeedInventoryItem = Pick<
-  IFeedInventory,
-  "availableQuantity" | "name" | "unitPrice"
->;
+export type CreateNewFeedItem = {
+  name: string;
+  totalQuentity: number;
+  totalPrice: number;
+};
+export type CreateNewFeedItemReq = CreateNewFeedItem;
 
 // Diet Plan
 export type CreateDietPlanReq = Omit<

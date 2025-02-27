@@ -6,7 +6,6 @@ import {
   IUser,
 } from "../interfaces/resources";
 import {
-  ListResponse,
   ResourceListResponse,
   ResourceResponse,
   SingleItemResponse,
@@ -30,10 +29,9 @@ export type AnimalResponse = ResourceResponse<AnimalPublic>;
 export type AnimalListResponse = ResourceListResponse<AnimalPublic>;
 
 // Feed Inventory
-export type FeedInventoryPublic = Omit<IFeedInventory, "_id">;
-export type FeedItemResponse = ResourceResponse<FeedInventoryPublic>;
-export type FeedInventoryListResponse =
-  ResourceListResponse<FeedInventoryPublic>;
+export type FeedItemPublic = ResourceResponse<IFeedInventory>;
+export type FeedItemResponse = ResourceResponse<IFeedInventory>;
+export type FeedInventoryListResponse = ResourceListResponse<IFeedInventory>;
 
 // Diet Plan
 export type AnimalDietPlanPublic = Omit<IDietPlan, "animal"> & {
