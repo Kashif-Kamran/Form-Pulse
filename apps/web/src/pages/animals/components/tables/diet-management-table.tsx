@@ -16,6 +16,7 @@ export interface DietManagementItem {
   animals: string[];
   date: string;
   dietTimePeriod: string;
+  dietPlan?: string; // Optional field for diet plan
 }
 
 // Props interface for the table
@@ -34,7 +35,8 @@ function DietManagementTable({ results, className }: DietManagementTableProps) {
               <TableHead className="pl-6">Animal(s)</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Diet Time Period</TableHead>
-              <TableHead className="text-center">Diet Delete</TableHead>
+              <TableHead>Diet Plan</TableHead> {/* New column heading */}
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
 
@@ -52,6 +54,9 @@ function DietManagementTable({ results, className }: DietManagementTableProps) {
                   </TableCell>
                   <TableCell>{item.date}</TableCell>
                   <TableCell>{item.dietTimePeriod}</TableCell>
+                  <TableCell> {/* Removed text-center */}
+                    <span className="text-green-700 cursor-pointer">Edit</span>
+                  </TableCell>
                   <TableCell className="p-0 text-center">
                     <Button
                       className="h-8 w-8 text-destructive hover:bg-destructive hover:text-destructive-foreground p-[6px]"
