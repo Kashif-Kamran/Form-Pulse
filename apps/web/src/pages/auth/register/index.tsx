@@ -67,7 +67,7 @@ const Register = () => {
         email: data.email,
         password: data.password,
         name: data.username,
-        roles: [data.role as RoleType],
+        role: data.role as RoleType,
       };
       await registerUser(payload, {
         onSuccess: () => {
