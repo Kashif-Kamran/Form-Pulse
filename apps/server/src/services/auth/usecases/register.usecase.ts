@@ -33,7 +33,7 @@ export class RegisterUserUseCase {
     const creationPayload: Partial<IUser> = {
       ...registerUserDto,
       password: hashedPassword,
-      roles: [RoleType.CareTaker],
+      role: RoleType.CareTaker,
       isVerified: false,
       verificationOtp: verificationOpt,
     };
@@ -55,7 +55,7 @@ export class RegisterUserUseCase {
     return {
       id: creationDbResponse.id,
       name: creationDbResponse.name,
-      roles: creationDbResponse.roles,
+      role: creationDbResponse.role,
       email: creationDbResponse.email,
       isVerified: creationDbResponse.isVerified,
     };

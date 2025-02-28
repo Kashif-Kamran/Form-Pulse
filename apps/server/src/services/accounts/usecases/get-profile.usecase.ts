@@ -13,7 +13,7 @@ export class GetProfileUseCase {
       id: userDocument.id,
       isVerified: userDocument.isVerified,
       name: userDocument.name,
-      roles: userDocument.roles,
+      role: userDocument.role,
     };
   }
 }

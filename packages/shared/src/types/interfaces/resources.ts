@@ -12,7 +12,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  roles: RoleType[];
+  role: RoleType;
   verificationOtp?: Number | null;
   isVerified: boolean;
 }

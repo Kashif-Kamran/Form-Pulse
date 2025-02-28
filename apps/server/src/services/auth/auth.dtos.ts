@@ -1,10 +1,9 @@
 import {
-  ArrayNotEmpty,
-  IsArray,
   IsEmail,
   IsIn,
   IsInt,
   IsNotEmpty,
+  IsString,
   Length,
 } from 'class-validator';
 import {
@@ -26,12 +25,10 @@ export class RegisterUserRequestDto implements CreateUserReq {
   @Length(8, 20)
   password: string;
 
-  @IsArray()
-  @ArrayNotEmpty()
-  @IsIn([RoleType.CareTaker, RoleType.Nutritionist, RoleType.Veterinarian], {
-    each: true,
-  })
-  roles: RoleType[];
+  @IsString()
+  @IsNotEmpty()
+  @IsIn([RoleType.CareTaker, RoleType.Nutritionist, RoleType.Veterinarian])
+  role: RoleType;
 }
 
 export class OtpVerificationDto implements VerifyOtpReq {

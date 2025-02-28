@@ -22,8 +22,8 @@ export class User implements IUser {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ type: [String], enum: RoleType, default: [RoleType.Admin] })
-  roles: RoleType[];
+  @Prop({ required: true })
+  role: RoleType;
 
   @Prop({ default: false })
   isVerified: boolean;
