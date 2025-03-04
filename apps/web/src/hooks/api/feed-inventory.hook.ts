@@ -16,6 +16,7 @@ import {
 const FEED_INVENTORY_QUERY_KEY = "feed-inventory" as const;
 
 export const useFeedInventory = (
+  query?: string,
   options?: UseQueryOptions<
     FeedInventoryListResponse,
     Error,
@@ -23,9 +24,14 @@ export const useFeedInventory = (
     QueryKey
   >
 ) => {
+  const queryKey = [FEED_INVENTORY_QUERY_KEY, "list", query ?? ""];
   const { data, ...rest } = useQuery({
-    queryFn: () => getRequest<FeedInventoryListResponse>("/feed-inventory"),
-    queryKey: [FEED_INVENTORY_QUERY_KEY, "list"],
+    queryFn: () => {
+      let url = "/feed-inventory";
+      if (query) url += `?q=${encodeURIComponent(query)}`;
+      return getRequest<FeedInventoryListResponse>(url);
+    },
+    queryKey: queryKey,
     ...options,
   });
 
