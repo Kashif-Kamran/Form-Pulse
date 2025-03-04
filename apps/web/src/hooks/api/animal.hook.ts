@@ -16,6 +16,7 @@ import {
 const ANIMALS_QUERY_KEY = "animals" as const;
 
 export const useAnimals = (
+  query?: string,
   options?: UseQueryOptions<
     AnimalListResponse,
     Error,
@@ -23,9 +24,14 @@ export const useAnimals = (
     QueryKey
   >
 ) => {
+  const queryKey = [ANIMALS_QUERY_KEY, "list", query ?? ""];
   const { data, ...rest } = useQuery({
-    queryFn: () => getRequest<AnimalListResponse>("/animals"),
-    queryKey: [ANIMALS_QUERY_KEY, "list"],
+    queryFn: () => {
+      let url = "/animals";
+      if (query) url += `?q=${encodeURIComponent(query)}`;
+      return getRequest<AnimalListResponse>(url);
+    },
+    queryKey: queryKey,
     ...options,
   });
 
