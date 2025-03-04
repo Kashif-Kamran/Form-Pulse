@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { CreateAnimalDto } from './dtos';
 import { CreateAnimalUseCase } from './usecases/create-animal.usecase';
 import { ListAnimalsUseCase } from './usecases/list-animals.usecase';
@@ -13,8 +13,8 @@ export class AnimalController {
   ) {}
 
   @Get()
-  async getAllAnimals() {
-    return this.listAnimalsUseCase.execute();
+  async getAllAnimals(@Query('q') queryString?: string) {
+    return this.listAnimalsUseCase.execute(queryString);
   }
 
   @Post()

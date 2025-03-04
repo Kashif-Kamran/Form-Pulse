@@ -41,4 +41,6 @@ AnimalSchema.virtual('id').get(function () {
   return this._id.toString();
 });
 
+AnimalSchema.index({ name: 'text', species: 'text', breed: 'text' });
+
 export type AnimalModel = Model<Animal>;
