@@ -17,11 +17,7 @@ export class ListAnimalsUseCase {
       const regex = new RegExp(`^${searchQuery}`, 'i'); // case-insensitive prefix search
       resultDocs = await this.animalModel
         .find({
-          $or: [
-            { name: { $regex: regex } },
-            { species: { $regex: regex } },
-            { breed: { $regex: regex } },
-          ],
+          $or: [{ name: { $regex: regex } }, { breed: { $regex: regex } }],
         })
         .exec();
     }
