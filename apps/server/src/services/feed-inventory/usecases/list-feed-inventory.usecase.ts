@@ -12,9 +12,17 @@ export class ListFeedInventoryUseCase {
     @InjectModel('FeedInventory')
     private readonly feedInventoryModel: FeedInventoryModel,
   ) {}
-  async execute(): Promise<FeedInventoryListResponse> {
-    const feedItems: FeedInventoryDocument[] =
-      await this.feedInventoryModel.find();
+  async execute(searchQuery?: string): Promise<FeedInventoryListResponse> {
+    let feedItems: FeedInventoryDocument[] = [];
+    if (!searchQuery) feedItems = await this.feedInventoryModel.find();
+    else {
+      const regex = new RegExp(`^${searchQuery}`, 'i');
+      feedItems = await this.feedInventoryModel
+        .find({
+          $or: [{ name: { $regex: regex } }],
+        })
+        .exec();
+    }
     const results: IFeedInventory[] = feedItems.map((item) => item.toObject());
 
     return { results, count: results.length };

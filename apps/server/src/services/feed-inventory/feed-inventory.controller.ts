@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CreateFeedItemUseCase } from './usecases/create-feed-item.usecase';
 import { CreateFeedItemDto } from './feed-ingentory.dtos';
 import { ListFeedInventoryUseCase } from './usecases/list-feed-inventory.usecase';
@@ -16,7 +16,7 @@ export class FeedInventoryController {
   }
 
   @Get()
-  async getInventoryList() {
-    return this.listFeedInventoryUC.execute();
+  async getInventoryList(@Query('q') searchQuery: string) {
+    return this.listFeedInventoryUC.execute(searchQuery);
   }
 }
