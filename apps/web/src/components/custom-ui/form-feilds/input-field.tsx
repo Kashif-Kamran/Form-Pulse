@@ -32,7 +32,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 
     return (
       <div className="flex flex-col gap-[6px] w-full transition-all duration-300 ">
-        {label && <Label className="">{label}</Label>}
+        {label && <Label className="text-md p-0">{label}</Label>}
         <div className={inputContainerStyles}>
           {leftIcon && (
             <div className="flex justify-center items-center text-muted-foreground">
