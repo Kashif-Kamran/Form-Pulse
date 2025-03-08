@@ -46,7 +46,7 @@ export interface IDietPlan {
   id: string;
   animal: string;
   startTime: Date;
-  duration: Date;
+  endTime: Date;
   recipes: {
     feed: string;
     quantity: number;

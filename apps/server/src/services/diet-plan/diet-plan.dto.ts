@@ -28,7 +28,7 @@ export class CreateDietPlanDto implements CreateDietPlanReq {
   @IsDate()
   @IsNotEmpty()
   @Type(() => Date)
-  duration: Date;
+  endTime: Date;
 
   @IsArray()
   @ValidateNested({ each: true })

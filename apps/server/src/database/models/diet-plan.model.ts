@@ -20,7 +20,7 @@ export class DietPlan implements IDietPlan {
   startTime: Date;
 
   @Prop({ required: true })
-  duration: Date;
+  endTime: Date;
 
   @Prop({
     type: [
