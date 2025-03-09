@@ -2,6 +2,7 @@ import { Outlet, RouteObject, Navigate, useLocation } from "react-router-dom";
 import {
   ANIMAL_DETAIL,
   ANIMALS_PROFILE,
+  CREATE_DIET_PLAN,
   DIET_MANAGEMENT,
   EDUCATIONAL_RESOURCERS,
   FEED_INVENTORY,
@@ -21,13 +22,15 @@ const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
 const AppLayout = lazy(() => import("@/layout/app-layout"));
 const FeedInventory = lazy(() => import("@/pages/feed-inventory"));
 const DietList = lazy(() => import("@/pages/diet-management/diet-list"));
+const CreateDietPlanPage = lazy(
+  () => import("@/pages/diet-management/create-diet-plan")
+);
 const AnimalList = lazy(
   () => import("@/pages/animals/animal-list/animal-list")
 );
 const HealthMonitoring = lazy(
   () => import("@/pages/health-monitoring/health-list")
 );
-
 
 const ProtectedRoute = () => {
   const { data, isLoading } = useMe();
@@ -86,6 +89,14 @@ const privateRoutes: RouteObject[] = [
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
                 <DietList />
+              </Suspense>
+            ),
+          },
+          {
+            path: CREATE_DIET_PLAN,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <CreateDietPlanPage />
               </Suspense>
             ),
           },

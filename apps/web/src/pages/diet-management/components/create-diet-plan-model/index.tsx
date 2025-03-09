@@ -8,11 +8,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Form from "./form";
+import Form from "../forms/diet-plan.form";
 
 function CreateDietPlanModel() {
   return (
-    <Dialog open={true}>
+    <Dialog>
       {/* Trigger Button */}
       <DialogTrigger asChild>
         <Button className="h-full"> Create Diet Plan</Button>
