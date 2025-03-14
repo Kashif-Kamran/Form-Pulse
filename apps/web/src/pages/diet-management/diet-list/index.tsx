@@ -10,11 +10,11 @@ function AnimalList() {
     <div className="space-y-4 flex flex-col h-full">
       <div className="flex justify-center items-center gap-2">
         <SearchInputFeild placeholder="Search Animal..." />
-        {/* <CreateDietPlanModel /> */}
-        <Link to={CREATE_DIET_PLAN}>
+        <Link className="h-full" to={CREATE_DIET_PLAN}>
           <Button className="h-full">Create Diet Plan</Button>
         </Link>
       </div>
+      {/*  */}
       <NotifyNutritionistCard />
       <DietListTable />
     </div>

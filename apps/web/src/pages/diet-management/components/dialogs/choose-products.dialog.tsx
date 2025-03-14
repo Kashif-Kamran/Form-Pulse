@@ -39,8 +39,10 @@ function ChooseFeedItemDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>
-        <Button>Feed Item</Button>
+      <DialogTrigger className="">
+        <Button type="button" className="p-6">
+          Feed Item
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[800px] sm:max-h-[800px]">
         <DialogTitle className="bg-primary text-primary-foreground py-4 text-center rounded-md mt-4">
