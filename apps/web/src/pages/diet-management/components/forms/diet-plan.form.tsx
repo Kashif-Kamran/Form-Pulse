@@ -22,12 +22,19 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { DietPlanData } from "../zod-schemas";
+import {
+  DietPlanData,
+  DietPlanSchema,
+  transformDietPlanForBackend,
+} from "../zod-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/hooks/use-toast";
 
 function DietPlanForm() {
+  const { toast } = useToast();
   const form = useForm<DietPlanData>({
+    resolver: zodResolver(DietPlanSchema),
     defaultValues: {
       animal: {
         id: "",
@@ -38,9 +45,40 @@ function DietPlanForm() {
     },
   });
 
+  const onSubmit = form.handleSubmit(
+    async (formData: DietPlanData) => {
+      // console.log("Data : ", formData);
+      const transformedData = transformDietPlanForBackend(formData);
+      console.log(transformedData);
+
+      // toast({
+      //   title: "Success",
+      //   description: "Diet plan created successfully!",
+      //   variant: "default",
+      // });
+    },
+    (errors) => {
+      // Handle validation errors
+      Object.entries(errors).forEach(([fieldName, error]) => {
+        console.log({ fieldName, error });
+        if (fieldName === "animal" && error) {
+          console.log("Shoud Be selected ");
+          return toast({
+            title: "Please Select Animal",
+            variant: "destructive",
+          });
+        }
+        toast({
+          title: error.message,
+          variant: "destructive",
+        });
+      });
+    }
+  );
+
   return (
     <Form {...form}>
-      <form className="space-y-4 max-h-full flex flex-col">
+      <form className="space-y-4 max-h-full flex flex-col" onSubmit={onSubmit}>
         <Card className="pt-2 px-6 pb-6">
           <CardTitle className="bg-primary rounded-md p-2 text-primary-foreground mt-4 text-center text-lg">
             Create New Diet Plan
@@ -54,7 +92,7 @@ function DietPlanForm() {
         </Card>
         <FeedItemsTable form={form} />
         <div className="px-4 flex justify-end">
-          <Button type="button" className="p-6 px-16">
+          <Button type="submit" className="p-6 px-16">
             Save
           </Button>
         </div>
@@ -87,7 +125,7 @@ const DurationSelection = ({
                 className="w-full"
               />
             </FormControl>
-            <FormMessage />
+            {/* <FormMessage /> Removed */}
           </FormItem>
         )}
       />
@@ -107,7 +145,7 @@ const DurationSelection = ({
                 className="w-full"
               />
             </FormControl>
-            <FormMessage />
+            {/* <FormMessage /> Removed */}
           </FormItem>
         )}
       />
@@ -159,7 +197,7 @@ const AnimalSummary = ({
                   Browse Animal
                 </Button>
               </div>
-              <FormMessage />
+              {/* <FormMessage /> Removed */}
             </FormItem>
           );
         }}
@@ -264,6 +302,9 @@ export function FeedItemsTable({
                             />
                           )}
                         />
+                      </TableCell>
+                      <TableCell className="px-10">
+                        {item.feed.remainingStock}
                       </TableCell>
                       <TableCell className="text-center">
                         <Button
