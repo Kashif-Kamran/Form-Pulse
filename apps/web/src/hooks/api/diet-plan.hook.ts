@@ -1,7 +1,18 @@
-import { getRequest } from "@/lib/client/common";
-import { AnimalDietPlanListResponse } from "@repo/shared";
-import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { getRequest, postRequest } from "@/lib/client/common";
+import {
+  AnimalDietPlanListResponse,
+  CreateAnimalDietPlanResponse,
+  CreateDietPlanReq,
+} from "@repo/shared";
+import {
+  QueryKey,
+  useQuery,
+  UseQueryOptions,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 import { mapDataToAnimalDietPlanPublic } from "./mappers/diet-plan.mapper";
+import { queryClient } from "@/lib/query-client";
 
 const ANIMALS_QUERY_KEY = "animals" as const;
 const DIET_PLAN_QUERY_KEY = "diet-plan" as const;
@@ -25,23 +36,32 @@ export const useDietPlan = (
       };
       return response;
     },
-    queryKey: [DIET_PLAN_QUERY_KEY],
+    queryKey: [DIET_PLAN_QUERY_KEY, "list"],
     ...options,
   });
 
   return { ...data, ...rest };
 };
 
-// const useCreateDietPlan = async (
-//   animalId: string,
-//   options?: UseMutationOptions<
-//     CreateAnimalDietPlanResponse,
-//     Error,
-//     CreateDietPlanReq
-//   >
-// ) => {
-//   return useMutation({
-//     mutationFn: (payload: CreateDietPlanReq) =>
-//       postRequest(`/animals/${animalId}/diet-plan`),
-//   });
-// };
+export const useCreateDietPlan = (
+  options?: UseMutationOptions<
+    CreateAnimalDietPlanResponse,
+    Error,
+    { animalId: string; payload: CreateDietPlanReq }
+  >
+) => {
+  return useMutation({
+    mutationFn: ({ animalId, payload }) =>
+      postRequest<CreateAnimalDietPlanResponse>(
+        `/animals/${animalId}/diet-plan`,
+        payload
+      ),
+    onSuccess: (data: any, variables: any, context: any) => {
+      queryClient.invalidateQueries({
+        queryKey: [DIET_PLAN_QUERY_KEY, "list"],
+      });
+      options?.onSuccess?.(data, variables, context);
+    },
+    ...options,
+  });
+};

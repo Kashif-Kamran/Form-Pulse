@@ -30,8 +30,10 @@ import {
 } from "../zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
+import { useCreateDietPlan } from "@/hooks/api/diet-plan.hook";
 
 function DietPlanForm() {
+  const { mutateAsync: createDietPlan } = useCreateDietPlan();
   const { toast } = useToast();
   const form = useForm<DietPlanData>({
     resolver: zodResolver(DietPlanSchema),
@@ -47,15 +49,29 @@ function DietPlanForm() {
 
   const onSubmit = form.handleSubmit(
     async (formData: DietPlanData) => {
-      // console.log("Data : ", formData);
       const transformedData = transformDietPlanForBackend(formData);
-      console.log(transformedData);
-
-      // toast({
-      //   title: "Success",
-      //   description: "Diet plan created successfully!",
-      //   variant: "default",
-      // });
+      createDietPlan(
+        {
+          animalId: formData.animal.id,
+          payload: transformedData,
+        },
+        {
+          onSuccess: () => {
+            toast({
+              title: "Diet plan created successfully!",
+              variant: "default",
+            });
+          },
+          onError: (error) => {
+            console.log("Error on Diet Plan Creation :", error);
+            toast({
+              title: "Unable to create diet plan",
+              description: error.message,
+              variant: "destructive",
+            });
+          },
+        }
+      );
     },
     (errors) => {
       // Handle validation errors
