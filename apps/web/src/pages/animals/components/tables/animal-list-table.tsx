@@ -9,6 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ANIMAL_DETAIL } from "@/constants/app-routes";
+import { useDeleteAnimalById } from "@/hooks/api/animal.hook";
+import { useToast } from "@/hooks/use-toast";
 import { AnimalPublic } from "@repo/shared";
 import { Trash2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -18,9 +20,31 @@ export interface AnimalListTableProps {
 }
 
 function AnimalListTable({ results }: AnimalListTableProps) {
+  const { mutateAsync: deleteAnimalById } = useDeleteAnimalById();
+  const { toast } = useToast();
   const navigate = useNavigate();
   function rowClick(animalId: string) {
     navigate(ANIMAL_DETAIL(animalId));
+  }
+  function handleDelete(animalId: string) {
+    deleteAnimalById(
+      { animalId },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Animal Deleted Successfully",
+            variant: "default",
+          });
+        },
+        onError: (error) => {
+          toast({
+            title: "Unable to Delete Animal",
+            description: error.message,
+            variant: "destructive",
+          });
+        },
+      }
+    );
   }
   return (
     <div className="flex flex-col overflow-hidden bg-white rounded-xl">
@@ -53,7 +77,10 @@ function AnimalListTable({ results }: AnimalListTableProps) {
                     <Button
                       className="h-8 w-8 text-destructive hover:bg-destructive hover:text-destructive-foreground p-[6px]"
                       variant="ghost"
-                      disabled
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleDelete(animal.id);
+                      }}
                     >
                       <Trash2Icon className="h-full w-full" />
                     </Button>

@@ -1,6 +1,7 @@
-import { getRequest, postRequest } from "@/lib/client/common";
+import { deleteRequest, getRequest, postRequest } from "@/lib/client/common";
 import { queryClient } from "@/lib/query-client";
 import {
+  AnimalDeleteResponse,
   AnimalListResponse,
   AnimalResponse,
   CreateAnimalReq,
@@ -9,6 +10,7 @@ import {
   MutationOptions,
   QueryKey,
   useMutation,
+  UseMutationOptions,
   useQuery,
   UseQueryOptions,
 } from "@tanstack/react-query";
@@ -62,4 +64,21 @@ export const useAnimalById = (
     ...options,
   });
   return { data, ...rest };
+};
+
+export const useDeleteAnimalById = (
+  options?: UseMutationOptions<
+    AnimalDeleteResponse,
+    Error,
+    { animalId: string }
+  >
+) => {
+  return useMutation({
+    mutationFn: ({ animalId }) => deleteRequest(`/animals/${animalId}`),
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({ queryKey: [ANIMALS_QUERY_KEY, "list"] });
+      options?.onSuccess?.(data, variables, context);
+    },
+    ...options,
+  });
 };

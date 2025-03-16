@@ -6,6 +6,7 @@ import {
   IUser,
 } from "../interfaces/resources";
 import {
+  DeleteResponse,
   ResourceListResponse,
   ResourceResponse,
   SingleItemResponse,
@@ -27,6 +28,7 @@ export type UserProfileResponse = ResourceResponse<
 export type AnimalPublic = Omit<IAnimal, "createdAt" | "updatedAt">;
 export type AnimalResponse = ResourceResponse<AnimalPublic>;
 export type AnimalListResponse = ResourceListResponse<AnimalPublic>;
+export type AnimalDeleteResponse = DeleteResponse;
 
 // Feed Inventory
 export type FeedItemPublic = ResourceResponse<IFeedInventory>;

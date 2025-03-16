@@ -1,8 +1,18 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { CreateAnimalDto } from './dtos';
 import { CreateAnimalUseCase } from './usecases/create-animal.usecase';
 import { ListAnimalsUseCase } from './usecases/list-animals.usecase';
 import { GETAnimalByIdUsecase } from './usecases/get-animal-by-id.usecase';
+import { DeleteAnimalByIdUseCase } from './usecases/delete-animal-by-id.usecase';
 
 @Controller('animals')
 export class AnimalController {
@@ -10,6 +20,7 @@ export class AnimalController {
     private readonly createAnimalUseCase: CreateAnimalUseCase,
     private readonly listAnimalsUseCase: ListAnimalsUseCase,
     private readonly getAnimalByIdUseCase: GETAnimalByIdUsecase,
+    private readonly deleteAnimalByIdUseCase: DeleteAnimalByIdUseCase,
   ) {}
 
   @Get()
@@ -25,5 +36,10 @@ export class AnimalController {
   @Get(':animalId')
   async getAnimalById(@Param('animalId') animalId: string) {
     return this.getAnimalByIdUseCase.execute(animalId);
+  }
+  @Delete(':animalId')
+  async deleteAnimalById(@Param('animalId') animalId: string) {
+    console.log('❌ Delete Animal');
+    return this.deleteAnimalByIdUseCase.execute(animalId);
   }
 }
