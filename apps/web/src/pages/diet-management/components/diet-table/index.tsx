@@ -9,30 +9,14 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Trash2Icon } from "lucide-react";
+import { AnimalDietPlanPublic } from "@repo/shared";
+import { formatDateDifference, formatDateToString } from "@/lib/moment";
 
-function DietListTable() {
-  // Temporary data for diet plans
-  const results = [
-    {
-      id: "1",
-      animal: "Lion",
-      date: "2023-09-01",
-      dietTimePeriod: "8:00 AM - 10:00 AM",
-    },
-    {
-      id: "2",
-      animal: "Elephant",
-      date: "2023-09-02",
-      dietTimePeriod: "9:00 AM - 11:00 AM",
-    },
-    {
-      id: "3",
-      animal: "Giraffe",
-      date: "2023-09-03",
-      dietTimePeriod: "7:00 AM - 9:00 AM",
-    },
-  ];
+interface DietListTableProps {
+  results: AnimalDietPlanPublic[];
+}
 
+function DietListTable({ results }: DietListTableProps) {
   // Row click handler (for example, to view details)
   const rowClick = (id: string) => {
     console.log("Row clicked:", id);
@@ -47,7 +31,8 @@ function DietListTable() {
               <TableHead className="pl-6">Animal(s)</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Diet Time Period</TableHead>
-              <TableHead className="text-center">Action</TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="flex-1">
@@ -59,19 +44,28 @@ function DietListTable() {
               </TableRow>
             )}
             {results.length > 0 &&
-              results.map((plan) => (
-                <TableRow key={plan.id} onClick={() => rowClick(plan.id)}>
-                  <TableCell className="pl-6">{plan.animal}</TableCell>
-                  <TableCell>{plan.date}</TableCell>
-                  <TableCell>{plan.dietTimePeriod}</TableCell>
+              results.map((dietPlan) => (
+                <TableRow
+                  key={dietPlan.id}
+                  onClick={() => rowClick(dietPlan.id)}
+                >
+                  <TableCell className="pl-6">{dietPlan.animal.name}</TableCell>
+                  <TableCell>
+                    {formatDateToString(dietPlan.startTime)}
+                  </TableCell>
+                  <TableCell>
+                    {formatDateDifference(dietPlan.startTime, dietPlan.endTime)}
+                  </TableCell>
+                  <TableCell className="text-end">
+                    <Button variant={"link"}>Edit</Button>
+                  </TableCell>
                   <TableCell className="p-0 text-center">
                     <Button
                       className="h-8 w-8 text-destructive hover:bg-destructive hover:text-destructive-foreground p-[6px]"
                       variant="ghost"
                       onClick={(e) => {
-                        // Prevent row click when delete is clicked
                         e.stopPropagation();
-                        console.log("Delete action for id:", plan.id);
+                        console.log("Delete action for id:", dietPlan.id);
                       }}
                     >
                       <Trash2Icon className="h-full w-full" />
