@@ -1,8 +1,10 @@
 import { stringify } from "qs";
+import { apiUrl as API_URL } from "@/utils/common.utils";
+
 
 const { API_TOKEN_KEY, apiUrl } = {
   API_TOKEN_KEY: "token",
-  apiUrl: "http://localhost:3001",
+  apiUrl:API_URL,
 };
 
 const commonHeaders = {

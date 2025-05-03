@@ -14,7 +14,6 @@ import {
 import { mapDataToAnimalDietPlanPublic } from "./mappers/diet-plan.mapper";
 import { queryClient } from "@/lib/query-client";
 
-const ANIMALS_QUERY_KEY = "animals" as const;
 const DIET_PLAN_QUERY_KEY = "diet-plan" as const;
 
 export const useDietPlan = (
