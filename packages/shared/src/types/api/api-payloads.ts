@@ -3,6 +3,7 @@ import {
   IDietPlan,
   IFeedInventory,
   IUser,
+  IVaccine,
 } from "../interfaces/resources";
 import { ListResponse } from "./api-operations";
 
@@ -38,3 +39,6 @@ export type CreateDietPlanReq = Omit<
 > & {
   recipes: Omit<IDietPlan["recipes"][number], "_id" | "id">[];
 };
+
+// Vaccine
+export type CreateVaccineReq = Pick<IVaccine, "name" | "type">;

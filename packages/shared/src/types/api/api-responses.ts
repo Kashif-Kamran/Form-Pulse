@@ -4,6 +4,7 @@ import {
   IDietPlan,
   IFeedInventory,
   IUser,
+  IVaccine,
 } from "../interfaces/resources";
 import {
   DeleteResponse,
@@ -45,3 +46,5 @@ export type AnimalDietPlanResponse = ResourceResponse<AnimalDietPlanPublic>;
 
 export type AnimalDietPlanListResponse =
   ResourceListResponse<AnimalDietPlanPublic>;
+
+export type CreateVaccineResponse = Omit<IVaccine, "_id"> & { _id: string };

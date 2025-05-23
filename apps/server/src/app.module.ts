@@ -6,6 +6,7 @@ import { AnimalModule } from './services/animal/animal.module';
 import { AccountsModule } from './services/accounts/account.module';
 import { FeedInventoryModule } from './services/feed-inventory/feed-inventory.module';
 import { DietPlanModule } from './services/diet-plan/diet-plan.module';
+import { HealthModule } from './services/health/health.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DietPlanModule } from './services/diet-plan/diet-plan.module';
     AccountsModule,
     FeedInventoryModule,
     DietPlanModule,
+    HealthModule,
   ],
 })
 export class AppModule {}

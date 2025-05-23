@@ -1,3 +1,4 @@
+import { VaccineTypeValues } from "../enum.types";
 import { RoleType } from "../roles.types";
 
 export type IAccessAndRefreshTokens = {
@@ -53,4 +54,13 @@ export interface IDietPlan {
     _id?: any;
     id: string;
   }[];
+}
+
+export interface IVaccine {
+  _id?: any;
+  id: string;
+  name: string;
+  type: VaccineTypeValues;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
