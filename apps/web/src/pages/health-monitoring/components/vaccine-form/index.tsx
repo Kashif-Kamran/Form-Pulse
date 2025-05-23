@@ -5,17 +5,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import InputField from "@/components/custom-ui/form-feilds/input-field";
-import { Button } from "@/components/ui/button";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -37,7 +27,7 @@ import {
 } from "@/components/ui/select";
 import { useCreateVaccine } from "@/hooks/api/vaccine.hook";
 import { useToast } from "@/hooks/use-toast";
-import { VaccineForm } from "../vaccine-form";
+import { Button } from "@/components/ui/button";
 
 const VACCINE_TYPES = Object.values(VaccineTypes) as [string, ...string[]];
 
@@ -50,7 +40,7 @@ const VaccineSchema = z.object({
 
 type VaccineFormData = z.infer<typeof VaccineSchema>;
 
-export function CreateVaccineModel() {
+export function VaccineForm() {
   const [open, setOpen] = useState(false);
   const { mutateAsync: createVaccine } = useCreateVaccine();
   const { toast } = useToast();
@@ -90,23 +80,58 @@ export function CreateVaccineModel() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="h-full">Add New Vaccine</Button>
-      </DialogTrigger>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="grid grid-cols-1 gap-4 py-4"
+      >
+        {/* Vaccine Name */}
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <Label className="mb-4">Vaccine Name</Label>
+              <FormControl>
+                <InputField placeholder="Enter Vaccine Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader className="bg-primary rounded-md p-4 text-primary-foreground mt-4">
-          <DialogTitle className="font-semibold text-center">
-            Create a New Vaccine
-          </DialogTitle>
-          <DialogDescription className="hidden">
-            Enter the vaccine details and click save.
-          </DialogDescription>
-        </DialogHeader>
-
-        <VaccineForm />
-      </DialogContent>
-    </Dialog>
+        {/* Vaccine Type Dropdown */}
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem className="space-y-0">
+              <Label className="mb-4">Vaccine Type</Label>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a Vaccine Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {VACCINE_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex flex-row justify-end">
+          <Button type="submit">Save changes</Button>
+        </div>
+      </form>
+    </Form>
   );
 }
