@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import * as z from "zod";
@@ -40,8 +39,11 @@ const VaccineSchema = z.object({
 
 type VaccineFormData = z.infer<typeof VaccineSchema>;
 
-export function VaccineForm() {
-  const [open, setOpen] = useState(false);
+interface VaccineFormProps {
+  onSubmitCb?: () => void;
+}
+
+export function VaccineForm({ onSubmitCb }: VaccineFormProps) {
   const { mutateAsync: createVaccine } = useCreateVaccine();
   const { toast } = useToast();
   const form = useForm<VaccineFormData>({
@@ -72,8 +74,8 @@ export function VaccineForm() {
           },
         }
       );
-      setOpen(false);
       form.reset();
+      onSubmitCb && onSubmitCb();
     } catch (error) {
       console.error("Error creating vaccine:", error);
     }

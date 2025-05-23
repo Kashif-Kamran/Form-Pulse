@@ -1,93 +1,24 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { Button } from "@/components/ui/button";
 
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
-import {
-  VaccineTypes,
-  VaccineTypeValues,
-} from "@repo/shared/dist/cjs/types/enum.types";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useCreateVaccine } from "@/hooks/api/vaccine.hook";
-import { useToast } from "@/hooks/use-toast";
+
 import { VaccineForm } from "../vaccine-form";
-
-const VACCINE_TYPES = Object.values(VaccineTypes) as [string, ...string[]];
-
-const VaccineSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  type: z.enum(VACCINE_TYPES, {
-    errorMap: () => ({ message: "Please select a valid vaccine type" }),
-  }),
-});
-
-type VaccineFormData = z.infer<typeof VaccineSchema>;
 
 export function CreateVaccineModel() {
   const [open, setOpen] = useState(false);
-  const { mutateAsync: createVaccine } = useCreateVaccine();
-  const { toast } = useToast();
-  const form = useForm<VaccineFormData>({
-    resolver: zodResolver(VaccineSchema),
-    defaultValues: {
-      name: "",
-      type: "",
-    },
-  });
 
-  const handleSubmit = async (data: VaccineFormData) => {
-    try {
-      await createVaccine(
-        {
-          name: data.name,
-          type: data.type as VaccineTypeValues,
-        },
-        {
-          onSuccess: () => {
-            toast({ title: "Vaccine Information Saved Successfully" });
-          },
-          onError: (error) => {
-            toast({
-              title: "Unable to save vaccine information",
-              description: error.message,
-              variant: "destructive",
-            });
-          },
-        }
-      );
-      setOpen(false);
-      form.reset();
-    } catch (error) {
-      console.error("Error creating vaccine:", error);
-    }
-  };
+  function onSubmit() {
+    setOpen(false);
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -105,7 +36,7 @@ export function CreateVaccineModel() {
           </DialogDescription>
         </DialogHeader>
 
-        <VaccineForm />
+        <VaccineForm onSubmitCb={onSubmit} />
       </DialogContent>
     </Dialog>
   );
