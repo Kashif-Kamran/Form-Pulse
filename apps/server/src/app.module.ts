@@ -7,6 +7,7 @@ import { AccountsModule } from './services/accounts/account.module';
 import { FeedInventoryModule } from './services/feed-inventory/feed-inventory.module';
 import { DietPlanModule } from './services/diet-plan/diet-plan.module';
 import { HealthModule } from './services/health/health.module';
+import { UserModule } from './services/user/user.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { HealthModule } from './services/health/health.module';
     FeedInventoryModule,
     DietPlanModule,
     HealthModule,
+    UserModule,
   ],
 })
 export class AppModule {}
