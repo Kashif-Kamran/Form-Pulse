@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { AllowedRolesList } from '@repo/shared';
+import { AllowedRolesList, UserListResponse } from '@repo/shared';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 import { FilterQuery } from 'mongoose';
 import { User, UserModel } from 'src/database';
@@ -21,7 +21,7 @@ export class GetUsersListQueryDto {
 export class GetUsersList {
   constructor(@InjectModel('User') private readonly userModel: UserModel) {}
 
-  async execute(queryDto: GetUsersListQueryDto) {
+  async execute(queryDto: GetUsersListQueryDto): Promise<UserListResponse> {
     const filter: FilterQuery<User> = {};
     // Filter construction
     if (queryDto.q) {
@@ -32,6 +32,16 @@ export class GetUsersList {
 
     console.log('Filter : ', filter);
 
-    return this.userModel.find(filter);
+    const usersList = await this.userModel.find(filter);
+    return {
+      count: usersList.length,
+      results: usersList.map((item) => ({
+        email: item.email,
+        name: item.name,
+        id: item.id,
+        isVerified: item.isVerified,
+        role: item.role,
+      })),
+    };
   }
 }

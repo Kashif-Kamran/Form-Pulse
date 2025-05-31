@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateVaccineDto } from './vaccine.dto';
 import { CreateVaccineUseCase } from './usecase/create-vaccine.usecase';
-import { GetVaccinationListUseCase } from './usecase/get-vaccination-list.usecase';
-import { VaccineTypes } from '@repo/shared/dist/cjs/types/enum.types';
+import {
+  GetVaccinationListQueryDto,
+  GetVaccinationListUseCase,
+} from './usecase/get-vaccination-list.usecase';
 
 @Controller('/vaccine')
 export class VaccineController {
@@ -15,11 +17,8 @@ export class VaccineController {
     return this.createVaccineUC.execute(createVaccineDto);
   }
 
-  @Get('/')
-  async getVaccinationList() {
-    return this.getVaccinationListUC.execute();
+  @Get('/list')
+  async getVaccinationList(@Query() queryDto: GetVaccinationListQueryDto) {
+    return this.getVaccinationListUC.execute(queryDto);
   }
-
-  @Get('/')
-  async getVaccinationListByType(@Param() type: VaccineTypes) {}
 }

@@ -8,6 +8,7 @@ import {
 } from "../interfaces/resources";
 import {
   DeleteResponse,
+  ListResponse,
   ResourceListResponse,
   ResourceResponse,
   SingleItemResponse,
@@ -15,15 +16,12 @@ import {
 
 // Auth
 export type AuthResponse = ResourceResponse<IAccessAndRefreshTokens>;
-export type UserResponse = ResourceResponse<
-  Omit<IUser, "_id" | "password" | "verificationOtp">
->;
+export type PublicUser = Omit<IUser, "_id" | "password" | "verificationOtp">;
+export type UserResponse = ResourceResponse<PublicUser>;
 export type VerifyOtpResponse = SingleItemResponse<{ message: string }>;
 
 // Profile
-export type UserProfileResponse = ResourceResponse<
-  Omit<IUser, "_id" | "verificationOtp" | "password">
->;
+export type UserProfileResponse = ResourceResponse<PublicUser>;
 
 // Animals
 export type AnimalPublic = Omit<IAnimal, "createdAt" | "updatedAt">;
@@ -48,3 +46,5 @@ export type AnimalDietPlanListResponse =
   ResourceListResponse<AnimalDietPlanPublic>;
 
 export type CreateVaccineResponse = Omit<IVaccine, "_id"> & { _id: string };
+export type UserListResponse = ListResponse<UserResponse>;
+export type VaccineListResponse = ListResponse<IVaccine>;

@@ -13,7 +13,7 @@ export class UserController {
 
   @Get('/list')
   @Public()
-  getPublicUser(@Query() queryDto: GetUsersListQueryDto) {
+  async getPublicUser(@Query() queryDto: GetUsersListQueryDto) {
     return this.getUsersList.execute(queryDto);
   }
 }
