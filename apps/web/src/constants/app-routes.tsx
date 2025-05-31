@@ -17,7 +17,7 @@ const REPORTS = "/reorts";
 const EDUCATIONAL_RESOURCERS = "/educational-resources";
 const SETTINGS = "/settings";
 const CREATE_DIET_PLAN = DIET_MANAGEMENT + "/create";
-
+const CREATE_HEALTH_RECORD = HEALTH_MONITORING + "/create";
 export {
   LOGIN,
   REGISTER,
@@ -33,4 +33,5 @@ export {
   SETTINGS,
   ANIMAL_DETAIL,
   CREATE_DIET_PLAN,
+  CREATE_HEALTH_RECORD,
 };

@@ -23,16 +23,64 @@ interface Animal {
 
 const HealthMonitoringTable = () => {
   const [animals, setAnimals] = useState<Animal[]>([
-    { id: 1, name: "Camel 1", age: "7 Yrs", breed: "Breed", weight: "90 kgs", status: "Add", vaccine: "Anti-MERS" },
-    { id: 2, name: "Camel 2", age: "7 Yrs", breed: "Breed", weight: "92 kgs", status: "2 Remaining", vaccine: "Anti-MERS" },
-    { id: 3, name: "Camel 3", age: "5 Yrs", breed: "Breed", weight: "88 kgs", status: "Vaccinated", vaccine: "Anti-MERS" },
-    { id: 4, name: "Horse 1", age: "7 Yrs", breed: "Breed", weight: "82 kgs", status: "2 Remaining", vaccine: "Anti-MERS" },
-    { id: 5, name: "Horse 2", age: "8 Yrs", breed: "Breed", weight: "91 kgs", status: "3 Remaining", vaccine: "Anti-MERS" },
-    { id: 6, name: "Horse 3", age: "8 Yrs", breed: "Breed", weight: "91 kgs", status: "3 Remaining", vaccine: "Anti-MERS" },
+    {
+      id: 1,
+      name: "Camel 1",
+      age: "7 Yrs",
+      breed: "Breed",
+      weight: "90 kgs",
+      status: "Add",
+      vaccine: "Anti-MERS",
+    },
+    {
+      id: 2,
+      name: "Camel 2",
+      age: "7 Yrs",
+      breed: "Breed",
+      weight: "92 kgs",
+      status: "2 Remaining",
+      vaccine: "Anti-MERS",
+    },
+    {
+      id: 3,
+      name: "Camel 3",
+      age: "5 Yrs",
+      breed: "Breed",
+      weight: "88 kgs",
+      status: "Vaccinated",
+      vaccine: "Anti-MERS",
+    },
+    {
+      id: 4,
+      name: "Horse 1",
+      age: "7 Yrs",
+      breed: "Breed",
+      weight: "82 kgs",
+      status: "2 Remaining",
+      vaccine: "Anti-MERS",
+    },
+    {
+      id: 5,
+      name: "Horse 2",
+      age: "8 Yrs",
+      breed: "Breed",
+      weight: "91 kgs",
+      status: "3 Remaining",
+      vaccine: "Anti-MERS",
+    },
+    {
+      id: 6,
+      name: "Horse 3",
+      age: "8 Yrs",
+      breed: "Breed",
+      weight: "91 kgs",
+      status: "3 Remaining",
+      vaccine: "Anti-MERS",
+    },
   ]);
 
   const handleDelete = (id: number) => {
-    setAnimals(animals.filter(animal => animal.id !== id));
+    setAnimals(animals.filter((animal) => animal.id !== id));
   };
 
   const getStatusColor = (status: string) => {

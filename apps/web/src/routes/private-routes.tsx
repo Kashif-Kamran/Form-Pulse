@@ -3,6 +3,7 @@ import {
   ANIMAL_DETAIL,
   ANIMALS_PROFILE,
   CREATE_DIET_PLAN,
+  CREATE_HEALTH_RECORD,
   DIET_MANAGEMENT,
   EDUCATIONAL_RESOURCERS,
   FEED_INVENTORY,
@@ -16,6 +17,7 @@ import FallbackSpinnerScreen from "@/components/custom-ui/fallback-spinner";
 import { useMe } from "@/hooks/api/profile.hook";
 import { Suspense, lazy } from "react";
 import { ErrorBoundary } from "@/common/error-boundary";
+import AddHealthRecord from "@/pages/health-monitoring/add-health-record";
 
 const AnimalProfile = lazy(() => import("@/pages/animals/animal-profile"));
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
@@ -137,6 +139,14 @@ const privateRoutes: RouteObject[] = [
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
                 <div>Settings</div>
+              </Suspense>
+            ),
+          },
+          {
+            path: CREATE_HEALTH_RECORD,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <AddHealthRecord />
               </Suspense>
             ),
           },

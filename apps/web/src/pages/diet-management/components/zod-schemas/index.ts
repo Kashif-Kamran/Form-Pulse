@@ -1,7 +1,7 @@
 import { CreateDietPlanReq } from "@repo/shared";
 import { z } from "zod";
 
-const AnimalSchema = z.object({
+export const AnimalSchema = z.object({
   id: z.string().nonempty(),
   name: z.string(),
   species: z.string(),
