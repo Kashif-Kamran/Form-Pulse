@@ -1,6 +1,7 @@
 import {
   IAccessAndRefreshTokens,
   IAnimal,
+  IAnimalHealthRecord,
   IDietPlan,
   IFeedInventory,
   IUser,
@@ -42,9 +43,13 @@ export type AnimalDietPlanPublic = Omit<IDietPlan, "animal"> & {
 export type CreateAnimalDietPlanResponse = ResourceResponse<IDietPlan>;
 export type AnimalDietPlanResponse = ResourceResponse<AnimalDietPlanPublic>;
 
+//
 export type AnimalDietPlanListResponse =
   ResourceListResponse<AnimalDietPlanPublic>;
 
 export type CreateVaccineResponse = Omit<IVaccine, "_id"> & { _id: string };
 export type UserListResponse = ListResponse<UserResponse>;
 export type VaccineListResponse = ListResponse<IVaccine>;
+
+//
+export type CreateAnimalHealthRecordResponse = IAnimalHealthRecord;

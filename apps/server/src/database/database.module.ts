@@ -8,6 +8,7 @@ import { AnimalSchema } from './models/animal.model';
 import { FeedInventorySchema } from './models/feed-inventory.model';
 import { DietPlan, DietPlanSchema } from './models/diet-plan.model';
 import { VaccineSchema } from './models/vaccine.model';
+import { AnimalHealthRecordSchema } from './models/animal-health-record.model';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { VaccineSchema } from './models/vaccine.model';
       { name: 'FeedInventory', schema: FeedInventorySchema },
       { name: 'DietPlan', schema: DietPlanSchema },
       { name: 'Vaccine', schema: VaccineSchema },
+      { name: 'AnimalHealthRecord', schema: AnimalHealthRecordSchema },
     ]),
   ],
   exports: [MongooseModule],

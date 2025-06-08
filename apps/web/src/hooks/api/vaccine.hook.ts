@@ -45,29 +45,6 @@ export const useVaccines = (
   return { ...data, ...rest };
 };
 
-// export const useAnimals = (
-//   query?: string,
-//   options?: UseQueryOptions<
-//     AnimalListResponse,
-//     Error,
-//     AnimalListResponse,
-//     QueryKey
-//   >
-// ) => {
-//   const queryKey = [ANIMALS_QUERY_KEY, "list", query ?? ""];
-//   const { data, ...rest } = useQuery({
-//     queryFn: () => {
-//       let url = "/animals";
-//       if (query) url += `?q=${encodeURIComponent(query)}`;
-//       return getRequest<AnimalListResponse>(url);
-//     },
-//     queryKey: queryKey,
-//     ...options,
-//   });
-
-//   return { ...data, ...rest };
-// };
-
 export const useCreateVaccine = (
   options?: MutationOptions<CreateVaccineResponse, Error, CreateVaccineReq>
 ) => {
@@ -81,32 +58,3 @@ export const useCreateVaccine = (
     ...options,
   });
 };
-
-// export const useAnimalById = (
-//   animalId: string,
-//   options?: UseQueryOptions<AnimalResponse, Error, AnimalResponse, QueryKey>
-// ) => {
-//   const { data, ...rest } = useQuery({
-//     queryKey: [ANIMALS_QUERY_KEY, animalId],
-//     queryFn: () => getRequest<AnimalResponse>(`/animals/${animalId}`),
-//     ...options,
-//   });
-//   return { data, ...rest };
-// };
-
-// export const useDeleteAnimalById = (
-//   options?: UseMutationOptions<
-//     AnimalDeleteResponse,
-//     Error,
-//     { animalId: string }
-//   >
-// ) => {
-//   return useMutation({
-//     mutationFn: ({ animalId }) => deleteRequest(`/animals/${animalId}`),
-//     onSuccess: (data, variables, context) => {
-//       queryClient.invalidateQueries({ queryKey: [ANIMALS_QUERY_KEY, "list"] });
-//       options?.onSuccess?.(data, variables, context);
-//     },
-//     ...options,
-//   });
-// };

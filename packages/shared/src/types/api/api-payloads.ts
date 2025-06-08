@@ -1,5 +1,6 @@
 import {
   IAnimal,
+  IAnimalHealthRecord,
   IDietPlan,
   IFeedInventory,
   IUser,
@@ -42,3 +43,7 @@ export type CreateDietPlanReq = Omit<
 
 // Vaccine
 export type CreateVaccineReq = Pick<IVaccine, "name" | "type">;
+export type CreateAnimalHealthRecordReq = Pick<
+  IAnimalHealthRecord,
+  "animal" | "vaccine" | "veterinarian" | "schedule"
+>;

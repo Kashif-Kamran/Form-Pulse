@@ -26,9 +26,6 @@ export interface IAnimal {
   breed: string;
   age: number;
   weight: number;
-  // healthStatus: string;
-  // activityLevel: string;
-  // specialDietRequirement: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -61,6 +58,17 @@ export interface IVaccine {
   id: string;
   name: string;
   type: VaccineTypeValues;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IAnimalHealthRecord {
+  _id?: any;
+  id: string;
+  animal: string; // relation with animal
+  vaccine: string; // relation with vaccine
+  veterinarian: string; // relation with doctor
+  schedule: { dateTime: Date; quantity: number }[];
   createdAt?: Date;
   updatedAt?: Date;
 }

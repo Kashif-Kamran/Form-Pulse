@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { AnimalSchema } from "@/pages/diet-management/components/zod-schemas";
+import { CreateAnimalHealthRecordReq } from "@repo/shared";
 
 export const UserSchema = z.object({
   id: z.string().nonempty(),
@@ -51,5 +52,19 @@ export const HealthRecordSchema = z
 //     })),
 //   };
 // };
+
+export const transformHealthRecordForBackend = (
+  payload: HealthRecordFormType
+): CreateAnimalHealthRecordReq => {
+  return {
+    animal: payload.animal.id,
+    schedule: payload.medicationDoses.map((item) => ({
+      dateTime: item.deliveryDate,
+      quantity: item.quantity,
+    })),
+    vaccine: payload.vaccination.id,
+    veterinarian: payload.veterinarian.id,
+  };
+};
 
 export type HealthRecordFormType = z.infer<typeof HealthRecordSchema>;

@@ -5,8 +5,11 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
-import { HealthRecordFormType } from "./schema";
+import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
+import {
+  HealthRecordFormType,
+  transformHealthRecordForBackend,
+} from "./schema";
 import {
   Card,
   CardContent,
@@ -26,8 +29,12 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import DatePicker from "@/components/date-picker";
 import { CircleMinus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCreateAnimalHealthRecord } from "@/hooks/api/animal-health-record";
+import { useToast } from "@/hooks/use-toast";
 
 export function HealthRecordForm() {
+  const { mutateAsync: createHealthRecord } = useCreateAnimalHealthRecord();
+  const { toast } = useToast();
   const form = useForm<HealthRecordFormType>({
     defaultValues: {
       animal: {
@@ -43,7 +50,25 @@ export function HealthRecordForm() {
 
   const handleSubmit = form.handleSubmit(
     async (formData: HealthRecordFormType) => {
-      console.log("Form Data :", formData);
+      console.log("Creation : ", formData);
+      const transformedData = transformHealthRecordForBackend(formData);
+      createHealthRecord(transformedData, {
+        onSuccess: () => {
+          toast({
+            title: "Animal health record created successfully!",
+            variant: "default",
+          });
+          form.reset();
+        },
+        onError: (error) => {
+          console.log("Error on Diet Plan Creation :", error);
+          toast({
+            title: "Unable to create health record",
+            description: error.message,
+            variant: "destructive",
+          });
+        },
+      });
     }
   );
 
@@ -204,7 +229,7 @@ const VaccineSelectDialog = ({
     });
     form.clearErrors("veterinarian");
   };
-
+  const { vaccination } = form.watch();
   return (
     <div className="flex w-full flex-col md:flex-row">
       <FormField
@@ -221,11 +246,11 @@ const VaccineSelectDialog = ({
                     type="button"
                     className={cn(
                       "justify-start text-left font-normal w-full py-6",
-                      !selectedVaccine && "text-muted-foreground"
+                      !vaccination?.name && "text-muted-foreground"
                     )}
                     onClick={openVaccineDialog}
                   >
-                    {selectedVaccine ? selectedVaccine.name : "Select Vaccine"}
+                    {vaccination?.name ? vaccination.name : "Select Vaccine"}
                   </Button>
                 </FormControl>
               </div>
@@ -262,6 +287,7 @@ const AnimalSelectionDialog = ({
     form.clearErrors("animal");
   };
 
+  const { animal } = form.watch();
   return (
     <div className="flex flex-col md:flex-row w-full">
       <FormField
@@ -278,11 +304,11 @@ const AnimalSelectionDialog = ({
                     variant={"outline"}
                     className={cn(
                       "justify-start text-left font-normal w-full py-6",
-                      !selectedAnimal && "text-muted-foreground"
+                      !animal.name && "text-muted-foreground"
                     )}
                     onClick={openAnimalDialog}
                   >
-                    {selectedAnimal ? selectedAnimal.name : "Browse Animal"}
+                    {animal.name ? animal.name : "Browse Animal"}
                   </Button>
                 </FormControl>
               </div>
@@ -318,6 +344,7 @@ const UserSelectingDialog = ({
     form.clearErrors("veterinarian");
   };
 
+  const { veterinarian } = form.watch();
   return (
     <div className="flex w-full flex-col md:flex-row">
       <FormField
@@ -334,11 +361,11 @@ const UserSelectingDialog = ({
                     type="button"
                     className={cn(
                       "justify-start text-left font-normal w-full py-6",
-                      !selectedUser && "text-muted-foreground"
+                      !veterinarian && "text-muted-foreground"
                     )}
                     onClick={openAnimalDialog}
                   >
-                    {selectedUser ? selectedUser.name : "Select Veterinarian"}
+                    {veterinarian ? veterinarian.name : "Select Veterinarian"}
                   </Button>
                 </FormControl>
               </div>
