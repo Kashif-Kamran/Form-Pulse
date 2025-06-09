@@ -52,4 +52,23 @@ export type UserListResponse = ListResponse<UserResponse>;
 export type VaccineListResponse = ListResponse<IVaccine>;
 
 //
+export type AnimalHealthRecordGeneric<
+  TAnimal = string,
+  TVaccine = string,
+  TVet = string,
+> = Omit<IAnimalHealthRecord, "animal" | "vaccine" | "veterinarian"> & {
+  animal: TAnimal;
+  vaccine: TVaccine;
+  veterinarian: TVet;
+};
+
+export type AnimalHealthRecordResponse = AnimalHealthRecordGeneric;
+
+export type PopulatedAnimalHealthRecord = AnimalHealthRecordGeneric<
+  IAnimal,
+  IVaccine,
+  IUser
+>;
+export type AnimalHealthRecordsListResponse =
+  ListResponse<PopulatedAnimalHealthRecord>;
 export type CreateAnimalHealthRecordResponse = IAnimalHealthRecord;

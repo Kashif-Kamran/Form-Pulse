@@ -5,7 +5,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import {
   HealthRecordFormType,
   transformHealthRecordForBackend,
@@ -29,7 +29,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import DatePicker from "@/components/date-picker";
 import { CircleMinus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCreateAnimalHealthRecord } from "@/hooks/api/animal-health-record";
+import { useCreateAnimalHealthRecord } from "@/hooks/api/animal-health-record.hook";
 import { useToast } from "@/hooks/use-toast";
 
 export function HealthRecordForm() {

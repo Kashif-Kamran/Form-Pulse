@@ -5,8 +5,11 @@ import { Button } from "@/components/ui/button";
 import { CreateVaccineModel } from "../components/create-vaccine-model";
 import { Link } from "react-router-dom";
 import { CREATE_HEALTH_RECORD } from "@/constants/app-routes";
+import { useAnimalsHealthRecords } from "@/hooks/api/animal-health-record.hook";
 
 export const HealthMonitoring = () => {
+  const { results = [] } = useAnimalsHealthRecords();
+
   return (
     <div className="space-y-4 flex flex-col h-full">
       <div className="flex justify-center items-center gap-2">
@@ -17,7 +20,7 @@ export const HealthMonitoring = () => {
         </Link>
       </div>
       <VaccinationBar />
-      <HealthMonitoringTable />
+      <HealthMonitoringTable results={results} />
     </div>
   );
 };

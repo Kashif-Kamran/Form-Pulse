@@ -20,7 +20,7 @@ export class AnimalHealthRecord implements IAnimalHealthRecord {
   @Prop({ type: Types.ObjectId, ref: 'Vaccine', required: true })
   vaccine: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Vaccine', required: true })
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   veterinarian: string;
 
   @Prop({})

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Trash2Icon } from "lucide-react";
+import { PopulatedAnimalHealthRecord } from "@repo/shared";
 
 interface Animal {
   id: number;
@@ -21,7 +22,11 @@ interface Animal {
   vaccine: string;
 }
 
-const HealthMonitoringTable = () => {
+export interface HealthMonitoringTableProps {
+  results: PopulatedAnimalHealthRecord[];
+}
+
+const HealthMonitoringTable = ({ results }: HealthMonitoringTableProps) => {
   const [animals, setAnimals] = useState<Animal[]>([
     {
       id: 1,
@@ -116,24 +121,24 @@ const HealthMonitoringTable = () => {
                 </TableCell>
               </TableRow>
             )}
-            {animals.length > 0 &&
-              animals.map((animal) => (
-                <TableRow key={animal.id} onClick={() => rowClick(animal.id)}>
-                  <TableCell className="pl-6">{animal.name}</TableCell>
-                  <TableCell>{animal.age}</TableCell>
-                  <TableCell>{animal.breed}</TableCell>
-                  <TableCell>{animal.weight}</TableCell>
-                  <TableCell className={getStatusColor(animal.status)}>
-                    {animal.status}
+            {results.length > 0 &&
+              results.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell className="pl-6">{item.animal.name}</TableCell>
+                  <TableCell>{item.animal.age}</TableCell>
+                  <TableCell>{item.animal.breed}</TableCell>
+                  <TableCell>{item.animal.weight}</TableCell>
+                  <TableCell className={"text-red-500"}>
+                    {"Not Defined"}
                   </TableCell>
-                  <TableCell>{animal.vaccine}</TableCell>
+                  <TableCell>{item.vaccine.name}</TableCell>
                   <TableCell className="p-0 text-center">
                     <Button
                       className="h-8 w-8 text-destructive hover:bg-destructive hover:text-destructive-foreground p-[6px]"
                       variant="ghost"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDelete(animal.id);
+                        // handleDelete(item.id);
                       }}
                     >
                       <Trash2Icon className="h-full w-full" />
