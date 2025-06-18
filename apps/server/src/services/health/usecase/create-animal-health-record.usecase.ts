@@ -23,6 +23,7 @@ import { AnimalHealthRecordModel } from 'src/database/models/animal-health-recor
 import { IsMongooseObjectId } from 'src/common/interceptors/pipes/is-mongoose-object-id.validator';
 import { VaccineModel } from 'src/database/models/vaccine.model';
 import { AnimalModel, UserModel } from 'src/database';
+import { Types } from 'mongoose';
 
 class ScheduleDto {
   @IsNotEmpty()
@@ -79,7 +80,12 @@ export class CreateAnimalHealthRecordUseCase {
     const user = await this.userModel.findOne({ _id: dto.veterinarian });
     if (!user) throw new NotFoundException('Veterinarian Not Found');
     // Response
-    const response = await this.animalHealthRecordModel.create({ ...dto });
+    const response = await this.animalHealthRecordModel.create({
+      ...dto,
+      animal: new Types.ObjectId(dto.animal),
+      vaccine: new Types.ObjectId(dto.vaccine),
+      veterinarian: new Types.ObjectId(dto.veterinarian),
+    });
     return response;
   }
 }

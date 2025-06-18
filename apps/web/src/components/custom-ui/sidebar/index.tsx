@@ -10,7 +10,7 @@ function Sidebar({ className }: { className?: string }) {
       className={`bg-gray-300 w-full rounded-lg border-[1px] border-gray-500 p-4 h-full ${className}`}
     >
       {/* Avatar */}
-      <div className="flex gap-4 p-4">
+      <div className="flex gap-4 p-2">
         <Avatar className="w-[50px] h-[50px]">
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>

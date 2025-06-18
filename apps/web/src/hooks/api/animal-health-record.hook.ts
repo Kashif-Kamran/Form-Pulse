@@ -4,6 +4,8 @@ import {
   AnimalHealthRecordsListResponse,
   CreateAnimalHealthRecordReq,
   CreateAnimalHealthRecordResponse,
+  HealthRecordListResponse,
+  HealthRecordResponseItem,
 } from "@repo/shared";
 import {
   MutationOptions,
@@ -48,6 +50,40 @@ export const useAnimalsHealthRecords = (
     queryFn: () => {
       const url = "/animal-health-record";
       return getRequest<AnimalHealthRecordsListResponse>(url);
+    },
+    queryKey: queryKey,
+    ...options,
+  });
+  return { ...data, ...rest };
+};
+
+export const useHealthRecordsByAnimalId = (
+  animalId: string,
+  options?: UseQueryOptions<
+    HealthRecordListResponse,
+    Error,
+    HealthRecordListResponse,
+    QueryKey
+  >
+) => {
+  const queryKey = ["NEW_HEALTH_RECORD", "list", animalId];
+  const { data, ...rest } = useQuery({
+    queryFn: async () => {
+      const url = `/animal-health-record/${animalId}`;
+      const apiResponse = await getRequest<HealthRecordListResponse>(url);
+      const mappedData: HealthRecordResponseItem[] = apiResponse.results.map(
+        (item) => {
+          return {
+            ...item,
+            administeredDate: item.administeredDate
+              ? new Date(item.administeredDate)
+              : null,
+            dueDate: new Date(item.dueDate),
+          };
+        }
+      );
+
+      return { count: apiResponse.count, results: mappedData };
     },
     queryKey: queryKey,
     ...options,

@@ -45,5 +45,9 @@ export type CreateDietPlanReq = Omit<
 export type CreateVaccineReq = Pick<IVaccine, "name" | "type">;
 export type CreateAnimalHealthRecordReq = Pick<
   IAnimalHealthRecord,
-  "animal" | "vaccine" | "veterinarian" | "schedule"
->;
+  "animal" | "vaccine" | "veterinarian"
+> & {
+  schedule: Array<
+    Pick<IAnimalHealthRecord["schedule"][number], "quantity" | "dateTime">
+  >;
+};

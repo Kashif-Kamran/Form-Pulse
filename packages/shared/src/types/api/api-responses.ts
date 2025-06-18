@@ -1,3 +1,4 @@
+import { VaccineStatusValues } from "../enum.types";
 import {
   IAccessAndRefreshTokens,
   IAnimal,
@@ -72,3 +73,17 @@ export type PopulatedAnimalHealthRecord = AnimalHealthRecordGeneric<
 export type AnimalHealthRecordsListResponse =
   ListResponse<PopulatedAnimalHealthRecord>;
 export type CreateAnimalHealthRecordResponse = IAnimalHealthRecord;
+
+export type HealthRecordResponseItem = {
+  id: string; // schedule, does id
+  animal: IAnimal;
+  vaccine: IVaccine;
+  administeredDate: Date | null;
+  dueDate: Date;
+  veterinarian: IUser;
+  status: VaccineStatusValues;
+  quantity: number | string;
+  healthRecordId: string;
+};
+
+export type HealthRecordListResponse = ListResponse<HealthRecordResponseItem>;

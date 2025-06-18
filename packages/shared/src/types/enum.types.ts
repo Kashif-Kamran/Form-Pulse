@@ -5,4 +5,11 @@ export enum VaccineTypes {
   BACTARIAN = "Bactarian",
   BIO_LOGICS = "BioLogics",
 }
+export enum VaccineStatuses {
+  PENDING = "Pending",
+  COMPLETED = "Completed",
+  OVER_DUE = "Overdue",
+}
+
 export type VaccineTypeValues = `${VaccineTypes}`;
+export type VaccineStatusValues = `${VaccineStatuses}`;

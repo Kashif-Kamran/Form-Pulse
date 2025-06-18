@@ -1,13 +1,17 @@
 import { useAnimalById } from "@/hooks/api/animal.hook";
 import { useParams } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import InputField from "@/components/custom-ui/form-feilds/input-field";
+import BasicInfo from "../components/profile-cards/basic-info";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { MedicalHistory } from "../components/profile-cards/medical-health-tab";
+import { Tabs, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import { TabsList } from "@radix-ui/react-tabs";
+import { useHealthRecordsByAnimalId } from "@/hooks/api/animal-health-record.hook";
 
 function AnimalProfile() {
   const { animalId } = useParams<{ animalId: string }>();
   const { data, isLoading, error } = useAnimalById(animalId as string);
-
+  const { results = [] } = useHealthRecordsByAnimalId(animalId!);
+  console.log("Results : ", results);
   if (isLoading) {
     return (
       <div className="w-full text-center py-10">Loading animal data...</div>
@@ -30,67 +34,30 @@ function AnimalProfile() {
   }
 
   return (
-    <Card className="shadow md">
-      <CardHeader>
-        <CardTitle className="text-[1.3rem] text-primary-foreground text-center font-semibold bg-primary p-2 rounded-md">
-          Basic Animal Info
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-4">
-            <div className="flex flex-col space-y-2">
-              <Label className="text-[1.02rem]">Species</Label>
-              <InputField
-                type="text"
-                placeholder="CategoryXYZ"
-                value={data.species || ""}
-                disabled
-              />
-            </div>
-            <div className="flex flex-col space-y-2">
-              <Label className="text-[1.02rem]">Weight (in kgs)</Label>
-              <InputField
-                type="text"
-                placeholder="50 Kgs"
-                value={data.weight ? `${data.weight}` : ""}
-                disabled
-              />
-            </div>
-            <div className="flex flex-col space-y-2">
-              <Label className="text-[1.02rem]">Age (in years)</Label>
-              <InputField
-                type="text"
-                placeholder="Infant"
-                value={data.age !== undefined ? data.age.toString() : ""}
-                disabled
-              />
-            </div>
-          </div>
-          {/* Right Column */}
-          <div className="space-y-4">
-            <div className="flex flex-col space-y-2">
-              <Label className="text-[1.02rem]">Animal</Label>
-              <InputField
-                type="text"
-                placeholder="AnimalXYZ"
-                value={data.name || ""}
-                disabled
-              />
-            </div>
-            <div className="flex flex-col space-y-2">
-              <Label className="text-[1.02rem]">Breed</Label>
-              <InputField
-                type="text"
-                placeholder="BreedXYZ"
-                value={data.breed || ""}
-                disabled
-              />
-            </div>
-          </div>
+    <div className="h-[100%]">
+      <ScrollArea className="h-full">
+        <div className="flex flex-col h-full space-y-2">
+          <BasicInfo data={{ ...data }} />
+
+          <Tabs defaultValue="medical-history" className="flex-1 overflow-auto">
+            <TabsList className="flex">
+              <TabsTrigger value="medical-history" className="w-full">
+                Medical History
+              </TabsTrigger>
+              <TabsTrigger value="food-management" className="w-full">
+                Food History
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="medical-history" className="">
+              <MedicalHistory results={results} />
+            </TabsContent>
+            <TabsContent value="food-management">
+              Change your password here.
+            </TabsContent>
+          </Tabs>
         </div>
-      </CardContent>
-    </Card>
+      </ScrollArea>
+    </div>
   );
 }
 

@@ -1,4 +1,8 @@
-import { VaccineTypeValues } from "../enum.types";
+import {
+  VaccineStatuses,
+  VaccineStatusValues,
+  VaccineTypeValues,
+} from "../enum.types";
 import { RoleType } from "../roles.types";
 
 export type IAccessAndRefreshTokens = {
@@ -68,7 +72,13 @@ export interface IAnimalHealthRecord {
   animal: string; // relation with animal
   vaccine: string; // relation with vaccine
   veterinarian: string; // relation with doctor
-  schedule: { dateTime: Date; quantity: number }[];
+  schedule: {
+    dateTime: Date;
+    quantity: number;
+    status: VaccineStatusValues;
+    administeredDate: Date | null;
+    _id?: any;
+  }[];
   createdAt?: Date;
   updatedAt?: Date;
 }

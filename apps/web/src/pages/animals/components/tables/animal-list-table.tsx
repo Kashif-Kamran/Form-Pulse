@@ -32,7 +32,7 @@ function AnimalListTable({ results }: AnimalListTableProps) {
       {
         onSuccess: () => {
           toast({
-            title: "Animal Deleted Successfully",
+            title: "Animal default Successfully",
             variant: "default",
           });
         },
