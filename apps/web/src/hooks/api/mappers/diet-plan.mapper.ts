@@ -10,5 +10,8 @@ export const mapDataToAnimalDietPlanPublic = (
     startTime: moment(data.startTime).toDate(),
     endTime: moment(data.endTime).toDate(),
     recipes: data.recipes,
+    careTaker: data.careTaker,
+    noOfTimesPerDay: data.noOfTimesPerDay,
+    _id: data._id as string,
   };
 };

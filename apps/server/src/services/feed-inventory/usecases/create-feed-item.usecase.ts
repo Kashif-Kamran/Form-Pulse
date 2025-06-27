@@ -19,9 +19,17 @@ export class CreateFeedItemUseCase {
     const newItem: FeedInventoryDocument = await this.feedInventoryModel.create(
       {
         name: createFeedItemDto.name,
+        description: createFeedItemDto.description,
         remainingStock: createFeedItemDto.totalQuentity,
         usedStock: 0,
         totalPrice: createFeedItemDto.totalPrice,
+        nutritionInfo: {
+          calories: createFeedItemDto.calories,
+          carbs: createFeedItemDto.carbs,
+          fats: createFeedItemDto.fats,
+          fiber: createFeedItemDto.fiber,
+          protein: createFeedItemDto.protein,
+        },
       },
     );
     return newItem.toObject();

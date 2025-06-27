@@ -20,13 +20,22 @@ const FeedItemSchema = z.object({
     usedStock: z.number(),
     totalPrice: z.number(),
   }),
+  perTimeQuantity: z.number(),
   quantity: z.number(),
 });
+
 export const DietPlanSchema = z
   .object({
     animal: AnimalSchema,
     startTime: z.date(),
     endTime: z.date(),
+    noOfTimesPerDay: z.number(),
+    careTaker: z.object({
+      id: z.string(),
+      _id: z.string(),
+      name: z.string(),
+      role: z.string(),
+    }),
     recipes: z
       .array(FeedItemSchema)
       .min(1, { message: "At least one recipe is required" }),
@@ -46,9 +55,11 @@ export const transformDietPlanForBackend = (
   return {
     startTime: data.startTime,
     endTime: data.endTime,
+    noOfTimesPerDay: data.noOfTimesPerDay,
+    careTaker: data.careTaker,
     recipes: data.recipes.map((recipe) => ({
       feed: recipe.feed.id,
-      quantity: recipe.quantity,
+      perTimeQuantity: recipe.perTimeQuantity,
     })),
   };
 };

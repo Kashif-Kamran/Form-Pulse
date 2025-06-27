@@ -16,7 +16,7 @@ class RecipeDto {
   @IsNumber()
   @Min(0.1)
   @IsNotEmpty()
-  quantity: number;
+  perTimeQuantity: number;
 }
 
 export class CreateDietPlanDto implements CreateDietPlanReq {
@@ -29,6 +29,14 @@ export class CreateDietPlanDto implements CreateDietPlanReq {
   @IsNotEmpty()
   @Type(() => Date)
   endTime: Date;
+
+  @IsNumber()
+  @Min(0.1)
+  @IsNotEmpty()
+  noOfTimesPerDay: number;
+
+  @IsNotEmpty()
+  careTaker: string;
 
   @IsArray()
   @ValidateNested({ each: true })

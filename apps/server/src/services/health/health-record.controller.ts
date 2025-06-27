@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import { CreateAnimalDietPlanUseCase } from '../diet-plan/usecases/create-animal-diet-plan.usecase';
 import {
   CreateAnimalHealthRecordDto,
@@ -6,6 +6,12 @@ import {
 } from './usecase/create-animal-health-record.usecase';
 import { GetAnimalListUseCase } from './usecase/get-animal-health-list.usecase';
 import { GetAnimalHealthRecordsList } from './usecase/get-animal-health-records.usecase';
+import {
+  UpdateHealthRecordStatusUseCase,
+  UpdateStatusDto,
+} from './usecase/update-health-record-status.usecase';
+import { MongooseIdValidationPipe } from 'src/common/interceptors/pipes/is-mongoose-object-id.pipe';
+import { Request } from 'express';
 
 @Controller('animal-health-record')
 export class AnimalHealthRecordController {
@@ -13,6 +19,7 @@ export class AnimalHealthRecordController {
     private readonly createAnimalHealthRecordUC: CreateAnimalHealthRecordUseCase,
     private readonly getAnimalHealthList: GetAnimalListUseCase,
     private readonly getHealthRecordsByAnimal: GetAnimalHealthRecordsList,
+    private readonly updateHealthRecordStatusUC: UpdateHealthRecordStatusUseCase,
   ) {}
 
   @Post()
@@ -28,5 +35,21 @@ export class AnimalHealthRecordController {
   @Get(':animalId')
   async getAllRecordsByAnimal(@Param('animalId') animalId: string) {
     return this.getHealthRecordsByAnimal.execute(animalId);
+  }
+
+  @Patch(':recordId/schedule/:scheduleId')
+  async updateHealthRecordStatus(
+    @Param('recordId', MongooseIdValidationPipe) recordId: string,
+    @Param('scheduleId', MongooseIdValidationPipe) scheduleId: string,
+    @Body() updateStatusDto: UpdateStatusDto,
+    @Req() request: Request,
+  ) {
+    const loggedInUser = request.user!;
+    return this.updateHealthRecordStatusUC.execute(
+      recordId,
+      scheduleId,
+      updateStatusDto,
+      loggedInUser,
+    );
   }
 }

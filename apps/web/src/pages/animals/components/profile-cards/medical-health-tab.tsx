@@ -14,7 +14,10 @@ import {
   PawPrint,
 } from "lucide-react";
 import { differenceInDays, format } from "date-fns";
-import { VaccineStatusValues } from "@repo/shared/dist/cjs/types/enum.types";
+import {
+  VaccineStatuses,
+  VaccineStatusValues,
+} from "@repo/shared/dist/cjs/types/enum.types";
 import React, { useState } from "react";
 import {
   Card,
@@ -33,14 +36,23 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  useHealthRecordsByAnimalId,
+  useUpdateHealthRecordStatus,
+} from "@/hooks/api/animal-health-record.hook";
+import { useMe } from "@/hooks/api/profile.hook";
 
 interface MedicalHistoryProps {
-  results: HealthRecordResponseItem[];
+  animalId: string;
 }
 
-export const MedicalHistory = ({
-  results: vaccinations,
-}: MedicalHistoryProps) => {
+export const MedicalHistory = ({ animalId }: MedicalHistoryProps) => {
+  const { results: vaccinations = [], isLoading } = useHealthRecordsByAnimalId(
+    animalId!
+  );
+
+  if (isLoading) return <h1>Animal Health Record is Loading</h1>;
+
   return (
     <div className="">
       <Card>
@@ -82,6 +94,10 @@ export const VaccinationCard: React.FC<VaccinationCardProps> = ({
   defaultExpanded = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+  const { data: loggedInUser } = useMe();
+  const updateHealthRecordStatus = useUpdateHealthRecordStatus();
+
+  console.log("LoggedIn User : ", loggedInUser);
 
   const getDaysLeft = (dueDate: Date): number => {
     return differenceInDays(new Date(dueDate), new Date());
@@ -194,6 +210,53 @@ export const VaccinationCard: React.FC<VaccinationCardProps> = ({
     if (onCardClick) {
       onCardClick(vaccination);
     }
+  };
+
+  const handleMarkAsCompleted = async () => {
+    try {
+      await updateHealthRecordStatus.mutateAsync({
+        recordId: vaccination.healthRecordId,
+        scheduleId: vaccination.id,
+        payload: {
+          newStatus: VaccineStatuses.COMPLETED,
+        },
+      });
+      console.log("Vaccination marked as completed successfully");
+    } catch (error) {
+      console.error("Failed to mark vaccination as completed:", error);
+    }
+  };
+
+  const handleMarkAsPending = async () => {
+    try {
+      await updateHealthRecordStatus.mutateAsync({
+        recordId: vaccination.healthRecordId,
+        scheduleId: vaccination.id,
+        payload: {
+          newStatus: VaccineStatuses.PENDING,
+        },
+      });
+      console.log("Vaccination marked as pending successfully");
+    } catch (error) {
+      console.error("Failed to mark vaccination as pending:", error);
+    }
+  };
+
+  // Check if vaccination was completed within the last 10 minutes
+  const canRevertToPending = () => {
+    if (
+      vaccination.status !== VaccineStatuses.COMPLETED ||
+      !vaccination.administeredDate
+    ) {
+      return false;
+    }
+
+    const now = new Date();
+    const administeredTime = new Date(vaccination.administeredDate);
+    const timeDifferenceInMinutes =
+      (now.getTime() - administeredTime.getTime()) / (1000 * 60);
+
+    return timeDifferenceInMinutes <= 10;
   };
 
   return (
@@ -370,13 +433,27 @@ export const VaccinationCard: React.FC<VaccinationCardProps> = ({
                           <p className="text-sm font-medium text-green-700 flex items-center gap-1">
                             <CheckCircle className="h-3 w-3" />
                             Administered
+                            {canRevertToPending() && (
+                              <Badge
+                                variant="outline"
+                                className="ml-2 text-xs border-orange-300 text-orange-600"
+                              >
+                                Can Revert
+                              </Badge>
+                            )}
                           </p>
                           <p className="text-sm text-muted-foreground">
                             {format(
                               new Date(vaccination.administeredDate),
-                              "EEEE, MMM dd, yyyy"
+                              "EEEE, MMM dd, yyyy 'at' HH:mm"
                             )}
                           </p>
+                          {canRevertToPending() && (
+                            <p className="text-xs text-orange-600 mt-1">
+                              Can be reverted to pending (completed within 10
+                              minutes)
+                            </p>
+                          )}
                         </div>
                       </>
                     )}
@@ -429,9 +506,38 @@ export const VaccinationCard: React.FC<VaccinationCardProps> = ({
                   Record: {vaccination.healthRecordId.slice(-8)}
                 </span>
               </div>
-              <Button variant="ghost" size="sm" className="text-xs h-auto p-1">
-                {isExpanded ? "Collapse" : "Expand"} details
-              </Button>
+              {loggedInUser?.id === vaccination.veterinarian._id && (
+                <div className="flex gap-2">
+                  {vaccination.status !== VaccineStatuses.COMPLETED && (
+                    <Button
+                      type="button"
+                      variant={"outline"}
+                      className="text-xs h-auto p-2 hover:bg-primary hover:text-primary-foreground"
+                      onClick={handleMarkAsCompleted}
+                      disabled={updateHealthRecordStatus.isPending}
+                    >
+                      {updateHealthRecordStatus.isPending
+                        ? "Updating..."
+                        : "Mark as Completed"}
+                    </Button>
+                  )}
+
+                  {vaccination.status === VaccineStatuses.COMPLETED &&
+                    canRevertToPending() && (
+                      <Button
+                        type="button"
+                        variant={"outline"}
+                        className="text-xs h-auto p-2 hover:bg-orange-500 hover:text-white border-orange-300 text-orange-600"
+                        onClick={handleMarkAsPending}
+                        disabled={updateHealthRecordStatus.isPending}
+                      >
+                        {updateHealthRecordStatus.isPending
+                          ? "Updating..."
+                          : "Revert to Pending"}
+                      </Button>
+                    )}
+                </div>
+              )}
             </div>
           </CardContent>
         </CollapsibleContent>

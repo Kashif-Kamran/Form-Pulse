@@ -5,13 +5,11 @@ import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { MedicalHistory } from "../components/profile-cards/medical-health-tab";
 import { Tabs, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { TabsList } from "@radix-ui/react-tabs";
-import { useHealthRecordsByAnimalId } from "@/hooks/api/animal-health-record.hook";
+import { DietHistory } from "../components/profile-cards/feed-history-tab";
 
 function AnimalProfile() {
   const { animalId } = useParams<{ animalId: string }>();
   const { data, isLoading, error } = useAnimalById(animalId as string);
-  const { results = [] } = useHealthRecordsByAnimalId(animalId!);
-  console.log("Results : ", results);
   if (isLoading) {
     return (
       <div className="w-full text-center py-10">Loading animal data...</div>
@@ -39,8 +37,11 @@ function AnimalProfile() {
         <div className="flex flex-col h-full space-y-2">
           <BasicInfo data={{ ...data }} />
 
-          <Tabs defaultValue="medical-history" className="flex-1 overflow-auto">
-            <TabsList className="flex">
+          <Tabs
+            defaultValue="medical-history"
+            className="flex-1 overflow-auto rounded-lg"
+          >
+            <TabsList className="flex h-10">
               <TabsTrigger value="medical-history" className="w-full">
                 Medical History
               </TabsTrigger>
@@ -49,10 +50,10 @@ function AnimalProfile() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="medical-history" className="">
-              <MedicalHistory results={results} />
+              <MedicalHistory animalId={animalId!} />
             </TabsContent>
             <TabsContent value="food-management">
-              Change your password here.
+              <DietHistory animalId={animalId!} />
             </TabsContent>
           </Tabs>
         </div>

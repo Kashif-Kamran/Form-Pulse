@@ -1,6 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { useToggleState } from "@/hooks/use-toggle-state";
-import { AnimalPublic, IFeedInventory } from "@repo/shared";
+import {
+  AnimalPublic,
+  IFeedInventory,
+  PublicUser,
+  RoleType,
+} from "@repo/shared";
 import { useState } from "react";
 import { ChooseAnimalDialog } from "../dialogs/choose-animal-dialog-box";
 import DatePicker from "@/components/date-picker";
@@ -11,7 +16,13 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@/components/ui/table";
 import { CircleMinus } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ChooseFeedItemDialog from "../dialogs/choose-products.dialog";
@@ -31,6 +42,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
 import { useCreateDietPlan } from "@/hooks/api/diet-plan.hook";
+import { cn } from "@/lib/utils";
+import { ChooseUserDialog } from "@/dialogs/choose-user-dialog-box";
 
 function DietPlanForm() {
   const { mutateAsync: createDietPlan } = useCreateDietPlan();
@@ -38,11 +51,11 @@ function DietPlanForm() {
   const form = useForm<DietPlanData>({
     resolver: zodResolver(DietPlanSchema),
     defaultValues: {
-      animal: {
-        id: "",
-      },
+      animal: undefined,
       startTime: new Date(),
       endTime: new Date(),
+      careTaker: { _id: "", name: "", role: RoleType.CareTaker },
+      noOfTimesPerDay: 0,
       recipes: [],
     },
   });
@@ -102,8 +115,10 @@ function DietPlanForm() {
           <CardContent className="p-0">
             <div className="space-y-2 flex gap-4 justify-center items-center">
               <AnimalSummary form={form} />
-              <DurationSelection form={form} />
+              <UserSummary form={form} />
+              <TimesPerDayInput form={form} />
             </div>
+            <DurationSelection form={form} />
           </CardContent>
         </Card>
         <FeedItemsTable form={form} />
@@ -125,7 +140,7 @@ const DurationSelection = ({
   form: ReturnType<typeof useForm<DietPlanData>>;
 }) => {
   return (
-    <div className="grid grid-cols-2 gap-4 w-1/2">
+    <div className="grid grid-cols-2 gap-4 mt-2">
       {/* Start Date */}
       <FormField
         name="startTime"
@@ -188,7 +203,7 @@ const AnimalSummary = ({
   };
 
   return (
-    <div className="flex  w-1/2 flex-col md:flex-row">
+    <div className="flex w-1/2 flex-col md:flex-row mt-2">
       <FormField
         control={form.control}
         name="animal"
@@ -198,22 +213,21 @@ const AnimalSummary = ({
               <FormLabel className="p-0 m-0">Animal</FormLabel>
               <div className="flex gap-2">
                 <FormControl>
-                  <InputField
-                    type="text"
-                    value={selectedAnimal ? selectedAnimal.name : ""}
-                    placeholder="Select an animal"
-                    readOnly
-                  />
+                  <Button
+                    variant={"outline"}
+                    type="button"
+                    className={cn(
+                      "justify-start text-left font-normal w-full py-6",
+                      !selectedAnimal?.name && "text-muted-foreground"
+                    )}
+                    onClick={openAnimalDialog}
+                  >
+                    {selectedAnimal?.name
+                      ? selectedAnimal.name
+                      : "Select Animal"}
+                  </Button>
                 </FormControl>
-                <Button
-                  type="button"
-                  className="p-6 "
-                  onClick={openAnimalDialog}
-                >
-                  Browse Animal
-                </Button>
               </div>
-              {/* <FormMessage /> Removed */}
             </FormItem>
           );
         }}
@@ -229,17 +243,102 @@ const AnimalSummary = ({
   );
 };
 
+const UserSummary = ({
+  form,
+}: {
+  form: ReturnType<typeof useForm<DietPlanData>>;
+}) => {
+  const [selectedUser, setSelectedUser] = useState<PublicUser | null>(null);
+  const [isUserDialogOpen, openUserDialog, closeUserDialog] = useToggleState();
+
+  const handleSelectAnimal = (user: PublicUser) => {
+    if (!user?.id) return;
+    setSelectedUser(user);
+    form.setValue("careTaker", {
+      id: user.id,
+      _id: user.id,
+      role: user.role,
+      name: user.name,
+    });
+    form.clearErrors("careTaker");
+  };
+
+  return (
+    <div className="flex w-1/2 flex-col md:flex-row mt-0">
+      <FormField
+        control={form.control}
+        name="careTaker"
+        render={() => {
+          return (
+            <FormItem className="w-full">
+              <FormLabel className="p-0 m-0">Care Taker</FormLabel>
+              <div className="flex gap-2">
+                <FormControl>
+                  <Button
+                    variant={"outline"}
+                    type="button"
+                    className={cn(
+                      "justify-start text-left font-normal w-full py-6",
+                      !selectedUser?.name && "text-muted-foreground"
+                    )}
+                    onClick={openUserDialog}
+                  >
+                    {selectedUser?.name ? selectedUser.name : "Select User"}
+                  </Button>
+                </FormControl>
+              </div>
+            </FormItem>
+          );
+        }}
+      />
+
+      <ChooseUserDialog
+        isOpen={isUserDialogOpen}
+        onClose={closeUserDialog}
+        onSelectUser={handleSelectAnimal}
+        selectedUserId={selectedUser?.id}
+        role={RoleType.CareTaker}
+      />
+    </div>
+  );
+};
+
 export function FeedItemsTable({
   form,
 }: {
   form: ReturnType<typeof useForm<DietPlanData>>;
 }) {
-  const { control } = form;
-
+  const { control, watch } = form;
   const { fields, remove } = useFieldArray({
     control,
     name: "recipes",
   });
+
+  // Watch form values for calculation
+  const startTime = watch("startTime");
+  const endTime = watch("endTime");
+  const noOfTimesPerDay = watch("noOfTimesPerDay");
+
+  // Calculate number of days between start and end date
+  const calculateDays = (start: Date, end: Date): number => {
+    if (!start || !end) return 0;
+    const timeDiff = end.getTime() - start.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return daysDiff > 0 ? daysDiff : 0;
+  };
+
+  // Calculate total quantity for a recipe
+  const calculateTotalQuantity = (perTimeQuantity: number): number => {
+    const days = calculateDays(startTime, endTime);
+    const timesPerDay = noOfTimesPerDay || 0;
+    const perTime = perTimeQuantity || 0;
+
+    if (days === 0 || timesPerDay === 0 || perTime === 0) {
+      return 0;
+    }
+
+    return days * timesPerDay * perTime;
+  };
 
   const handleSelectRecipe = (recipe: IFeedInventory) => {
     if (!recipe?.id) return;
@@ -249,22 +348,32 @@ export function FeedItemsTable({
     );
 
     if (existingRecipeIndex !== -1) {
-      const updatedRecipes = [...fields];
-      updatedRecipes[existingRecipeIndex].quantity += 1;
-
-      form.setValue("recipes", updatedRecipes);
+      // If recipe already exists, increment perTimeQuantity
+      const currentPerTimeQuantity =
+        fields[existingRecipeIndex].perTimeQuantity || 0;
+      form.setValue(
+        `recipes.${existingRecipeIndex}.perTimeQuantity`,
+        currentPerTimeQuantity + 1
+      );
     } else {
       const newRecipe = {
         id: recipe.id,
         feed: recipe,
-        quantity: 1,
+        quantity: 1, // This will be calculated
+        perTimeQuantity: 1,
       };
       form.setValue("recipes", [...fields, newRecipe]);
     }
   };
 
-  const handleQuantityChange = (index: number, newQuantity: number) => {
-    form.setValue(`recipes.${index}.quantity`, newQuantity);
+  const handlePerTimeQuantityChange = (
+    index: number,
+    newPerTimeQuantity: number
+  ) => {
+    form.setValue(`recipes.${index}.perTimeQuantity`, newPerTimeQuantity);
+    // Calculate and update total quantity
+    const totalQuantity = calculateTotalQuantity(newPerTimeQuantity);
+    form.setValue(`recipes.${index}.quantity`, totalQuantity);
   };
 
   const removeRecipe = (index: number) => {
@@ -291,47 +400,87 @@ export function FeedItemsTable({
               <TableBody className="flex-1">
                 {fields.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center">
+                    <TableCell colSpan={5} className="text-center">
                       No recipes added yet.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  fields.map((item, index) => (
-                    <TableRow className="p-0" key={item.feed.id}>
-                      <TableCell className="p-0">{item.feed.id}</TableCell>
-                      <TableCell className="p-0">{item.feed.name}</TableCell>
-                      <TableCell className="p-0">
-                        <Controller
-                          name={`recipes.${index}.quantity`}
-                          control={control}
-                          render={({ field }) => (
-                            <InputField
-                              type="number"
-                              value={field.value}
-                              onChange={(e) => {
-                                const newQuantity = parseInt(e.target.value);
-                                field.onChange(newQuantity);
-                                handleQuantityChange(index, newQuantity);
-                              }}
-                              placeholder="Quantity"
-                              className="p-0 px-2"
-                            />
+                  fields.map((item, index) => {
+                    const perTimeQuantity =
+                      watch(`recipes.${index}.perTimeQuantity`) || 0;
+                    const totalQuantity =
+                      calculateTotalQuantity(perTimeQuantity);
+                    const hasCalculationError =
+                      !startTime ||
+                      !endTime ||
+                      !noOfTimesPerDay ||
+                      perTimeQuantity === 0;
+
+                    return (
+                      <TableRow className="p-0" key={item.feed.id}>
+                        <TableCell className="p-2 font-medium">
+                          {item.feed.name}
+                        </TableCell>
+                        <TableCell className="p-2">
+                          <Controller
+                            name={`recipes.${index}.perTimeQuantity`}
+                            control={control}
+                            render={({ field }) => (
+                              <InputField
+                                type="number"
+                                value={field.value || ""}
+                                onChange={(e) => {
+                                  const newPerTimeQuantity =
+                                    parseInt(e.target.value) || 0;
+                                  field.onChange(newPerTimeQuantity);
+                                  handlePerTimeQuantityChange(
+                                    index,
+                                    newPerTimeQuantity
+                                  );
+                                }}
+                                placeholder="Per time qty"
+                                className="text-center"
+                                min="0"
+                              />
+                            )}
+                          />
+                        </TableCell>
+                        <TableCell className="p-2 text-center">
+                          <div
+                            className={`px-2 py-1 rounded ${hasCalculationError ? "bg-yellow-100 text-yellow-800" : "bg-green-100 text-green-800"}`}
+                          >
+                            {hasCalculationError ? "N/A" : totalQuantity}
+                          </div>
+                          {hasCalculationError && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              Missing: {!startTime || !endTime ? "dates" : ""}
+                              {(!startTime || !endTime) && !noOfTimesPerDay
+                                ? ", "
+                                : ""}
+                              {!noOfTimesPerDay ? "times/day" : ""}
+                              {perTimeQuantity === 0 ? ", per-time qty" : ""}
+                            </div>
                           )}
-                        />
-                      </TableCell>
-                      <TableCell className="px-10">
-                        {item.feed.remainingStock}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Button
-                          variant="ghost"
-                          onClick={() => removeRecipe(index)}
-                        >
-                          <CircleMinus className="w-6 h-6 text-red-500" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                        </TableCell>
+                        <TableCell className="p-2 text-center">
+                          <span
+                            className={`px-2 py-1 rounded ${item.feed.remainingStock < totalQuantity ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"}`}
+                          >
+                            {item.feed.remainingStock}
+                          </span>
+                        </TableCell>
+                        <TableCell className="p-2 text-center">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeRecipe(index)}
+                          >
+                            <CircleMinus className="w-5 h-5 text-red-500" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
                 )}
               </TableBody>
             </Table>
@@ -341,3 +490,38 @@ export function FeedItemsTable({
     </Card>
   );
 }
+
+const TimesPerDayInput = ({
+  form,
+}: {
+  form: ReturnType<typeof useForm<DietPlanData>>;
+}) => {
+  return (
+    <div className="flex w-1/3 flex-col">
+      <FormField
+        control={form.control}
+        name="noOfTimesPerDay"
+        render={({ field }) => {
+          return (
+            <FormItem className="w-full">
+              <FormLabel className="p-0 m-0">Times Per Day</FormLabel>
+              <FormControl>
+                <InputField
+                  type="number"
+                  placeholder="Enter times per day"
+                  value={field.value || ""}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value) || 0;
+                    field.onChange(value);
+                  }}
+                  className="w-full py"
+                  min="1"
+                />
+              </FormControl>
+            </FormItem>
+          );
+        }}
+      />
+    </div>
+  );
+};

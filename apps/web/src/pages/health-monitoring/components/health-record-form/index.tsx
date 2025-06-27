@@ -17,7 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useState } from "react";
-import { AnimalPublic, IVaccine, PublicUser } from "@repo/shared";
+import { AnimalPublic, IVaccine, PublicUser, RoleType } from "@repo/shared";
 import { useToggleState } from "@/hooks/use-toggle-state";
 import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { Button } from "@/components/ui/button";
@@ -334,10 +334,9 @@ const UserSelectingDialog = ({
   form: ReturnType<typeof useForm<HealthRecordFormType>>;
 }) => {
   const [selectedUser, setSelectedUser] = useState<PublicUser | null>(null);
-  const [isAnimalDialogOpen, openAnimalDialog, closeAnimalDialog] =
-    useToggleState();
+  const [isUserDialogOpen, openUserDialog, closeUserDialog] = useToggleState();
 
-  const handleSelectAnimal = (user: PublicUser) => {
+  const handleSelectUser = (user: PublicUser) => {
     if (!user?.id) return;
     setSelectedUser(user);
     form.setValue("veterinarian", user);
@@ -363,7 +362,7 @@ const UserSelectingDialog = ({
                       "justify-start text-left font-normal w-full py-6",
                       !veterinarian && "text-muted-foreground"
                     )}
-                    onClick={openAnimalDialog}
+                    onClick={openUserDialog}
                   >
                     {veterinarian ? veterinarian.name : "Select Veterinarian"}
                   </Button>
@@ -375,10 +374,11 @@ const UserSelectingDialog = ({
       />
 
       <ChooseUserDialog
-        isOpen={isAnimalDialogOpen}
-        onClose={closeAnimalDialog}
-        onSelectUser={handleSelectAnimal}
+        isOpen={isUserDialogOpen}
+        onClose={closeUserDialog}
+        onSelectUser={handleSelectUser}
         selectedUserId={selectedUser?.id}
+        role={RoleType.Veterinarian}
       />
     </div>
   );

@@ -64,3 +64,33 @@ export const useCreateDietPlan = (
     ...options,
   });
 };
+
+export const useAnimalDietPlan = (
+  animalId: string,
+  options?: UseQueryOptions<
+    AnimalDietPlanListResponse,
+    Error,
+    AnimalDietPlanListResponse,
+    QueryKey
+  >
+) => {
+  const { data, ...rest } = useQuery({
+    queryFn: async () => {
+      const data = await getRequest<AnimalDietPlanListResponse>(
+        `/animals/${animalId}/diet-plan`
+      );
+      const response = {
+        ...data,
+        results: data.results.map((result) =>
+          mapDataToAnimalDietPlanPublic(result)
+        ),
+      };
+      console.log("Response : ", response);
+      return response;
+    },
+    queryKey: [DIET_PLAN_QUERY_KEY, animalId, "list"],
+    ...options,
+  });
+
+  return { ...data, ...rest };
+};

@@ -41,6 +41,14 @@ export interface IFeedInventory {
   remainingStock: number;
   usedStock: number;
   totalPrice: number;
+  description?: string;
+  nutritionInfo: {
+    protein: number;
+    carbs: number;
+    fats: number;
+    fiber: number;
+    calories: number;
+  };
 }
 
 export interface IDietPlan {
@@ -49,8 +57,11 @@ export interface IDietPlan {
   animal: string;
   startTime: Date;
   endTime: Date;
+  careTaker: any;
+  noOfTimesPerDay: number;
   recipes: {
     feed: string;
+    perTimeQuantity: number;
     quantity: number;
     _id?: any;
     id: string;

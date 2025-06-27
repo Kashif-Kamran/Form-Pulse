@@ -41,7 +41,7 @@ export function ChooseUserDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[800px] sm:max-h-[800px]">
         <DialogTitle className="bg-primary text-primary-foreground py-4 text-center rounded-md mt-4">
-          Select Animal
+          Select User
         </DialogTitle>
         <div className="flex gap-4 mb-4">
           <InputField
@@ -69,7 +69,7 @@ export function ChooseUserDialog({
               {users.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={4} className="text-center py-4">
-                    No animals found
+                    No users found
                   </TableCell>
                 </TableRow>
               )}

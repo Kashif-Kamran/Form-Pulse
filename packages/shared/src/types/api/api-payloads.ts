@@ -6,7 +6,7 @@ import {
   IUser,
   IVaccine,
 } from "../interfaces/resources";
-import { ListResponse } from "./api-operations";
+import { VaccineStatusValues } from "../enum.types";
 
 // Auth
 export type EmailPassReq = { email: string; password: string };
@@ -26,10 +26,22 @@ export type CreateAnimalReq = Omit<
 >;
 
 // Feed Inventory
+
+type CreateFeedInventoryBase = Omit<
+  IFeedInventory,
+  "_id" | "id" | "remainingStock" | "usedStock"
+>;
+
 export type CreateNewFeedItem = {
   name: string;
   totalQuentity: number;
   totalPrice: number;
+  protein: number;
+  carbs: number;
+  fats: number;
+  fiber: number;
+  calories: number;
+  description?: string;
 };
 export type CreateNewFeedItemReq = CreateNewFeedItem;
 
@@ -38,7 +50,7 @@ export type CreateDietPlanReq = Omit<
   IDietPlan,
   "_id" | "id" | "recipes" | "animal"
 > & {
-  recipes: Omit<IDietPlan["recipes"][number], "_id" | "id">[];
+  recipes: Omit<IDietPlan["recipes"][number], "_id" | "id" | "quantity">[];
 };
 
 // Vaccine
@@ -50,4 +62,9 @@ export type CreateAnimalHealthRecordReq = Pick<
   schedule: Array<
     Pick<IAnimalHealthRecord["schedule"][number], "quantity" | "dateTime">
   >;
+};
+
+// Health Record Status Update
+export type UpdateHealthRecordStatusReq = {
+  newStatus: VaccineStatusValues;
 };

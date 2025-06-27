@@ -26,15 +26,67 @@ import { useToast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
 import { useCreateFeedInventory } from "@/hooks/api/feed-inventory.hook";
 
-// Validation Schema using Zod for Feed Inventory Item
-const FeedInventoryItemSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  totalQuentity: z.coerce
-    .number()
+// Fixed Zod schema without coerce mess
+export const FeedInventoryItemSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Name is required" })
+    .min(2, { message: "Name must be at least 2 characters" }),
+
+  totalQuentity: z
+    .number({
+      required_error: "Total Quantity is required",
+      invalid_type_error: "Total Quantity must be a valid number",
+    })
     .min(0, { message: "Total Quantity must be a positive number" }),
-  totalPrice: z.coerce
-    .number()
+
+  totalPrice: z
+    .number({
+      required_error: "Total Price is required",
+      invalid_type_error: "Total Price must be a valid number",
+    })
     .min(0, { message: "Total Price must be a positive number" }),
+
+  protein: z
+    .number({
+      required_error: "Protein is required",
+      invalid_type_error: "Protein must be a valid number",
+    })
+    .min(0, { message: "Protein must be 0 or more" })
+    .max(100, { message: "Protein must be at most 100%" }),
+
+  carbs: z
+    .number({
+      required_error: "Carbs is required",
+      invalid_type_error: "Carbs must be a valid number",
+    })
+    .min(0, { message: "Carbs must be 0 or more" })
+    .max(100, { message: "Carbs must be at most 100%" }),
+
+  fats: z
+    .number({
+      required_error: "Fats is required",
+      invalid_type_error: "Fats must be a valid number",
+    })
+    .min(0, { message: "Fats must be 0 or more" })
+    .max(100, { message: "Fats must be at most 100%" }),
+
+  fiber: z
+    .number({
+      required_error: "Fiber is required",
+      invalid_type_error: "Fiber must be a valid number",
+    })
+    .min(0, { message: "Fiber must be 0 or more" })
+    .max(100, { message: "Fiber must be at most 100%" }),
+
+  calories: z
+    .number({
+      required_error: "Calories is required",
+      invalid_type_error: "Calories must be a valid number",
+    })
+    .min(0, { message: "Calories must be a positive number" }),
+
+  description: z.string().optional(),
 });
 
 type FeedInventoryItemData = z.infer<typeof FeedInventoryItemSchema>;
@@ -42,20 +94,25 @@ type FeedInventoryItemData = z.infer<typeof FeedInventoryItemSchema>;
 export function CreateFeedInventoryItemModel() {
   const [open, setOpen] = useState(false);
   const { mutateAsync: createNewFeedInventory } = useCreateFeedInventory();
+  const { toast } = useToast();
+
   const form = useForm<FeedInventoryItemData>({
     resolver: zodResolver(FeedInventoryItemSchema),
     defaultValues: {
       name: "",
-      totalQuentity: 0,
-      totalPrice: 0,
+      totalQuentity: undefined,
+      totalPrice: undefined,
+      protein: undefined,
+      carbs: undefined,
+      fats: undefined,
+      fiber: undefined,
+      calories: undefined,
+      description: "",
     },
   });
 
-  const { toast } = useToast();
-
   const handleSubmit = async (data: FeedInventoryItemData) => {
     try {
-      console.log("Feed Inventory Item Data:", data);
       await createNewFeedInventory(data);
       toast({ title: "Feed Inventory Item created successfully" });
     } catch (error: any) {
@@ -75,7 +132,7 @@ export function CreateFeedInventoryItemModel() {
       <DialogTrigger asChild>
         <Button className="h-full">New Feed Item</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[800px]">
         <DialogHeader className="bg-primary rounded-md p-4 text-primary-foreground mt-4">
           <DialogTitle className="font-semibold text-center">
             Create a New Feed Inventory Item
@@ -90,34 +147,40 @@ export function CreateFeedInventoryItemModel() {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="grid grid-cols-1 lg:grid-cols-2 gap-4 py-4"
           >
-            {/* Feed Inventory Item Name */}
+            {/* Basic Fields */}
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem className="space-y-0">
-                  <Label className="">Name</Label>
+                  <Label>Name *</Label>
                   <FormControl>
-                    <InputField placeholder="Enter Feed Item Name" {...field} />
+                    <InputField placeholder="Enter Feed Name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            {/* Total Quantity */}
             <FormField
               control={form.control}
               name="totalQuentity"
               render={({ field }) => (
                 <FormItem className="space-y-0">
-                  <Label className="">Total Quantity</Label>
+                  <Label>Total Quantity *</Label>
                   <FormControl>
                     <InputField
-                      placeholder="Enter Total Quantity"
+                      placeholder="Enter Quantity"
                       type="number"
                       min={0}
                       {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(
+                          value === "" ? undefined : Number(value)
+                        );
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -125,18 +188,182 @@ export function CreateFeedInventoryItemModel() {
               )}
             />
 
-            {/* Total Price */}
             <FormField
               control={form.control}
               name="totalPrice"
               render={({ field }) => (
                 <FormItem className="space-y-0">
-                  <Label className="">Total Price</Label>
+                  <Label>Total Price *</Label>
                   <FormControl>
                     <InputField
-                      placeholder="Enter Total Price"
+                      placeholder="Enter Price"
                       type="number"
                       min={0}
+                      step="0.01"
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(
+                          value === "" ? undefined : Number(value)
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Nutrition Fields */}
+            <FormField
+              control={form.control}
+              name="protein"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <Label>Protein (%) *</Label>
+                  <FormControl>
+                    <InputField
+                      type="number"
+                      min={0}
+                      max={100}
+                      step="0.1"
+                      placeholder="0-100"
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(
+                          value === "" ? undefined : Number(value)
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="carbs"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <Label>Carbohydrates (%) *</Label>
+                  <FormControl>
+                    <InputField
+                      type="number"
+                      min={0}
+                      max={100}
+                      step="0.1"
+                      placeholder="0-100"
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(
+                          value === "" ? undefined : Number(value)
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="fats"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <Label>Fats (%) *</Label>
+                  <FormControl>
+                    <InputField
+                      type="number"
+                      min={0}
+                      max={100}
+                      step="0.1"
+                      placeholder="0-100"
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(
+                          value === "" ? undefined : Number(value)
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="fiber"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <Label>Fiber (%) *</Label>
+                  <FormControl>
+                    <InputField
+                      type="number"
+                      min={0}
+                      max={100}
+                      step="0.1"
+                      placeholder="0-100"
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(
+                          value === "" ? undefined : Number(value)
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="calories"
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <Label>Calories (kcal/kg) *</Label>
+                  <FormControl>
+                    <InputField
+                      type="number"
+                      min={0}
+                      placeholder="Enter calories"
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(
+                          value === "" ? undefined : Number(value)
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Optional Description */}
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="col-span-1 lg:col-span-2 space-y-0">
+                  <Label>Description (optional)</Label>
+                  <FormControl>
+                    <InputField
+                      placeholder="Describe this feed item..."
                       {...field}
                     />
                   </FormControl>

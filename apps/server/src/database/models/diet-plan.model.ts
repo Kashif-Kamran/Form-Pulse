@@ -22,19 +22,28 @@ export class DietPlan implements IDietPlan {
   @Prop({ required: true })
   endTime: Date;
 
+  @Prop({ required: true })
+  noOfTimesPerDay: number;
+
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  careTaker: string;
+
   @Prop({
     type: [
       {
         _id: { type: Types.ObjectId, auto: true },
         feed: { type: Types.ObjectId, ref: 'FeedInventory', required: true },
+        perTimeQuantity: { type: Number, required: true },
         quantity: { type: Number, required: true },
       },
     ],
+    required: true,
   })
   recipes: {
     _id: Types.ObjectId;
     id: string;
     feed: string;
+    perTimeQuantity: number;
     quantity: number;
   }[];
 

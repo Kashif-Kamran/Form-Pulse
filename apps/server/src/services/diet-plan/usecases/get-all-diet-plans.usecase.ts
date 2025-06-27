@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { AnimalDietPlanListResponse, IAnimal } from '@repo/shared';
-import { Types } from 'mongoose';
+import {
+  AnimalDietPlanListResponse,
+  IAnimal,
+  IUser,
+  RoleType,
+} from '@repo/shared';
 import { DietPlanModel } from 'src/database/models/diet-plan.model';
 
 @Injectable()
@@ -10,7 +14,7 @@ export class GetAllDietPlans {
     @InjectModel('DietPlan') private readonly dietPlanModel: DietPlanModel,
   ) {}
 
-  async execute(): Promise<AnimalDietPlanListResponse> {
+  async execute(_user: IUser): Promise<AnimalDietPlanListResponse> {
     const animalDietPlans = await this.dietPlanModel
       .find()
       .populate(['animal']);
@@ -18,7 +22,7 @@ export class GetAllDietPlans {
       ...dietPlan.toObject(),
       id: dietPlan._id.toString(),
       animal: dietPlan.animal as unknown as IAnimal,
-    }));
+    })) as any as AnimalDietPlanListResponse['results'];
 
     return {
       count: transformedDietPlans.length,

@@ -1,4 +1,4 @@
-import { getRequest, postRequest } from "@/lib/client/common";
+import { getRequest, postRequest, patchRequest } from "@/lib/client/common";
 import { queryClient } from "@/lib/query-client";
 import {
   AnimalHealthRecordsListResponse,
@@ -6,6 +6,8 @@ import {
   CreateAnimalHealthRecordResponse,
   HealthRecordListResponse,
   HealthRecordResponseItem,
+  UpdateHealthRecordStatusReq,
+  UpdateHealthRecordStatusResponse,
 } from "@repo/shared";
 import {
   MutationOptions,
@@ -32,6 +34,10 @@ export const useCreateAnimalHealthRecord = (
       ),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({ queryKey: [HEALTH_QUERY_KEY, "list"] });
+      queryClient.invalidateQueries({
+        queryKey: ["NEW_HEALTH_RECORD", "list"],
+      });
+
       options?.onSuccess?.(data, variables, context);
     },
   });
@@ -89,4 +95,38 @@ export const useHealthRecordsByAnimalId = (
     ...options,
   });
   return { ...data, ...rest };
+};
+
+export const useUpdateHealthRecordStatus = (
+  options?: MutationOptions<
+    UpdateHealthRecordStatusResponse,
+    Error,
+    {
+      recordId: string;
+      scheduleId: string;
+      payload: UpdateHealthRecordStatusReq;
+    }
+  >
+) => {
+  return useMutation({
+    mutationFn: ({ recordId, scheduleId, payload }) =>
+      patchRequest<UpdateHealthRecordStatusResponse>(
+        `/animal-health-record/${recordId}/schedule/${scheduleId}`,
+        payload
+      ),
+    onSuccess: (data: any, variables: any, context: any) => {
+      // Invalidate all health record queries to refresh the data
+      queryClient.invalidateQueries({ queryKey: [HEALTH_QUERY_KEY, "list"] });
+      queryClient.invalidateQueries({
+        queryKey: ["NEW_HEALTH_RECORD", "list"],
+      });
+
+      // Also invalidate the specific animal's health records
+      queryClient.invalidateQueries({
+        queryKey: ["NEW_HEALTH_RECORD", "list", variables.recordId],
+      });
+
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
 };
