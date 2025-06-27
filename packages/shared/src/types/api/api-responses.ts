@@ -108,3 +108,9 @@ export type UpdateHealthRecordStatusResponse = SingleItemResponse<{
     administeredDate: Date | null;
   };
 }>;
+
+// Nutritionist Notification
+export type NotifyNutritionistResponse = SingleItemResponse<{
+  message: string;
+  notificationId: string;
+}>;

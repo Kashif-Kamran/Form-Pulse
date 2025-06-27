@@ -1,53 +1,45 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { NotifyNutritionistDialog } from "../notify-nutritionist-dialog";
+import { useToggleState } from "@/hooks/use-toggle-state";
+import { Bell, MessageSquare } from "lucide-react";
+
 export default function NotifyNutritionistCard() {
+  const [isDialogOpen, openDialog, closeDialog] = useToggleState();
+
   return (
-    <Card className="">
+    <Card className="border-blue-200 bg-blue-50/50">
       <CardHeader>
-        <CardTitle className="text-[1.1rem]">
-          Assign Task to Nutritionist
+        <CardTitle className="text-[1.1rem] flex items-center gap-2">
+          <MessageSquare className="h-5 w-5 text-blue-600" />
+          Need Dietary Assistance?
         </CardTitle>
       </CardHeader>
-      <CardContent className="grid lg:grid-cols-[2fr_1fr] gap-2">
-        <Textarea
-          className=" overflow-y-auto h-[8rem] border rounded p-2 resize-none"
-          placeholder="Type your message here."
-        />
-        <div>
-          <div className="grid lg:grid-cols-2 gap-2">
-            <Select>
-              <SelectTrigger className="py-5">
-                <SelectValue placeholder="Select Nutritionist" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select>
-              <SelectTrigger className="py-5">
-                <SelectValue placeholder="Select Animal" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
-              </SelectContent>
-            </Select>
+      <CardContent>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex-1">
+            <p className="text-sm text-muted-foreground mb-2">
+              As a caretaker, you can notify nutritionists about specific
+              dietary needs or concerns for any animal in your care.
+            </p>
+            <p className="text-xs text-blue-600 font-medium">
+              Get expert nutritional guidance for optimal animal health
+            </p>
           </div>
-          <Button className="w-full mt-3 py-6">Send Messge</Button>
+          <Button
+            onClick={openDialog}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+          >
+            <Bell className="h-4 w-4" />
+            Notify Nutritionist
+          </Button>
         </div>
       </CardContent>
+
+      <NotifyNutritionistDialog
+        isOpen={isDialogOpen}
+        onOpenChange={closeDialog}
+      />
     </Card>
   );
 }

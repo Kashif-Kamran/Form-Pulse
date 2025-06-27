@@ -68,3 +68,10 @@ export type CreateAnimalHealthRecordReq = Pick<
 export type UpdateHealthRecordStatusReq = {
   newStatus: VaccineStatusValues;
 };
+
+// Nutritionist Notification
+export type NotifyNutritionistReq = {
+  message: string;
+  animalId: string;
+  nutritionistId: string;
+};
