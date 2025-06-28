@@ -11,16 +11,12 @@ import { NotifyNutritionistDialog } from "../components/notify-nutritionist-dial
 import { useToggleState } from "@/hooks/use-toggle-state";
 import { Bell, Info, Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import moment from "moment";
 
 function AnimalList() {
   const { results = [] } = useDietPlan();
   const { data: currentUser, isLoading: isUserLoading } = useMe();
   const [isNotifyDialogOpen, openNotifyDialog, closeNotifyDialog] =
     useToggleState();
-
-  console.log("Results : ", results, { date: moment().toDate() });
-  console.log("Current User : ", currentUser);
 
   if (isUserLoading) {
     return <div>Loading...</div>;

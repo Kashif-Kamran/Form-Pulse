@@ -17,7 +17,7 @@ export class GetAllDietPlans {
   async execute(_user: IUser): Promise<AnimalDietPlanListResponse> {
     const animalDietPlans = await this.dietPlanModel
       .find()
-      .populate(['animal']);
+      .populate(['animal', 'careTaker']);
     const transformedDietPlans = animalDietPlans.map((dietPlan) => ({
       ...dietPlan.toObject(),
       id: dietPlan._id.toString(),

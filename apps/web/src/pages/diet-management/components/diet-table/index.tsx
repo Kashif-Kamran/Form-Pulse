@@ -8,7 +8,13 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Trash2Icon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Trash2Icon, Edit, MoreHorizontal } from "lucide-react";
 import { AnimalDietPlanPublic } from "@repo/shared";
 import { formatDateDifference, formatDateToString } from "@/lib/moment";
 
@@ -16,8 +22,51 @@ interface DietListTableProps {
   results: AnimalDietPlanPublic[];
 }
 
+interface DietPlanActionsProps {
+  dietPlan: AnimalDietPlanPublic;
+}
+
+function DietPlanActions({ dietPlan }: DietPlanActionsProps) {
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("Edit action for id:", dietPlan.id);
+    // TODO: Implement edit functionality
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log("Delete action for id:", dietPlan.id);
+    // TODO: Implement delete functionality
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          className="h-8 w-8 p-0"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={handleEdit}>
+          <Edit className="mr-2 h-4 w-4" />
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleDelete} className="text-destructive">
+          <Trash2Icon className="mr-2 h-4 w-4" />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 function DietListTable({ results }: DietListTableProps) {
   // Row click handler (for example, to view details)
+  console.log("Results:", results);
   const rowClick = (id: string) => {
     console.log("Row clicked:", id);
   };
@@ -29,16 +78,17 @@ function DietListTable({ results }: DietListTableProps) {
           <TableHeader className="bg-[#E2E2E2]">
             <TableRow>
               <TableHead className="pl-6">Animal(s)</TableHead>
-              <TableHead>Date</TableHead>
+              <TableHead>Start Date</TableHead>
               <TableHead>Diet Time Period</TableHead>
-              <TableHead></TableHead>
-              <TableHead></TableHead>
+              <TableHead>Doses per day</TableHead>
+              <TableHead>Caretaker</TableHead>
+              <TableHead className="text-center">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="flex-1">
             {results.length === 0 && (
               <TableRow>
-                <TableCell className="p-4" colSpan={4}>
+                <TableCell className="p-4" colSpan={6}>
                   No Diet Plans Found
                 </TableCell>
               </TableRow>
@@ -56,20 +106,10 @@ function DietListTable({ results }: DietListTableProps) {
                   <TableCell>
                     {formatDateDifference(dietPlan.startTime, dietPlan.endTime)}
                   </TableCell>
-                  <TableCell className="text-end">
-                    <Button variant={"link"}>Edit</Button>
-                  </TableCell>
-                  <TableCell className="p-0 text-center">
-                    <Button
-                      className="h-8 w-8 text-destructive hover:bg-destructive hover:text-destructive-foreground p-[6px]"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        console.log("Delete action for id:", dietPlan.id);
-                      }}
-                    >
-                      <Trash2Icon className="h-full w-full" />
-                    </Button>
+                  <TableCell>{dietPlan.noOfTimesPerDay}</TableCell>
+                  <TableCell>{dietPlan.careTaker?.name || 'N/A'}</TableCell>
+                  <TableCell className="text-center">
+                    <DietPlanActions dietPlan={dietPlan} />
                   </TableCell>
                 </TableRow>
               ))}

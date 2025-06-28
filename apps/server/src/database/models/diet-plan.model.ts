@@ -26,7 +26,7 @@ export class DietPlan implements IDietPlan {
   noOfTimesPerDay: number;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  careTaker: string;
+  careTaker: Types.ObjectId;
 
   @Prop({
     type: [
