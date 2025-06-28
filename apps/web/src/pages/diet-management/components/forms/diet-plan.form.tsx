@@ -74,12 +74,15 @@ function DietPlanForm({ mode = "create", dietPlan, dietPlanId }: DietPlanFormPro
       form.setValue("animal", dietPlan.animal);
       form.setValue("startTime", new Date(dietPlan.startTime));
       form.setValue("endTime", new Date(dietPlan.endTime));
-      form.setValue("careTaker", {
+      
+      // Create a proper careTaker object for the form
+      const careTakerFormData = {
         _id: dietPlan.careTaker.id,
         id: dietPlan.careTaker.id,
         name: dietPlan.careTaker.name,
         role: dietPlan.careTaker.role,
-      });
+      };
+      form.setValue("careTaker", careTakerFormData);
       form.setValue("noOfTimesPerDay", dietPlan.noOfTimesPerDay);
       
       // Transform recipes to match form structure
@@ -173,8 +176,8 @@ function DietPlanForm({ mode = "create", dietPlan, dietPlanId }: DietPlanFormPro
           </CardTitle>
           <CardContent className="p-0">
             <div className="space-y-2 flex gap-4 justify-center items-center">
-              <AnimalSummary form={form} />
-              <UserSummary form={form} />
+              <AnimalSummary form={form} mode={mode} dietPlan={dietPlan} />
+              <UserSummary form={form} mode={mode} dietPlan={dietPlan} />
               <TimesPerDayInput form={form} />
             </div>
             <DurationSelection form={form} />
@@ -245,14 +248,35 @@ const DurationSelection = ({
 
 const AnimalSummary = ({
   form,
+  mode,
+  dietPlan,
 }: {
   form: ReturnType<typeof useForm<DietPlanData>>;
+  mode?: "create" | "edit";
+  dietPlan?: AnimalDietPlanPublic;
 }) => {
   const [selectedAnimal, setSelectedAnimal] = useState<AnimalPublic | null>(
     null
   );
   const [isAnimalDialogOpen, openAnimalDialog, closeAnimalDialog] =
     useToggleState();
+
+  // Watch form values for animal
+  const animalValue = form.watch("animal");
+
+  // Initialize and sync selectedAnimal
+  useEffect(() => {
+    if (mode === "edit" && dietPlan?.animal) {
+      setSelectedAnimal(dietPlan.animal);
+    }
+  }, [mode, dietPlan]);
+
+  // Sync selectedAnimal with form value changes
+  useEffect(() => {
+    if (animalValue && animalValue.id) {
+      setSelectedAnimal(animalValue as AnimalPublic);
+    }
+  }, [animalValue]);
 
   const handleSelectAnimal = (animal: AnimalPublic) => {
     if (!animal?.id) return;
@@ -304,11 +328,40 @@ const AnimalSummary = ({
 
 const UserSummary = ({
   form,
+  mode,
+  dietPlan,
 }: {
   form: ReturnType<typeof useForm<DietPlanData>>;
+  mode?: "create" | "edit";
+  dietPlan?: AnimalDietPlanPublic;
 }) => {
   const [selectedUser, setSelectedUser] = useState<PublicUser | null>(null);
   const [isUserDialogOpen, openUserDialog, closeUserDialog] = useToggleState();
+
+  // Watch form values for careTaker
+  const careTakerValue = form.watch("careTaker");
+
+  // Initialize and sync selectedUser
+  useEffect(() => {
+    if (mode === "edit" && dietPlan?.careTaker) {
+      setSelectedUser(dietPlan.careTaker);
+    }
+  }, [mode, dietPlan]);
+
+  // Sync selectedUser with form value changes
+  useEffect(() => {
+    if (careTakerValue && careTakerValue.id && careTakerValue.name) {
+      // Create a compatible user object for display
+      const userForDisplay = {
+        id: careTakerValue.id,
+        name: careTakerValue.name,
+        role: careTakerValue.role,
+        email: "", // Not available in form schema
+        isVerified: true, // Default for display
+      } as PublicUser;
+      setSelectedUser(userForDisplay);
+    }
+  }, [careTakerValue]);
 
   const handleSelectAnimal = (user: PublicUser) => {
     if (!user?.id) return;
