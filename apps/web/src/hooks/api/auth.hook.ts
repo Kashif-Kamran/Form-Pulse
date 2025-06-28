@@ -7,10 +7,10 @@ import {
   VerifyOtpResponse,
 } from "@repo/shared";
 
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import { useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/client/client";
-import { postRequest } from "@/lib/client/common";
+import { postRequest, getRequest } from "@/lib/client/common";
 const API_TOKEN_KEY = "token";
 
 const handleAuthSuccess = async (data: AuthResponse) => {
@@ -52,8 +52,18 @@ export const useVerifyOtp = (
     mutationFn: (payload: VerifyOtpReq) =>
       postRequest<VerifyOtpResponse>("/auth/verify-otp", payload),
     onSuccess: async (data, variables, context) => {
+      // VerifyOtpResponse doesn't contain auth tokens, just verification status
       options?.onSuccess?.(data, variables, context);
     },
     ...options,
+  });
+};
+
+export const useCurrentUser = () => {
+  return useQuery({
+    queryKey: ["auth", "me"],
+    queryFn: () => getRequest<UserResponse>("/auth/me"),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: false,
   });
 };

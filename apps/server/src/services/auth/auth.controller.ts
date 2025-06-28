@@ -37,4 +37,17 @@ export class AuthController {
   async verifyOtp(@Body() verifyOtpDto: OtpVerificationDto) {
     return this.verifyOtpUseCase.execute(verifyOtpDto);
   }
+
+  @Get('me')
+  @HttpCode(200)
+  async getCurrentUser(@Request() request: any) {
+    const user = request.user;
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isVerified: user.isVerified,
+    };
+  }
 }

@@ -14,9 +14,10 @@ interface InventoryTableProps {
   results: IFeedInventory[];
   onEdit: (feedItem: IFeedInventory) => void;
   onDelete: (feedItem: IFeedInventory) => void;
+  showActions?: boolean;
 }
 
-function InventoryTable({ results, onEdit, onDelete }: InventoryTableProps) {
+function InventoryTable({ results, onEdit, onDelete, showActions = true }: InventoryTableProps) {
   return (
     <div className="flex flex-col overflow-hidden bg-white rounded-xl">
       <ScrollArea className="h-full">
@@ -27,7 +28,7 @@ function InventoryTable({ results, onEdit, onDelete }: InventoryTableProps) {
               <TableHead>Used upto</TableHead>
               <TableHead>Remaining</TableHead>
               <TableHead>Total Price</TableHead>
-              <TableHead className="text-center">Action</TableHead>
+              {showActions && <TableHead className="text-center">Action</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody className="flex-1">
@@ -42,13 +43,15 @@ function InventoryTable({ results, onEdit, onDelete }: InventoryTableProps) {
                   <TableCell>{item.usedStock}</TableCell>
                   <TableCell>{item.remainingStock}</TableCell>
                   <TableCell>{item.totalPrice}</TableCell>
-                  <TableCell className="text-center">
-                    <FeedInventoryActions
-                      feedItem={item}
-                      onEdit={onEdit}
-                      onDelete={onDelete}
-                    />
-                  </TableCell>
+                  {showActions && (
+                    <TableCell className="text-center">
+                      <FeedInventoryActions
+                        feedItem={item}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
+                      />
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             )}
