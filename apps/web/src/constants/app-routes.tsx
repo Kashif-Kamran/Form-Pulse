@@ -17,6 +17,8 @@ const REPORTS = "/reorts";
 const EDUCATIONAL_RESOURCERS = "/educational-resources";
 const SETTINGS = "/settings";
 const CREATE_DIET_PLAN = DIET_MANAGEMENT + "/create";
+const EDIT_DIET_PLAN = (dietPlanId?: string) => 
+  `${DIET_MANAGEMENT}/edit/${dietPlanId ?? ":dietPlanId"}`;
 const CREATE_HEALTH_RECORD = HEALTH_MONITORING + "/create";
 export {
   LOGIN,
@@ -33,5 +35,6 @@ export {
   SETTINGS,
   ANIMAL_DETAIL,
   CREATE_DIET_PLAN,
+  EDIT_DIET_PLAN,
   CREATE_HEALTH_RECORD,
 };

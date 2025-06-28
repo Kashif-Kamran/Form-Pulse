@@ -17,6 +17,8 @@ import {
 import { Trash2Icon, Edit, MoreHorizontal } from "lucide-react";
 import { AnimalDietPlanPublic } from "@repo/shared";
 import { formatDateDifference, formatDateToString } from "@/lib/moment";
+import { useNavigate } from "react-router-dom";
+import { EDIT_DIET_PLAN } from "@/constants/app-routes";
 
 interface DietListTableProps {
   results: AnimalDietPlanPublic[];
@@ -27,10 +29,11 @@ interface DietPlanActionsProps {
 }
 
 function DietPlanActions({ dietPlan }: DietPlanActionsProps) {
+  const navigate = useNavigate();
+  
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log("Edit action for id:", dietPlan.id);
-    // TODO: Implement edit functionality
+    navigate(EDIT_DIET_PLAN(dietPlan.id));
   };
 
   const handleDelete = (e: React.MouseEvent) => {

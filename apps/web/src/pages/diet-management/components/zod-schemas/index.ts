@@ -56,7 +56,7 @@ export const transformDietPlanForBackend = (
     startTime: data.startTime,
     endTime: data.endTime,
     noOfTimesPerDay: data.noOfTimesPerDay,
-    careTaker: data.careTaker,
+    careTaker: data.careTaker._id,
     recipes: data.recipes.map((recipe) => ({
       feed: recipe.feed.id,
       perTimeQuantity: recipe.perTimeQuantity,

@@ -3,6 +3,7 @@ import {
   ANIMAL_DETAIL,
   ANIMALS_PROFILE,
   CREATE_DIET_PLAN,
+  EDIT_DIET_PLAN,
   CREATE_HEALTH_RECORD,
   DIET_MANAGEMENT,
   EDUCATIONAL_RESOURCERS,
@@ -26,6 +27,9 @@ const FeedInventory = lazy(() => import("@/pages/feed-inventory"));
 const DietList = lazy(() => import("@/pages/diet-management/diet-list"));
 const CreateDietPlanPage = lazy(
   () => import("@/pages/diet-management/create-diet-plan")
+);
+const EditDietPlanPage = lazy(
+  () => import("@/pages/diet-management/edit-diet-plan")
 );
 const AnimalList = lazy(
   () => import("@/pages/animals/animal-list/animal-list")
@@ -99,6 +103,14 @@ const privateRoutes: RouteObject[] = [
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
                 <CreateDietPlanPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: EDIT_DIET_PLAN(),
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <EditDietPlanPage />
               </Suspense>
             ),
           },

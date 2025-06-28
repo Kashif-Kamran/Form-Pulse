@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import { useToggleState } from "@/hooks/use-toggle-state";
 import {
   AnimalPublic,
+  AnimalDietPlanPublic,
   IFeedInventory,
   PublicUser,
   RoleType,
 } from "@repo/shared";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChooseAnimalDialog } from "../dialogs/choose-animal-dialog-box";
 import DatePicker from "@/components/date-picker";
 import InputField from "@/components/custom-ui/form-feilds/input-field";
@@ -20,7 +21,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableRow,
 } from "@/components/ui/table";
 import { CircleMinus } from "lucide-react";
@@ -41,13 +41,21 @@ import {
 } from "../zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
-import { useCreateDietPlan } from "@/hooks/api/diet-plan.hook";
+import { useCreateDietPlan, useUpdateDietPlan } from "@/hooks/api/diet-plan.hook";
 import { cn } from "@/lib/utils";
 import { ChooseUserDialog } from "@/dialogs/choose-user-dialog-box";
 
-function DietPlanForm() {
+interface DietPlanFormProps {
+  mode?: "create" | "edit";
+  dietPlan?: AnimalDietPlanPublic;
+  dietPlanId?: string;
+}
+
+function DietPlanForm({ mode = "create", dietPlan, dietPlanId }: DietPlanFormProps) {
   const { mutateAsync: createDietPlan } = useCreateDietPlan();
+  const { mutateAsync: updateDietPlan } = useUpdateDietPlan();
   const { toast } = useToast();
+  
   const form = useForm<DietPlanData>({
     resolver: zodResolver(DietPlanSchema),
     defaultValues: {
@@ -60,38 +68,89 @@ function DietPlanForm() {
     },
   });
 
+  // Populate form with existing data when in edit mode
+  useEffect(() => {
+    if (mode === "edit" && dietPlan) {
+      form.setValue("animal", dietPlan.animal);
+      form.setValue("startTime", new Date(dietPlan.startTime));
+      form.setValue("endTime", new Date(dietPlan.endTime));
+      form.setValue("careTaker", {
+        _id: dietPlan.careTaker.id,
+        id: dietPlan.careTaker.id,
+        name: dietPlan.careTaker.name,
+        role: dietPlan.careTaker.role,
+      });
+      form.setValue("noOfTimesPerDay", dietPlan.noOfTimesPerDay);
+      
+      // Transform recipes to match form structure
+      const formRecipes = dietPlan.recipes.map((recipe) => ({
+        id: recipe.feed.id,
+        feed: recipe.feed,
+        quantity: recipe.quantity,
+        perTimeQuantity: recipe.perTimeQuantity,
+      }));
+      form.setValue("recipes", formRecipes);
+    }
+  }, [mode, dietPlan, form]);
+
   const onSubmit = form.handleSubmit(
     async (formData: DietPlanData) => {
       const transformedData = transformDietPlanForBackend(formData);
-      createDietPlan(
-        {
-          animalId: formData.animal.id,
-          payload: transformedData,
-        },
-        {
-          onSuccess: () => {
-            toast({
-              title: "Diet plan created successfully!",
-              variant: "default",
-            });
+      
+      if (mode === "create") {
+        createDietPlan(
+          {
+            animalId: formData.animal.id,
+            payload: transformedData,
           },
-          onError: (error) => {
-            console.log("Error on Diet Plan Creation :", error);
-            toast({
-              title: "Unable to create diet plan",
-              description: error.message,
-              variant: "destructive",
-            });
+          {
+            onSuccess: () => {
+              toast({
+                title: "Diet plan created successfully!",
+                variant: "default",
+              });
+            },
+            onError: (error) => {
+              console.log("Error on Diet Plan Creation :", error);
+              toast({
+                title: "Unable to create diet plan",
+                description: error.message,
+                variant: "destructive",
+              });
+            },
+          }
+        );
+      } else if (mode === "edit" && dietPlanId) {
+        updateDietPlan(
+          {
+            dietPlanId: dietPlanId,
+            payload: transformedData,
           },
-        }
-      );
+          {
+            onSuccess: () => {
+              toast({
+                title: "Diet plan updated successfully!",
+                variant: "default",
+              });
+            },
+            onError: (error) => {
+              console.log("Error on Diet Plan Update :", error);
+              toast({
+                title: "Unable to update diet plan",
+                description: error.message,
+                variant: "destructive",
+              });
+            },
+          }
+        );
+      }
     },
     (errors) => {
       // Handle validation errors
       Object.entries(errors).forEach(([fieldName, error]) => {
         console.log({ fieldName, error });
         if (fieldName === "animal" && error) {
-          console.log("Shoud Be selected ");
+          console.log("Should Be selected ");
           return toast({
             title: "Please Select Animal",
             variant: "destructive",
@@ -110,7 +169,7 @@ function DietPlanForm() {
       <form className="space-y-4 max-h-full flex flex-col" onSubmit={onSubmit}>
         <Card className="pt-2 px-6 pb-6">
           <CardTitle className="bg-primary rounded-md p-2 text-primary-foreground mt-4 text-center text-lg">
-            Create New Diet Plan
+            {mode === "create" ? "Create New Diet Plan" : "Edit Diet Plan"}
           </CardTitle>
           <CardContent className="p-0">
             <div className="space-y-2 flex gap-4 justify-center items-center">
@@ -124,7 +183,7 @@ function DietPlanForm() {
         <FeedItemsTable form={form} />
         <div className="px-4 flex justify-end">
           <Button type="submit" className="p-6 px-16">
-            Save
+            {mode === "create" ? "Save" : "Update"}
           </Button>
         </div>
       </form>
