@@ -7,15 +7,16 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Trash2Icon } from "lucide-react";
 import { IFeedInventory } from "@repo/shared";
+import FeedInventoryActions from "./feed-inventory-actions";
 
 interface InventoryTableProps {
   results: IFeedInventory[];
+  onEdit: (feedItem: IFeedInventory) => void;
+  onDelete: (feedItem: IFeedInventory) => void;
 }
 
-function InventoryTable({ results }: InventoryTableProps) {
+function InventoryTable({ results, onEdit, onDelete }: InventoryTableProps) {
   return (
     <div className="flex flex-col overflow-hidden bg-white rounded-xl">
       <ScrollArea className="h-full">
@@ -41,15 +42,12 @@ function InventoryTable({ results }: InventoryTableProps) {
                   <TableCell>{item.usedStock}</TableCell>
                   <TableCell>{item.remainingStock}</TableCell>
                   <TableCell>{item.totalPrice}</TableCell>
-                  <TableCell className="p-0 text-center">
-                    <Button
-                      className="h-8 w-8 text-destructive hover:bg-destructive hover:text-destructive-foreground p-[6px]"
-                      variant="ghost"
-                      onClick={() => console.log(`Deleting ${item.name}`)}
-                      disabled
-                    >
-                      <Trash2Icon className="h-full w-full" />
-                    </Button>
+                  <TableCell className="text-center">
+                    <FeedInventoryActions
+                      feedItem={item}
+                      onEdit={onEdit}
+                      onDelete={onDelete}
+                    />
                   </TableCell>
                 </TableRow>
               ))

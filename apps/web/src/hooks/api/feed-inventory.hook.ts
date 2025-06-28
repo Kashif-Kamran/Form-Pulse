@@ -1,4 +1,4 @@
-import { getRequest, postRequest } from "@/lib/client/common";
+import { getRequest, postRequest, patchRequest } from "@/lib/client/common";
 import { queryClient } from "@/lib/query-client";
 import {
   CreateNewFeedItemReq,
@@ -44,6 +44,22 @@ export const useCreateFeedInventory = (
   return useMutation({
     mutationFn: (payload: CreateNewFeedItemReq) =>
       postRequest<FeedItemResponse>("/feed-inventory", payload),
+    onSuccess: (data: any, variables: any, context: any) => {
+      queryClient.invalidateQueries({
+        queryKey: [FEED_INVENTORY_QUERY_KEY, "list"],
+      });
+      options?.onSuccess?.(data, variables, context);
+    },
+    ...options,
+  });
+};
+
+export const useUpdateFeedInventory = (
+  options?: MutationOptions<FeedItemResponse, Error, { feedItemId: string; payload: CreateNewFeedItemReq }>
+) => {
+  return useMutation({
+    mutationFn: ({ feedItemId, payload }: { feedItemId: string; payload: CreateNewFeedItemReq }) =>
+      patchRequest<FeedItemResponse>(`/feed-inventory/${feedItemId}`, payload),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: [FEED_INVENTORY_QUERY_KEY, "list"],

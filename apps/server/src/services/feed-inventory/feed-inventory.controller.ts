@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Patch, Param, Query } from '@nestjs/common';
 import { CreateFeedItemUseCase } from './usecases/create-feed-item.usecase';
+import { UpdateFeedInventoryUseCase } from './usecases/update-feed-inventory.usecase';
 import { CreateFeedItemDto } from './feed-ingentory.dtos';
 import { ListFeedInventoryUseCase } from './usecases/list-feed-inventory.usecase';
 
@@ -7,6 +8,7 @@ import { ListFeedInventoryUseCase } from './usecases/list-feed-inventory.usecase
 export class FeedInventoryController {
   constructor(
     private readonly createFeedItemUC: CreateFeedItemUseCase,
+    private readonly updateFeedInventoryUC: UpdateFeedInventoryUseCase,
     private readonly listFeedInventoryUC: ListFeedInventoryUseCase,
   ) {}
 
@@ -18,5 +20,13 @@ export class FeedInventoryController {
   @Get()
   async getInventoryList(@Query('q') searchQuery: string) {
     return this.listFeedInventoryUC.execute(searchQuery);
+  }
+
+  @Patch(':feedInventoryId')
+  async updateInventoryItem(
+    @Param('feedInventoryId') feedInventoryId: string,
+    @Body() updateFeedItemDto: CreateFeedItemDto,
+  ) {
+    return this.updateFeedInventoryUC.execute(feedInventoryId, updateFeedItemDto);
   }
 }
