@@ -47,11 +47,33 @@ interface MedicalHistoryProps {
 }
 
 export const MedicalHistory = ({ animalId }: MedicalHistoryProps) => {
-  const { results: vaccinations = [], isLoading } = useHealthRecordsByAnimalId(
+  const { results: vaccinations = [], isLoading, error } = useHealthRecordsByAnimalId(
     animalId!
   );
 
   if (isLoading) return <h1>Animal Health Record is Loading</h1>;
+
+  if (error) {
+    console.error("Error loading health records:", error);
+    return (
+      <div className="">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold text-red-600">
+              Error Loading Medical History
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-red-500 text-center py-4">
+              Unable to load medical history: {error.message}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  console.log("Medical History - Vaccinations:", vaccinations);
 
   return (
     <div className="">

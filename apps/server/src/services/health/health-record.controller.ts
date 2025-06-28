@@ -10,6 +10,8 @@ import {
   UpdateHealthRecordStatusUseCase,
   UpdateStatusDto,
 } from './usecase/update-health-record-status.usecase';
+import { GetHealthRecordByIdUseCase } from './usecase/get-health-record-by-id.usecase';
+import { UpdateHealthRecordUseCase } from './usecase/update-health-record.usecase';
 import { MongooseIdValidationPipe } from 'src/common/interceptors/pipes/is-mongoose-object-id.pipe';
 import { Request } from 'express';
 
@@ -20,6 +22,8 @@ export class AnimalHealthRecordController {
     private readonly getAnimalHealthList: GetAnimalListUseCase,
     private readonly getHealthRecordsByAnimal: GetAnimalHealthRecordsList,
     private readonly updateHealthRecordStatusUC: UpdateHealthRecordStatusUseCase,
+    private readonly getHealthRecordByIdUC: GetHealthRecordByIdUseCase,
+    private readonly updateHealthRecordUC: UpdateHealthRecordUseCase,
   ) {}
 
   @Post()
@@ -32,9 +36,22 @@ export class AnimalHealthRecordController {
     return this.getAnimalHealthList.execute();
   }
 
-  @Get(':animalId')
+  @Get('animal/:animalId')
   async getAllRecordsByAnimal(@Param('animalId') animalId: string) {
     return this.getHealthRecordsByAnimal.execute(animalId);
+  }
+
+  @Get('record/:recordId')
+  async getHealthRecordById(@Param('recordId', MongooseIdValidationPipe) recordId: string) {
+    return this.getHealthRecordByIdUC.execute(recordId);
+  }
+
+  @Patch(':recordId')
+  async updateHealthRecord(
+    @Param('recordId', MongooseIdValidationPipe) recordId: string,
+    @Body() dto: CreateAnimalHealthRecordDto,
+  ) {
+    return this.updateHealthRecordUC.execute(recordId, dto);
   }
 
   @Patch(':recordId/schedule/:scheduleId')

@@ -1,17 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { AnimalHealthRecordsListResponse } from '@repo/shared';
+import { HealthRecordListResponse } from '@repo/shared';
 import { PipelineStage, Types } from 'mongoose';
 import { AnimalHealthRecordModel } from 'src/database/models/animal-health-record.model';
 
 @Injectable()
 export class GetAnimalHealthRecordsList {
+  private readonly logger = new Logger(GetAnimalHealthRecordsList.name);
+
   constructor(
     @InjectModel('AnimalHealthRecord')
     private readonly animalHealthRecordModel: AnimalHealthRecordModel,
   ) {}
 
-  async execute(animalId?: string): Promise<AnimalHealthRecordsListResponse> {
+  async execute(animalId?: string): Promise<HealthRecordListResponse> {
+    this.logger.log(`Fetching health records for animal: ${animalId || 'all animals'}`);
+
     const matchStage = animalId
       ? { $match: { animal: new Types.ObjectId(animalId) } }
       : { $match: {} };
@@ -84,6 +88,11 @@ export class GetAnimalHealthRecordsList {
     ];
 
     const results = await this.animalHealthRecordModel.aggregate(pipeline);
+
+    this.logger.log(`Query results for animal ${animalId}:`, {
+      count: results.length,
+      recordIds: results.map(r => r.healthRecordId?.toString()).filter(Boolean)
+    });
 
     return {
       count: results.length,

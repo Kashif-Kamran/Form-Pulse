@@ -9,6 +9,8 @@ import { GetAnimalListUseCase } from './usecase/get-animal-health-list.usecase';
 import { GetAnimalHealthRecordsList } from './usecase/get-animal-health-records.usecase';
 import { PopulateVaccines } from './usecase/populate-vaccines.usecase';
 import { UpdateHealthRecordStatusUseCase } from './usecase/update-health-record-status.usecase';
+import { GetHealthRecordByIdUseCase } from './usecase/get-health-record-by-id.usecase';
+import { UpdateHealthRecordUseCase } from './usecase/update-health-record.usecase';
 
 @Module({
   imports: [DatabaseModule],
@@ -22,6 +24,8 @@ import { UpdateHealthRecordStatusUseCase } from './usecase/update-health-record-
     GetAnimalHealthRecordsList,
     PopulateVaccines,
     UpdateHealthRecordStatusUseCase,
+    GetHealthRecordByIdUseCase,
+    UpdateHealthRecordUseCase,
   ],
 })
 export class HealthModule {}

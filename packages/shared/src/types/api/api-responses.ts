@@ -82,6 +82,12 @@ export type PopulatedAnimalHealthRecord = AnimalHealthRecordGeneric<
 export type AnimalHealthRecordsListResponse =
   ListResponse<PopulatedAnimalHealthRecord>;
 export type CreateAnimalHealthRecordResponse = IAnimalHealthRecord;
+export type UpdateAnimalHealthRecordResponse = SingleItemResponse<{
+  message: string;
+  data: {
+    id: string;
+  };
+}>;
 
 export type HealthRecordResponseItem = {
   id: string; // schedule, does id

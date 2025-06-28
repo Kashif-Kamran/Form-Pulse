@@ -17,7 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useState } from "react";
-import { AnimalPublic, IVaccine, PublicUser, RoleType } from "@repo/shared";
+import { AnimalPublic, IVaccine, PublicUser, RoleType, PopulatedAnimalHealthRecord } from "@repo/shared";
 import { useToggleState } from "@/hooks/use-toggle-state";
 import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { Button } from "@/components/ui/button";
@@ -29,12 +29,23 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import DatePicker from "@/components/date-picker";
 import { CircleMinus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCreateAnimalHealthRecord } from "@/hooks/api/animal-health-record.hook";
+import { useCreateAnimalHealthRecord, useUpdateHealthRecord } from "@/hooks/api/animal-health-record.hook";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+import { HEALTH_MONITORING } from "@/constants/app-routes";
+import { useEffect } from "react";
 
-export function HealthRecordForm() {
+interface HealthRecordFormProps {
+  healthRecord?: PopulatedAnimalHealthRecord;
+  mode?: 'create' | 'edit';
+}
+
+export function HealthRecordForm({ healthRecord, mode = 'create' }: HealthRecordFormProps) {
   const { mutateAsync: createHealthRecord } = useCreateAnimalHealthRecord();
+  const { mutateAsync: updateHealthRecord } = useUpdateHealthRecord();
   const { toast } = useToast();
+  const navigate = useNavigate();
+  
   const form = useForm<HealthRecordFormType>({
     defaultValues: {
       animal: {
@@ -48,27 +59,86 @@ export function HealthRecordForm() {
     },
   });
 
+  // Pre-populate form when in edit mode
+  useEffect(() => {
+    if (mode === 'edit' && healthRecord) {
+      form.reset({
+        animal: {
+          id: healthRecord.animal.id,
+          name: healthRecord.animal.name,
+          breed: healthRecord.animal.breed,
+          age: healthRecord.animal.age,
+          weight: healthRecord.animal.weight,
+        },
+        veterinarian: {
+          id: healthRecord.veterinarian.id,
+          name: healthRecord.veterinarian.name,
+          email: healthRecord.veterinarian.email,
+          role: healthRecord.veterinarian.role,
+        },
+        vaccination: {
+          id: healthRecord.vaccine.id,
+          name: healthRecord.vaccine.name,
+          type: healthRecord.vaccine.type,
+        },
+        vaccinationType: healthRecord.vaccine.type,
+        medicationDoses: healthRecord.schedule.map((schedule, index) => ({
+          id: `${healthRecord.id}-${index}`,
+          deliveryDate: new Date(schedule.dateTime),
+          quantity: schedule.quantity,
+        })),
+      });
+    }
+  }, [mode, healthRecord, form]);
+
   const handleSubmit = form.handleSubmit(
     async (formData: HealthRecordFormType) => {
-      console.log("Creation : ", formData);
+      console.log(mode === 'edit' ? "Update : " : "Creation : ", formData);
       const transformedData = transformHealthRecordForBackend(formData);
-      createHealthRecord(transformedData, {
-        onSuccess: () => {
-          toast({
-            title: "Animal health record created successfully!",
-            variant: "default",
-          });
-          form.reset();
-        },
-        onError: (error) => {
-          console.log("Error on Diet Plan Creation :", error);
-          toast({
-            title: "Unable to create health record",
-            description: error.message,
-            variant: "destructive",
-          });
-        },
-      });
+      
+      if (mode === 'edit' && healthRecord) {
+        updateHealthRecord(
+          {
+            healthRecordId: healthRecord.id,
+            payload: transformedData,
+          },
+          {
+            onSuccess: () => {
+              toast({
+                title: "Health record updated successfully!",
+                variant: "default",
+              });
+              navigate(HEALTH_MONITORING);
+            },
+            onError: (error) => {
+              console.log("Error on Health Record Update :", error);
+              toast({
+                title: "Unable to update health record",
+                description: error.message,
+                variant: "destructive",
+              });
+            },
+          }
+        );
+      } else {
+        createHealthRecord(transformedData, {
+          onSuccess: () => {
+            toast({
+              title: "Animal health record created successfully!",
+              variant: "default",
+            });
+            form.reset();
+          },
+          onError: (error) => {
+            console.log("Error on Diet Plan Creation :", error);
+            toast({
+              title: "Unable to create health record",
+              description: error.message,
+              variant: "destructive",
+            });
+          },
+        });
+      }
     }
   );
 
@@ -80,7 +150,7 @@ export function HealthRecordForm() {
       >
         <Card className="pt-2 px-6 pb-6">
           <CardTitle className="bg-primary rounded-md p-2 text-primary-foreground mt-4 text-center text-lg">
-            Create New Health Record
+            {mode === 'edit' ? 'Edit Health Record' : 'Create New Health Record'}
           </CardTitle>
           <CardContent className="p-0">
             <div className="space-y-2 flex flex-row gap-4 justify-center items-center">
@@ -91,9 +161,18 @@ export function HealthRecordForm() {
           </CardContent>
         </Card>
         <VaccineItemsList form={form} />
-        <div className="px-4 flex justify-end">
+        <div className="px-4 flex justify-end gap-4">
+          {mode === 'edit' && (
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => navigate(HEALTH_MONITORING)}
+            >
+              Cancel
+            </Button>
+          )}
           <Button type="submit" className="p-6 px-16">
-            Save
+            {mode === 'edit' ? 'Update' : 'Save'}
           </Button>
         </div>
       </form>

@@ -7,28 +7,26 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Trash2Icon } from "lucide-react";
 import { PopulatedAnimalHealthRecord } from "@repo/shared";
+import HealthRecordActions from "./health-record-actions";
+import { useNavigate } from "react-router-dom";
+import { EDIT_HEALTH_RECORD } from "@/constants/app-routes";
 
 export interface HealthMonitoringTableProps {
   results: PopulatedAnimalHealthRecord[];
 }
 
 const HealthMonitoringTable = ({ results }: HealthMonitoringTableProps) => {
-  // const handleDelete = (id: number) => {
-  //   setAnimals(animals.filter((animal) => animal.id !== id));
-  // };
+  const navigate = useNavigate();
 
-  // const getStatusColor = (status: string) => {
-  //   if (status === "Add") return "text-green-500";
-  //   if (status === "Vaccinated") return "text-blue-500";
-  //   return "text-red-500"; // For "Remaining" numbers
-  // };
+  const handleEdit = (healthRecord: PopulatedAnimalHealthRecord) => {
+    navigate(EDIT_HEALTH_RECORD(healthRecord.id.toString()));
+  };
 
-  // const rowClick = (id: number) => {
-  //   console.log("Row clicked:", id);
-  // };
+  const handleDelete = (healthRecord: PopulatedAnimalHealthRecord) => {
+    // TODO: Implement delete functionality
+    console.log('Delete health record:', healthRecord.id);
+  };
 
   return (
     <div className="flex flex-col overflow-hidden bg-white rounded-xl">
@@ -65,16 +63,11 @@ const HealthMonitoringTable = ({ results }: HealthMonitoringTableProps) => {
                   </TableCell>
                   <TableCell>{item.vaccine.name}</TableCell>
                   <TableCell className="p-0 text-center">
-                    <Button
-                      className="h-8 w-8 text-destructive hover:bg-destructive hover:text-destructive-foreground p-[6px]"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // handleDelete(item.id);
-                      }}
-                    >
-                      <Trash2Icon className="h-full w-full" />
-                    </Button>
+                    <HealthRecordActions
+                      healthRecord={item}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

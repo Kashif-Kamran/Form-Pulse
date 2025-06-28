@@ -6,6 +6,8 @@ import {
   CreateAnimalHealthRecordResponse,
   HealthRecordListResponse,
   HealthRecordResponseItem,
+  PopulatedAnimalHealthRecord,
+  UpdateAnimalHealthRecordResponse,
   UpdateHealthRecordStatusReq,
   UpdateHealthRecordStatusResponse,
 } from "@repo/shared";
@@ -33,9 +35,16 @@ export const useCreateAnimalHealthRecord = (
         payload
       ),
     onSuccess: (data: any, variables: any, context: any) => {
-      queryClient.invalidateQueries({ queryKey: [HEALTH_QUERY_KEY, "list"] });
-      queryClient.invalidateQueries({
-        queryKey: ["NEW_HEALTH_RECORD", "list"],
+      // Invalidate ALL health record related queries to ensure fresh data everywhere
+      queryClient.invalidateQueries({ 
+        predicate: (query) => {
+          const queryKey = query.queryKey;
+          return (
+            queryKey.includes(HEALTH_QUERY_KEY) ||
+            queryKey.includes("NEW_HEALTH_RECORD") ||
+            queryKey.includes("animal-health-record")
+          );
+        }
       });
 
       options?.onSuccess?.(data, variables, context);
@@ -75,7 +84,7 @@ export const useHealthRecordsByAnimalId = (
   const queryKey = ["NEW_HEALTH_RECORD", "list", animalId];
   const { data, ...rest } = useQuery({
     queryFn: async () => {
-      const url = `/animal-health-record/${animalId}`;
+      const url = `/animal-health-record/animal/${animalId}`;
       const apiResponse = await getRequest<HealthRecordListResponse>(url);
       const mappedData: HealthRecordResponseItem[] = apiResponse.results.map(
         (item) => {
@@ -115,18 +124,77 @@ export const useUpdateHealthRecordStatus = (
         payload
       ),
     onSuccess: (data: any, variables: any, context: any) => {
-      // Invalidate all health record queries to refresh the data
-      queryClient.invalidateQueries({ queryKey: [HEALTH_QUERY_KEY, "list"] });
-      queryClient.invalidateQueries({
-        queryKey: ["NEW_HEALTH_RECORD", "list"],
-      });
-
-      // Also invalidate the specific animal's health records
-      queryClient.invalidateQueries({
-        queryKey: ["NEW_HEALTH_RECORD", "list", variables.recordId],
+      // Invalidate ALL health record related queries to ensure fresh data everywhere
+      queryClient.invalidateQueries({ 
+        predicate: (query) => {
+          const queryKey = query.queryKey;
+          return (
+            queryKey.includes(HEALTH_QUERY_KEY) ||
+            queryKey.includes("NEW_HEALTH_RECORD") ||
+            queryKey.includes("animal-health-record")
+          );
+        }
       });
 
       options?.onSuccess?.(data, variables, context);
     },
   });
+};
+
+export const useUpdateHealthRecord = (
+  options?: MutationOptions<
+    UpdateAnimalHealthRecordResponse,
+    Error,
+    {
+      healthRecordId: string;
+      payload: CreateAnimalHealthRecordReq;
+    }
+  >
+) => {
+  return useMutation({
+    mutationFn: ({ healthRecordId, payload }) =>
+      patchRequest<UpdateAnimalHealthRecordResponse>(
+        `/animal-health-record/${healthRecordId}`,
+        payload
+      ),
+    onSuccess: (data: any, variables: any, context: any) => {
+      // Invalidate ALL health record related queries to ensure fresh data everywhere
+      queryClient.invalidateQueries({ 
+        predicate: (query) => {
+          const queryKey = query.queryKey;
+          return (
+            queryKey.includes(HEALTH_QUERY_KEY) ||
+            queryKey.includes("NEW_HEALTH_RECORD") ||
+            queryKey.includes("animal-health-record")
+          );
+        }
+      });
+
+      options?.onSuccess?.(data, variables, context);
+    },
+  });
+};
+
+export const useHealthRecordById = (
+  recordId: string,
+  options?: UseQueryOptions<
+    PopulatedAnimalHealthRecord,
+    Error,
+    PopulatedAnimalHealthRecord,
+    QueryKey
+  >
+) => {
+  const queryKey = [HEALTH_QUERY_KEY, "single", recordId];
+  const { data, ...rest } = useQuery({
+    queryFn: () => {
+      const url = `/animal-health-record/record/${recordId}`;
+      return getRequest<{ data: PopulatedAnimalHealthRecord }>(url).then(
+        (response) => response.data
+      );
+    },
+    queryKey: queryKey,
+    enabled: !!recordId,
+    ...options,
+  });
+  return { data, ...rest };
 };

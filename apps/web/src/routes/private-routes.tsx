@@ -5,6 +5,7 @@ import {
   CREATE_DIET_PLAN,
   EDIT_DIET_PLAN,
   CREATE_HEALTH_RECORD,
+  EDIT_HEALTH_RECORD,
   DIET_MANAGEMENT,
   EDUCATIONAL_RESOURCERS,
   FEED_INVENTORY,
@@ -31,6 +32,9 @@ const CreateDietPlanPage = lazy(
 const EditDietPlanPage = lazy(
   () => import("@/pages/diet-management/edit-diet-plan")
 );
+const EditHealthRecordPage = lazy(
+  () => import("@/pages/health-monitoring/edit-health-record")
+);
 const AnimalList = lazy(
   () => import("@/pages/animals/animal-list/animal-list")
 );
@@ -39,7 +43,9 @@ const HealthMonitoring = lazy(
 );
 
 const ProtectedRoute = () => {
-  const { data, isLoading } = useMe();
+  // const { data, isLoading } = useMe();
+
+  const { data, isLoading } = { data: {}, isLoading: false };
   const location = useLocation();
 
   if (isLoading) {
@@ -159,6 +165,14 @@ const privateRoutes: RouteObject[] = [
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
                 <AddHealthRecord />
+              </Suspense>
+            ),
+          },
+          {
+            path: EDIT_HEALTH_RECORD(),
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <EditHealthRecordPage />
               </Suspense>
             ),
           },
