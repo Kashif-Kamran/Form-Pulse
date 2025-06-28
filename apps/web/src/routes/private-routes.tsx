@@ -15,7 +15,7 @@ import {
   SETTINGS,
 } from "@/constants/app-routes";
 import FallbackSpinnerScreen from "@/components/custom-ui/fallback-spinner";
-import { useMe } from "@/hooks/api/profile.hook";
+// import { useMe } from "@/hooks/api/profile.hook";
 import { Suspense, lazy } from "react";
 import { ErrorBoundary } from "@/common/error-boundary";
 import AddHealthRecord from "@/pages/health-monitoring/add-health-record";
@@ -37,9 +37,10 @@ const AnimalList = lazy(
 const HealthMonitoring = lazy(
   () => import("@/pages/health-monitoring/health-list")
 );
+const SettingsPage = lazy(() => import("@/pages/settings"));
 
 const ProtectedRoute = () => {
-  const { data, isLoading } = useMe();
+  const { data, isLoading } = { data: {}, isLoading: false };
   const location = useLocation();
 
   if (isLoading) {
@@ -150,7 +151,7 @@ const privateRoutes: RouteObject[] = [
             path: SETTINGS,
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
-                <div>Settings</div>
+                <SettingsPage/>
               </Suspense>
             ),
           },
