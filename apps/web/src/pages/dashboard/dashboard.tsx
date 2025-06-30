@@ -20,23 +20,6 @@ export default function Dashboard() {
           <h1 className="text-3xl font-bold text-gray-900">
             Analytics Dashboard
           </h1>
-          <p className="text-gray-600 mt-1">
-            Comprehensive insights into your animal management system
-          </p>
-          <div className="mt-4 flex items-center gap-4">
-            <Badge
-              variant="outline"
-              className="py-1 px-3 text-sm font-medium bg-blue-100 text-blue-800 border-blue-200"
-            >
-              Total Animals: 128
-            </Badge>
-            <Badge
-              variant="outline"
-              className="py-1 px-3 text-sm font-medium bg-green-100 text-green-800 border-green-200"
-            >
-              Active Users: 24
-            </Badge>
-          </div>
         </header>
 
         <div className="space-y-12">
