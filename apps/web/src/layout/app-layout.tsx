@@ -8,14 +8,18 @@ function AppLayout() {
   return (
     <div className="w-screen h-full py-2 flex justify-evenly">
       {/* Sidebar */}
-      <div className={`transition-all duration-300 ${isSidebarCollapsed ? 'w-[5%]' : 'w-[21%]'}`}>
-        <Sidebar 
+      <div
+        className={`transition-all duration-300 ${isSidebarCollapsed ? "w-[5%]" : "w-[21%]"}`}
+      >
+        <Sidebar
           isCollapsed={isSidebarCollapsed}
           onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         />
       </div>
       {/* Main application */}
-      <div className={`bg-gray-300 h-full rounded-lg border-[1px] border-gray-500 p-6 transition-all duration-300 ${isSidebarCollapsed ? 'w-[94%]' : 'w-[78%]'}`}>
+      <div
+        className={`bg-gray-300 h-full rounded-lg border-[1px] border-gray-500 p-6 transition-all duration-300 overflow-y-auto ${isSidebarCollapsed ? "w-[94%]" : "w-[78%]"}`}
+      >
         <Outlet />
       </div>
     </div>
