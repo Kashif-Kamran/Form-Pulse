@@ -42,7 +42,9 @@ export class AnimalHealthRecordController {
   }
 
   @Get('record/:recordId')
-  async getHealthRecordById(@Param('recordId', MongooseIdValidationPipe) recordId: string) {
+  async getHealthRecordById(
+    @Param('recordId', MongooseIdValidationPipe) recordId: string,
+  ) {
     return this.getHealthRecordByIdUC.execute(recordId);
   }
 

@@ -17,12 +17,7 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { CircleMinus } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ChooseFeedItemDialog from "../dialogs/choose-products.dialog";
@@ -41,7 +36,10 @@ import {
 } from "../zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
-import { useCreateDietPlan, useUpdateDietPlan } from "@/hooks/api/diet-plan.hook";
+import {
+  useCreateDietPlan,
+  useUpdateDietPlan,
+} from "@/hooks/api/diet-plan.hook";
 import { cn } from "@/lib/utils";
 import { ChooseUserDialog } from "@/dialogs/choose-user-dialog-box";
 
@@ -51,11 +49,15 @@ interface DietPlanFormProps {
   dietPlanId?: string;
 }
 
-function DietPlanForm({ mode = "create", dietPlan, dietPlanId }: DietPlanFormProps) {
+function DietPlanForm({
+  mode = "create",
+  dietPlan,
+  dietPlanId,
+}: DietPlanFormProps) {
   const { mutateAsync: createDietPlan } = useCreateDietPlan();
   const { mutateAsync: updateDietPlan } = useUpdateDietPlan();
   const { toast } = useToast();
-  
+
   const form = useForm<DietPlanData>({
     resolver: zodResolver(DietPlanSchema),
     defaultValues: {
@@ -74,7 +76,7 @@ function DietPlanForm({ mode = "create", dietPlan, dietPlanId }: DietPlanFormPro
       form.setValue("animal", dietPlan.animal);
       form.setValue("startTime", new Date(dietPlan.startTime));
       form.setValue("endTime", new Date(dietPlan.endTime));
-      
+
       // Create a proper careTaker object for the form
       const careTakerFormData = {
         _id: dietPlan.careTaker.id,
@@ -84,7 +86,7 @@ function DietPlanForm({ mode = "create", dietPlan, dietPlanId }: DietPlanFormPro
       };
       form.setValue("careTaker", careTakerFormData);
       form.setValue("noOfTimesPerDay", dietPlan.noOfTimesPerDay);
-      
+
       // Transform recipes to match form structure
       const formRecipes = dietPlan.recipes.map((recipe) => ({
         id: recipe.feed.id,
@@ -99,7 +101,7 @@ function DietPlanForm({ mode = "create", dietPlan, dietPlanId }: DietPlanFormPro
   const onSubmit = form.handleSubmit(
     async (formData: DietPlanData) => {
       const transformedData = transformDietPlanForBackend(formData);
-      
+
       if (mode === "create") {
         createDietPlan(
           {

@@ -25,7 +25,7 @@ const HealthMonitoringTable = ({ results }: HealthMonitoringTableProps) => {
 
   const handleDelete = (healthRecord: PopulatedAnimalHealthRecord) => {
     // TODO: Implement delete functionality
-    console.log('Delete health record:', healthRecord.id);
+    console.log("Delete health record:", healthRecord.id);
   };
 
   return (

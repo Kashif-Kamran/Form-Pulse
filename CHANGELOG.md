@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial project setup with Turborepo monorepo structure
 - Complete authentication system with JWT and OTP verification
 - Role-based access control (Admin, Nutritionist, Veterinarian, Caretaker)
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Professional README and documentation
 
 ### Frontend Features
+
 - React 18 with TypeScript and Vite
 - Tailwind CSS with Radix UI components
 - React Hook Form with Zod validation
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Responsive design for mobile and desktop
 
 ### Backend Features
+
 - NestJS framework with TypeScript
 - MongoDB with Mongoose ODM
 - JWT authentication with refresh tokens
@@ -34,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Role-based route protection
 
 ### Security
+
 - JWT-based authentication
 - Role-based access control
 - Input validation and sanitization
@@ -43,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2025-01-XX
 
 ### Added
+
 - Initial release with core functionality
 - Basic user management
 - Animal registration and tracking

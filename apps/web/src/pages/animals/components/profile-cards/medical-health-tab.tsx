@@ -47,9 +47,11 @@ interface MedicalHistoryProps {
 }
 
 export const MedicalHistory = ({ animalId }: MedicalHistoryProps) => {
-  const { results: vaccinations = [], isLoading, error } = useHealthRecordsByAnimalId(
-    animalId!
-  );
+  const {
+    results: vaccinations = [],
+    isLoading,
+    error,
+  } = useHealthRecordsByAnimalId(animalId!);
 
   if (isLoading) return <h1>Animal Health Record is Loading</h1>;
 

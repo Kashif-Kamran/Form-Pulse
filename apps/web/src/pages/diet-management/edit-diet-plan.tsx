@@ -27,11 +27,7 @@ function EditDietPlanPage() {
   }
 
   return (
-    <DietPlanForm
-      mode="edit"
-      dietPlan={dietPlan}
-      dietPlanId={dietPlanId}
-    />
+    <DietPlanForm mode="edit" dietPlan={dietPlan} dietPlanId={dietPlanId} />
   );
 }
 

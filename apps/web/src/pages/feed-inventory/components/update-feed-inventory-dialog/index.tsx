@@ -97,10 +97,10 @@ interface UpdateFeedInventoryDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function UpdateFeedInventoryDialog({ 
-  feedItem, 
-  open, 
-  onOpenChange 
+export function UpdateFeedInventoryDialog({
+  feedItem,
+  open,
+  onOpenChange,
 }: UpdateFeedInventoryDialogProps) {
   const { mutateAsync: updateFeedInventory } = useUpdateFeedInventory();
   const { toast } = useToast();
@@ -406,7 +406,11 @@ export function UpdateFeedInventoryDialog({
             />
 
             <DialogFooter className="col-span-1 lg:col-span-2">
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancel
               </Button>
               <Button type="submit">Update changes</Button>

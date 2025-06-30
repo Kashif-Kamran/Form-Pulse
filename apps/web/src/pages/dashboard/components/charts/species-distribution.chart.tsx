@@ -1,47 +1,64 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { useSpeciesDistribution } from "@/hooks/api/dashboard.hook";
+import { Loader2 } from "lucide-react";
 
-const data = [
-  { name: "Dogs", value: 45, color: "#3b82f6" },
-  { name: "Cats", value: 32, color: "#8b5cf6" },
-  { name: "Cows", value: 28, color: "#10b981" },
-  { name: "Horses", value: 15, color: "#f97316" },
-  { name: "Others", value: 8, color: "#6b7280" },
+const COLORS = [
+  "#3b82f6",
+  "#8b5cf6",
+  "#10b981",
+  "#f97316",
+  "#ef4444",
+  "#6b7280",
 ];
 
-const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-}: any) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-    >
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
+type SpeciesDistributionItem = {
+  species: string;
+  count: number;
+  percentage: number;
 };
 
+interface ChartDataItem {
+  name: string;
+  value: number;
+  color: string;
+}
+
 export function SpeciesDistributionChart() {
+  const { speciesDistribution, total, isLoading, isError } =
+    useSpeciesDistribution();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (isError || speciesDistribution.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64 text-gray-500">
+        No data available
+      </div>
+    );
+  }
+
+  // Transform data and add colors
+  const chartData: ChartDataItem[] = speciesDistribution.map(
+    (item: SpeciesDistributionItem, index: number) => ({
+      name: item.species,
+      value: item.count,
+      color: COLORS[index % COLORS.length],
+    })
+  );
+
   return (
     <div className="flex items-center justify-center -mt-4">
       <div className="w-1/2 h-64 relative">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={data}
+              data={chartData}
               cx="50%"
               cy="50%"
               labelLine={false}
@@ -51,19 +68,19 @@ export function SpeciesDistributionChart() {
               dataKey="value"
               stroke="none"
             >
-              {data.map((entry, index) => (
+              {chartData.map((entry: ChartDataItem, index: number) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-3xl font-bold">128</span>
+          <span className="text-3xl font-bold">{total}</span>
           <span className="text-sm text-gray-500">Animals</span>
         </div>
       </div>
       <div className="w-1/2 space-y-2 pl-4">
-        {data.map((entry) => (
+        {chartData.map((entry: ChartDataItem) => (
           <div
             key={entry.name}
             className="flex items-center justify-between text-sm"

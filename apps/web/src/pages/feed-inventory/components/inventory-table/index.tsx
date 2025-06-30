@@ -17,7 +17,12 @@ interface InventoryTableProps {
   showActions?: boolean;
 }
 
-function InventoryTable({ results, onEdit, onDelete, showActions = true }: InventoryTableProps) {
+function InventoryTable({
+  results,
+  onEdit,
+  onDelete,
+  showActions = true,
+}: InventoryTableProps) {
   return (
     <div className="flex flex-col overflow-hidden bg-white rounded-xl">
       <ScrollArea className="h-full">
@@ -28,7 +33,9 @@ function InventoryTable({ results, onEdit, onDelete, showActions = true }: Inven
               <TableHead>Used upto</TableHead>
               <TableHead>Remaining</TableHead>
               <TableHead>Total Price</TableHead>
-              {showActions && <TableHead className="text-center">Action</TableHead>}
+              {showActions && (
+                <TableHead className="text-center">Action</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody className="flex-1">

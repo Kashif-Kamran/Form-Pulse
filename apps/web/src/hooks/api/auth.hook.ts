@@ -7,7 +7,11 @@ import {
   VerifyOtpResponse,
 } from "@repo/shared";
 
-import { useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+} from "@tanstack/react-query";
 
 import { client } from "@/lib/client/client";
 import { postRequest, getRequest } from "@/lib/client/common";

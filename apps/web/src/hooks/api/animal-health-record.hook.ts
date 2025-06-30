@@ -36,7 +36,7 @@ export const useCreateAnimalHealthRecord = (
       ),
     onSuccess: (data: any, variables: any, context: any) => {
       // Invalidate ALL health record related queries to ensure fresh data everywhere
-      queryClient.invalidateQueries({ 
+      queryClient.invalidateQueries({
         predicate: (query) => {
           const queryKey = query.queryKey;
           return (
@@ -44,7 +44,7 @@ export const useCreateAnimalHealthRecord = (
             queryKey.includes("NEW_HEALTH_RECORD") ||
             queryKey.includes("animal-health-record")
           );
-        }
+        },
       });
 
       options?.onSuccess?.(data, variables, context);
@@ -125,7 +125,7 @@ export const useUpdateHealthRecordStatus = (
       ),
     onSuccess: (data: any, variables: any, context: any) => {
       // Invalidate ALL health record related queries to ensure fresh data everywhere
-      queryClient.invalidateQueries({ 
+      queryClient.invalidateQueries({
         predicate: (query) => {
           const queryKey = query.queryKey;
           return (
@@ -133,7 +133,7 @@ export const useUpdateHealthRecordStatus = (
             queryKey.includes("NEW_HEALTH_RECORD") ||
             queryKey.includes("animal-health-record")
           );
-        }
+        },
       });
 
       options?.onSuccess?.(data, variables, context);
@@ -159,7 +159,7 @@ export const useUpdateHealthRecord = (
       ),
     onSuccess: (data: any, variables: any, context: any) => {
       // Invalidate ALL health record related queries to ensure fresh data everywhere
-      queryClient.invalidateQueries({ 
+      queryClient.invalidateQueries({
         predicate: (query) => {
           const queryKey = query.queryKey;
           return (
@@ -167,7 +167,7 @@ export const useUpdateHealthRecord = (
             queryKey.includes("NEW_HEALTH_RECORD") ||
             queryKey.includes("animal-health-record")
           );
-        }
+        },
       });
 
       options?.onSuccess?.(data, variables, context);

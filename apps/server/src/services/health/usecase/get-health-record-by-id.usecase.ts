@@ -11,7 +11,9 @@ export class GetHealthRecordByIdUseCase {
     private animalHealthRecordModel: Model<AnimalHealthRecord>,
   ) {}
 
-  async execute(recordId: string): Promise<{ data: PopulatedAnimalHealthRecord }> {
+  async execute(
+    recordId: string,
+  ): Promise<{ data: PopulatedAnimalHealthRecord }> {
     const healthRecord = await this.animalHealthRecordModel
       .findById(recordId)
       .populate('animal')
@@ -20,7 +22,9 @@ export class GetHealthRecordByIdUseCase {
       .exec();
 
     if (!healthRecord) {
-      throw new NotFoundException(`Health record with ID ${recordId} not found`);
+      throw new NotFoundException(
+        `Health record with ID ${recordId} not found`,
+      );
     }
 
     // Transform the mongoose document to the expected format

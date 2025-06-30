@@ -83,7 +83,7 @@ export default function Navbar({ isCollapsed = false }: NavbarProps) {
                 isActive
                   ? "bg-primary text-primary-foreground"
                   : "bg-transparent text-black hover:border-[1px] hover:border-primary "
-              } ${isCollapsed ? 'justify-center' : ''}`
+              } ${isCollapsed ? "justify-center" : ""}`
             }
             title={isCollapsed ? item.label : undefined}
           >

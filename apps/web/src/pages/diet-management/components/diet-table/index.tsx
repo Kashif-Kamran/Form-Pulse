@@ -30,7 +30,7 @@ interface DietPlanActionsProps {
 
 function DietPlanActions({ dietPlan }: DietPlanActionsProps) {
   const navigate = useNavigate();
-  
+
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigate(EDIT_DIET_PLAN(dietPlan.id));
@@ -110,7 +110,7 @@ function DietListTable({ results }: DietListTableProps) {
                     {formatDateDifference(dietPlan.startTime, dietPlan.endTime)}
                   </TableCell>
                   <TableCell>{dietPlan.noOfTimesPerDay}</TableCell>
-                  <TableCell>{dietPlan.careTaker?.name || 'N/A'}</TableCell>
+                  <TableCell>{dietPlan.careTaker?.name || "N/A"}</TableCell>
                   <TableCell className="text-center">
                     <DietPlanActions dietPlan={dietPlan} />
                   </TableCell>

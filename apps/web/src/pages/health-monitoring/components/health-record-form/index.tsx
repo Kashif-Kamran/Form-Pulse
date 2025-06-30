@@ -17,7 +17,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useState } from "react";
-import { AnimalPublic, IVaccine, PublicUser, RoleType, PopulatedAnimalHealthRecord } from "@repo/shared";
+import {
+  AnimalPublic,
+  IVaccine,
+  PublicUser,
+  RoleType,
+  PopulatedAnimalHealthRecord,
+} from "@repo/shared";
 import { useToggleState } from "@/hooks/use-toggle-state";
 import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { Button } from "@/components/ui/button";
@@ -29,7 +35,10 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import DatePicker from "@/components/date-picker";
 import { CircleMinus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCreateAnimalHealthRecord, useUpdateHealthRecord } from "@/hooks/api/animal-health-record.hook";
+import {
+  useCreateAnimalHealthRecord,
+  useUpdateHealthRecord,
+} from "@/hooks/api/animal-health-record.hook";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { HEALTH_MONITORING } from "@/constants/app-routes";
@@ -37,15 +46,18 @@ import { useEffect } from "react";
 
 interface HealthRecordFormProps {
   healthRecord?: PopulatedAnimalHealthRecord;
-  mode?: 'create' | 'edit';
+  mode?: "create" | "edit";
 }
 
-export function HealthRecordForm({ healthRecord, mode = 'create' }: HealthRecordFormProps) {
+export function HealthRecordForm({
+  healthRecord,
+  mode = "create",
+}: HealthRecordFormProps) {
   const { mutateAsync: createHealthRecord } = useCreateAnimalHealthRecord();
   const { mutateAsync: updateHealthRecord } = useUpdateHealthRecord();
   const { toast } = useToast();
   const navigate = useNavigate();
-  
+
   const form = useForm<HealthRecordFormType>({
     defaultValues: {
       animal: {
@@ -61,7 +73,7 @@ export function HealthRecordForm({ healthRecord, mode = 'create' }: HealthRecord
 
   // Pre-populate form when in edit mode
   useEffect(() => {
-    if (mode === 'edit' && healthRecord) {
+    if (mode === "edit" && healthRecord) {
       form.reset({
         animal: {
           id: healthRecord.animal.id,
@@ -93,10 +105,10 @@ export function HealthRecordForm({ healthRecord, mode = 'create' }: HealthRecord
 
   const handleSubmit = form.handleSubmit(
     async (formData: HealthRecordFormType) => {
-      console.log(mode === 'edit' ? "Update : " : "Creation : ", formData);
+      console.log(mode === "edit" ? "Update : " : "Creation : ", formData);
       const transformedData = transformHealthRecordForBackend(formData);
-      
-      if (mode === 'edit' && healthRecord) {
+
+      if (mode === "edit" && healthRecord) {
         updateHealthRecord(
           {
             healthRecordId: healthRecord.id,
@@ -150,7 +162,9 @@ export function HealthRecordForm({ healthRecord, mode = 'create' }: HealthRecord
       >
         <Card className="pt-2 px-6 pb-6">
           <CardTitle className="bg-primary rounded-md p-2 text-primary-foreground mt-4 text-center text-lg">
-            {mode === 'edit' ? 'Edit Health Record' : 'Create New Health Record'}
+            {mode === "edit"
+              ? "Edit Health Record"
+              : "Create New Health Record"}
           </CardTitle>
           <CardContent className="p-0">
             <div className="space-y-2 flex flex-row gap-4 justify-center items-center">
@@ -162,17 +176,17 @@ export function HealthRecordForm({ healthRecord, mode = 'create' }: HealthRecord
         </Card>
         <VaccineItemsList form={form} />
         <div className="px-4 flex justify-end gap-4">
-          {mode === 'edit' && (
-            <Button 
-              type="button" 
-              variant="outline" 
+          {mode === "edit" && (
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => navigate(HEALTH_MONITORING)}
             >
               Cancel
             </Button>
           )}
           <Button type="submit" className="p-6 px-16">
-            {mode === 'edit' ? 'Update' : 'Save'}
+            {mode === "edit" ? "Update" : "Save"}
           </Button>
         </div>
       </form>

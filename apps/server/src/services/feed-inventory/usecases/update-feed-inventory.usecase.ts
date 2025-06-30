@@ -14,34 +14,38 @@ export class UpdateFeedInventoryUseCase {
     feedInventoryId: string,
     updateData: CreateNewFeedItemReq,
   ): Promise<IFeedInventory> {
-    const feedInventory = await this.feedInventoryModel.findById(feedInventoryId);
+    const feedInventory =
+      await this.feedInventoryModel.findById(feedInventoryId);
 
     if (!feedInventory) {
       throw new NotFoundException('Feed inventory item not found');
     }
 
     // Update the feed inventory item
-    const updatedFeedInventory = await this.feedInventoryModel.findByIdAndUpdate(
-      feedInventoryId,
-      {
-        name: updateData.name,
-        totalPrice: updateData.totalPrice,
-        description: updateData.description,
-        // Calculate the total quantity and update remaining stock
-        // Keep the used stock the same, adjust the remaining stock
-        $inc: {
-          remainingStock: updateData.totalQuentity - (feedInventory.remainingStock + feedInventory.usedStock),
+    const updatedFeedInventory =
+      await this.feedInventoryModel.findByIdAndUpdate(
+        feedInventoryId,
+        {
+          name: updateData.name,
+          totalPrice: updateData.totalPrice,
+          description: updateData.description,
+          // Calculate the total quantity and update remaining stock
+          // Keep the used stock the same, adjust the remaining stock
+          $inc: {
+            remainingStock:
+              updateData.totalQuentity -
+              (feedInventory.remainingStock + feedInventory.usedStock),
+          },
+          nutritionInfo: {
+            protein: updateData.protein,
+            carbs: updateData.carbs,
+            fats: updateData.fats,
+            fiber: updateData.fiber,
+            calories: updateData.calories,
+          },
         },
-        nutritionInfo: {
-          protein: updateData.protein,
-          carbs: updateData.carbs,
-          fats: updateData.fats,
-          fiber: updateData.fiber,
-          calories: updateData.calories,
-        },
-      },
-      { new: true },
-    );
+        { new: true },
+      );
 
     return {
       ...updatedFeedInventory.toObject(),

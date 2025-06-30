@@ -47,6 +47,7 @@ form-pulse/
 ### 🛠️ Tech Stack
 
 #### Frontend (`/apps/web`)
+
 - **⚛️ React 18** - Modern React with hooks and concurrent features
 - **⚡ Vite** - Fast build tool and dev server
 - **🎨 Tailwind CSS** - Utility-first CSS framework
@@ -57,6 +58,7 @@ form-pulse/
 - **🔗 Zod** - TypeScript-first schema validation
 
 #### Backend (`/apps/server`)
+
 - **🚀 NestJS** - Progressive Node.js framework
 - **🍃 MongoDB** - NoSQL database with Mongoose ODM
 - **🔐 JWT** - JSON Web Token authentication
@@ -65,6 +67,7 @@ form-pulse/
 - **📝 Swagger/OpenAPI** - API documentation
 
 #### Shared (`/packages/shared`)
+
 - **📘 TypeScript** - Shared types and interfaces
 - **🔄 Common utilities** - Reusable functions and constants
 
@@ -79,12 +82,14 @@ form-pulse/
 ### Installation
 
 1. **Clone the repository**
+
 ```bash
 git clone <repository-url>
 cd Form-Pulse
 ```
 
 2. **Install dependencies**
+
 ```bash
 yarn install
 # or
@@ -92,6 +97,7 @@ npm install
 ```
 
 3. **Environment setup**
+
 ```bash
 # Copy environment template
 cp apps/server/.env.example apps/server/.env
@@ -103,6 +109,7 @@ cp apps/server/.env.example apps/server/.env
 ```
 
 4. **Start development servers**
+
 ```bash
 # Start both frontend and backend
 yarn dev
@@ -121,6 +128,7 @@ yarn dev:server  # Backend only (http://localhost:3001)
 ## 📝 Available Scripts
 
 ### Root Level
+
 ```bash
 yarn dev          # Start all apps in development mode
 yarn build        # Build all apps for production
@@ -129,6 +137,7 @@ yarn format       # Format code with Prettier
 ```
 
 ### Frontend (`apps/web`)
+
 ```bash
 yarn dev          # Start Vite dev server
 yarn build        # Build for production
@@ -137,6 +146,7 @@ yarn lint         # Run ESLint
 ```
 
 ### Backend (`apps/server`)
+
 ```bash
 yarn dev          # Start NestJS in watch mode
 yarn build        # Build for production
@@ -157,6 +167,7 @@ yarn test:e2e     # Run end-to-end tests
 ### Core Workflows
 
 #### 🍽️ Diet Management (Nutritionist)
+
 1. Navigate to **Diet Management**
 2. Click **"Create New Diet Plan"**
 3. Select target animal and caretaker
@@ -164,12 +175,14 @@ yarn test:e2e     # Run end-to-end tests
 5. Save and monitor plan execution
 
 #### 🏥 Health Monitoring (Veterinarian)
+
 1. Go to **Health Monitoring**
 2. Create health records for animals
 3. Schedule vaccinations and treatments
 4. Track health metrics over time
 
 #### 📦 Inventory Management (Caretaker)
+
 1. Access **Feed Inventory**
 2. Add new feed items with nutritional data
 3. Update stock levels as needed
@@ -180,6 +193,7 @@ yarn test:e2e     # Run end-to-end tests
 ### Environment Variables
 
 #### Backend (`apps/server/.env`)
+
 ```env
 # Database
 MONGODB_URI=mongodb://localhost:27017/form-pulse

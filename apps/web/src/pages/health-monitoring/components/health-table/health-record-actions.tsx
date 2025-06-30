@@ -14,26 +14,27 @@ interface HealthRecordActionsProps {
   onDelete: (healthRecord: PopulatedAnimalHealthRecord) => void;
 }
 
-function HealthRecordActions({ healthRecord, onEdit, onDelete }: HealthRecordActionsProps) {
+function HealthRecordActions({
+  healthRecord,
+  onEdit,
+  onDelete,
+}: HealthRecordActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button 
-          variant="ghost" 
-          className="h-8 w-8 p-0"
-        >
+        <Button variant="ghost" className="h-8 w-8 p-0">
           <EllipsisVertical className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem 
+        <DropdownMenuItem
           onClick={() => onEdit(healthRecord)}
           className="cursor-pointer"
         >
           <EditIcon className="mr-2 h-4 w-4" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem 
+        <DropdownMenuItem
           onClick={() => onDelete(healthRecord)}
           className="cursor-pointer text-destructive focus:text-destructive"
         >

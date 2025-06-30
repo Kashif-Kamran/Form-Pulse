@@ -120,3 +120,34 @@ export type NotifyNutritionistResponse = SingleItemResponse<{
   message: string;
   notificationId: string;
 }>;
+
+// Dashboard Analytics
+export type SpeciesDistributionItem = {
+  species: string;
+  count: number;
+  percentage: number;
+};
+
+export type SpeciesDistributionResponse = {
+  success: boolean;
+  data: {
+    data: SpeciesDistributionItem[];
+    total: number;
+  };
+};
+
+export type AgeDistributionItem = {
+  ageGroup: string;
+  count: number;
+  percentage: number;
+  minAge: number;
+  maxAge: number;
+};
+
+export type AgeDistributionResponse = {
+  success: boolean;
+  data: {
+    data: AgeDistributionItem[];
+    total: number;
+  };
+};

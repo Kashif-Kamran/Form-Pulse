@@ -108,7 +108,9 @@ export const useDietPlanById = (
 ) => {
   const { data, ...rest } = useQuery({
     queryFn: async () => {
-      const data = await getRequest<AnimalDietPlanPublic>(`/diet-plan/${dietPlanId}`);
+      const data = await getRequest<AnimalDietPlanPublic>(
+        `/diet-plan/${dietPlanId}`
+      );
       return mapDataToAnimalDietPlanPublic(data);
     },
     queryKey: [DIET_PLAN_QUERY_KEY, dietPlanId],
@@ -129,10 +131,7 @@ export const useUpdateDietPlan = (
 ) => {
   return useMutation({
     mutationFn: ({ dietPlanId, payload }) =>
-      patchRequest<AnimalDietPlanPublic>(
-        `/diet-plan/${dietPlanId}`,
-        payload
-      ),
+      patchRequest<AnimalDietPlanPublic>(`/diet-plan/${dietPlanId}`, payload),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: [DIET_PLAN_QUERY_KEY, "list"],

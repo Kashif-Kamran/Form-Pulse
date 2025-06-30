@@ -14,26 +14,27 @@ interface FeedInventoryActionsProps {
   onDelete: (feedItem: IFeedInventory) => void;
 }
 
-function FeedInventoryActions({ feedItem, onEdit, onDelete }: FeedInventoryActionsProps) {
+function FeedInventoryActions({
+  feedItem,
+  onEdit,
+  onDelete,
+}: FeedInventoryActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button 
-          variant="ghost" 
-          className="h-8 w-8 p-0"
-        >
+        <Button variant="ghost" className="h-8 w-8 p-0">
           <EllipsisVertical className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem 
+        <DropdownMenuItem
           onClick={() => onEdit(feedItem)}
           className="cursor-pointer"
         >
           <EditIcon className="mr-2 h-4 w-4" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem 
+        <DropdownMenuItem
           onClick={() => onDelete(feedItem)}
           className="cursor-pointer text-destructive focus:text-destructive"
         >

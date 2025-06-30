@@ -17,10 +17,10 @@ const REPORTS = "/reorts";
 const EDUCATIONAL_RESOURCERS = "/educational-resources";
 const SETTINGS = "/settings";
 const CREATE_DIET_PLAN = DIET_MANAGEMENT + "/create";
-const EDIT_DIET_PLAN = (dietPlanId?: string) => 
+const EDIT_DIET_PLAN = (dietPlanId?: string) =>
   `${DIET_MANAGEMENT}/edit/${dietPlanId ?? ":dietPlanId"}`;
 const CREATE_HEALTH_RECORD = HEALTH_MONITORING + "/create";
-const EDIT_HEALTH_RECORD = (healthRecordId?: string) => 
+const EDIT_HEALTH_RECORD = (healthRecordId?: string) =>
   `${HEALTH_MONITORING}/edit/${healthRecordId ?? ":healthRecordId"}`;
 export {
   LOGIN,

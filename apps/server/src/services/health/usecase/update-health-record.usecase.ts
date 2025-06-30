@@ -26,10 +26,13 @@ export class UpdateHealthRecordUseCase {
   ): Promise<UpdateAnimalHealthRecordResponse> {
     this.logger.log(`Updating health record ${recordId} with data:`, updateDto);
 
-    const existingRecord = await this.animalHealthRecordModel.findById(recordId);
+    const existingRecord =
+      await this.animalHealthRecordModel.findById(recordId);
 
     if (!existingRecord) {
-      throw new NotFoundException(`Health record with ID ${recordId} not found`);
+      throw new NotFoundException(
+        `Health record with ID ${recordId} not found`,
+      );
     }
 
     this.logger.log(`Existing record found:`, {

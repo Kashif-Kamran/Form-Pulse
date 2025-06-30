@@ -7,7 +7,11 @@ import { ListFeedInventoryUseCase } from './usecases/list-feed-inventory.usecase
 
 @Module({
   imports: [DatabaseModule],
-  providers: [CreateFeedItemUseCase, UpdateFeedInventoryUseCase, ListFeedInventoryUseCase],
+  providers: [
+    CreateFeedItemUseCase,
+    UpdateFeedInventoryUseCase,
+    ListFeedInventoryUseCase,
+  ],
   controllers: [FeedInventoryController],
 })
 export class FeedInventoryModule {}

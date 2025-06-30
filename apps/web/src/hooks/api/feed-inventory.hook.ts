@@ -55,10 +55,20 @@ export const useCreateFeedInventory = (
 };
 
 export const useUpdateFeedInventory = (
-  options?: MutationOptions<FeedItemResponse, Error, { feedItemId: string; payload: CreateNewFeedItemReq }>
+  options?: MutationOptions<
+    FeedItemResponse,
+    Error,
+    { feedItemId: string; payload: CreateNewFeedItemReq }
+  >
 ) => {
   return useMutation({
-    mutationFn: ({ feedItemId, payload }: { feedItemId: string; payload: CreateNewFeedItemReq }) =>
+    mutationFn: ({
+      feedItemId,
+      payload,
+    }: {
+      feedItemId: string;
+      payload: CreateNewFeedItemReq;
+    }) =>
       patchRequest<FeedItemResponse>(`/feed-inventory/${feedItemId}`, payload),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({

@@ -13,7 +13,7 @@ function InventoryList() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   // Get current user for role-based access control
   const { data: currentUser } = useCurrentUser();
 
@@ -23,7 +23,8 @@ function InventoryList() {
 
   // Update dialog state
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
-  const [selectedFeedItem, setSelectedFeedItem] = useState<IFeedInventory | null>(null);
+  const [selectedFeedItem, setSelectedFeedItem] =
+    useState<IFeedInventory | null>(null);
 
   const { results = [] } = useFeedInventory(query);
 
@@ -63,13 +64,13 @@ function InventoryList() {
         />
         {isCareTaker && <CreateFeedInventoryItemModel />}
       </div>
-      <InventoryTable 
-        results={results} 
+      <InventoryTable
+        results={results}
         onEdit={handleEdit}
         onDelete={handleDelete}
         showActions={isCareTaker}
       />
-      
+
       {isCareTaker && (
         <UpdateFeedInventoryDialog
           feedItem={selectedFeedItem}

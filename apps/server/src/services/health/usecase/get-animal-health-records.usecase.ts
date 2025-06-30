@@ -14,7 +14,9 @@ export class GetAnimalHealthRecordsList {
   ) {}
 
   async execute(animalId?: string): Promise<HealthRecordListResponse> {
-    this.logger.log(`Fetching health records for animal: ${animalId || 'all animals'}`);
+    this.logger.log(
+      `Fetching health records for animal: ${animalId || 'all animals'}`,
+    );
 
     const matchStage = animalId
       ? { $match: { animal: new Types.ObjectId(animalId) } }
@@ -91,7 +93,9 @@ export class GetAnimalHealthRecordsList {
 
     this.logger.log(`Query results for animal ${animalId}:`, {
       count: results.length,
-      recordIds: results.map(r => r.healthRecordId?.toString()).filter(Boolean)
+      recordIds: results
+        .map((r) => r.healthRecordId?.toString())
+        .filter(Boolean),
     });
 
     return {

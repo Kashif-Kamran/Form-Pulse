@@ -44,23 +44,27 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 ## Development Setup
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/your-username/form-pulse.git
 cd form-pulse
 ```
 
 2. Install dependencies
+
 ```bash
 yarn install
 ```
 
 3. Set up environment variables
+
 ```bash
 cp apps/server/.env.example apps/server/.env
 # Edit the .env file with your local configuration
 ```
 
 4. Start development servers
+
 ```bash
 yarn dev
 ```
@@ -128,6 +132,7 @@ type(scope): description
 ```
 
 Types:
+
 - `feat`: A new feature
 - `fix`: A bug fix
 - `docs`: Documentation only changes
@@ -137,6 +142,7 @@ Types:
 - `chore`: Maintenance tasks
 
 Examples:
+
 ```
 feat(diet): add diet plan creation form
 fix(auth): resolve JWT token refresh issue

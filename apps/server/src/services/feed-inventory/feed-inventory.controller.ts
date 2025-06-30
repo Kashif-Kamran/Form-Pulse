@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Patch, Param, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { CreateFeedItemUseCase } from './usecases/create-feed-item.usecase';
 import { UpdateFeedInventoryUseCase } from './usecases/update-feed-inventory.usecase';
 import { CreateFeedItemDto } from './feed-ingentory.dtos';
@@ -31,6 +39,9 @@ export class FeedInventoryController {
     @Param('feedInventoryId') feedInventoryId: string,
     @Body() updateFeedItemDto: CreateFeedItemDto,
   ) {
-    return this.updateFeedInventoryUC.execute(feedInventoryId, updateFeedItemDto);
+    return this.updateFeedInventoryUC.execute(
+      feedInventoryId,
+      updateFeedItemDto,
+    );
   }
 }
