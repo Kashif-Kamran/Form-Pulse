@@ -151,3 +151,50 @@ export type AgeDistributionResponse = {
     total: number;
   };
 };
+
+// Vaccination Status Types
+export type VaccinationStatusItem = {
+  status: "completed" | "pending" | "overdue";
+  count: number;
+  percentage: number;
+};
+
+export type VaccinationStatusResponse = {
+  success: boolean;
+  data: {
+    data: VaccinationStatusItem[];
+    total: number;
+  };
+};
+
+// Top Vaccines Types
+export type TopVaccineItem = {
+  vaccineName: string;
+  count: number;
+  vaccineId: string;
+};
+
+export type TopVaccinesResponse = {
+  success: boolean;
+  data: {
+    data: TopVaccineItem[];
+    total: number;
+  };
+};
+
+// Health Alerts Types
+export type HealthAlertItem = {
+  type: "overdue_vaccines" | "missing_records" | "upcoming_schedules";
+  count: number;
+  severity: "high" | "medium" | "low";
+  message: string;
+  description: string;
+};
+
+export type HealthAlertsResponse = {
+  success: boolean;
+  data: {
+    data: HealthAlertItem[];
+    total: number;
+  };
+};
