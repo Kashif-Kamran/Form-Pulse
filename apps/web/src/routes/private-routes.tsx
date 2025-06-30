@@ -19,6 +19,8 @@ import FallbackSpinnerScreen from "@/components/custom-ui/fallback-spinner";
 import { Suspense, lazy } from "react";
 import { ErrorBoundary } from "@/common/error-boundary";
 import AddHealthRecord from "@/pages/health-monitoring/add-health-record";
+import Educationalresources from "@/pages/educational-resources";
+import ReportsPage from "@/pages/reports";
 
 const AnimalProfile = lazy(() => import("@/pages/animals/animal-profile"));
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
@@ -135,7 +137,7 @@ const privateRoutes: RouteObject[] = [
             path: EDUCATIONAL_RESOURCERS,
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
-                <div>Educational Resources</div>
+                <Educationalresources/>
               </Suspense>
             ),
           },
@@ -143,7 +145,7 @@ const privateRoutes: RouteObject[] = [
             path: REPORTS,
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
-                <div>Reports</div>
+              <ReportsPage />
               </Suspense>
             ),
           },
