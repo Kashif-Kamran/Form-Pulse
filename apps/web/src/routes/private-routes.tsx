@@ -43,9 +43,8 @@ const HealthMonitoring = lazy(
 );
 
 const ProtectedRoute = () => {
-  // const { data, isLoading } = useMe();
+  const { data, isLoading } = useMe();
 
-  const { data, isLoading } = { data: {}, isLoading: false };
   const location = useLocation();
 
   if (isLoading) {
