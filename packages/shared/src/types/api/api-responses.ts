@@ -198,3 +198,101 @@ export type HealthAlertsResponse = {
     total: number;
   };
 };
+
+// Feed Stock Levels Types
+export type FeedStockLevelItem = {
+  feedId: string;
+  feedName: string;
+  remainingStock: number;
+  totalStock: number;
+  usedStock: number;
+  percentage: number;
+  status: "good" | "low" | "critical";
+};
+
+export type FeedStockLevelsResponse = {
+  success: boolean;
+  data: {
+    data: FeedStockLevelItem[];
+    total: number;
+  };
+};
+
+// Feed Usage Types
+export type FeedUsageItem = {
+  feedId: string;
+  feedName: string;
+  usedStock: number;
+  totalConsumption: number;
+};
+
+export type FeedUsageResponse = {
+  success: boolean;
+  data: {
+    data: FeedUsageItem[];
+    total: number;
+  };
+};
+
+// Diet Plans Status Types
+export type DietPlansStatusItem = {
+  status: "with_diet_plan" | "without_diet_plan";
+  count: number;
+  percentage: number;
+};
+
+export type DietPlansStatusResponse = {
+  success: boolean;
+  data: {
+    data: DietPlansStatusItem[];
+    total: number;
+    compliance: number;
+  };
+};
+
+// User Roles Types
+export type UserRoleItem = {
+  role: "Admin" | "Nutritionist" | "Veterinarian" | "Care Taker";
+  count: number;
+  percentage: number;
+};
+
+export type UserRolesResponse = {
+  success: boolean;
+  data: {
+    data: UserRoleItem[];
+    total: number;
+  };
+};
+
+// Verification Status Types
+export type VerificationStatusItem = {
+  status: "verified" | "unverified";
+  count: number;
+  percentage: number;
+};
+
+export type VerificationStatusResponse = {
+  success: boolean;
+  data: {
+    data: VerificationStatusItem[];
+    total: number;
+    verificationRate: number;
+  };
+};
+
+// Activity Types
+export type ActivityItem = {
+  type: "animals_added" | "vaccinations_given" | "feed_orders" | "active_users";
+  count: number;
+  period: "24h" | "7d" | "30d";
+  label: string;
+};
+
+export type ActivityResponse = {
+  success: boolean;
+  data: {
+    data: ActivityItem[];
+    total: number;
+  };
+};

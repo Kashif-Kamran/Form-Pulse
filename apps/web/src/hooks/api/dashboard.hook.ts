@@ -2,7 +2,13 @@ import { getRequest } from "@/lib/client/common";
 import { 
   VaccinationStatusResponse,
   TopVaccinesResponse,
-  HealthAlertsResponse
+  HealthAlertsResponse,
+  FeedStockLevelsResponse,
+  FeedUsageResponse,
+  DietPlansStatusResponse,
+  UserRolesResponse,
+  VerificationStatusResponse,
+  ActivityResponse
 } from "@repo/shared";
 import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
 
@@ -150,6 +156,146 @@ export const useHealthAlerts = (
 
   return {
     healthAlerts: data?.data?.data || [],
+    total: data?.data?.total || 0,
+    ...rest,
+  };
+};
+
+export const useFeedStockLevels = (
+  options?: UseQueryOptions<
+    FeedStockLevelsResponse,
+    Error,
+    FeedStockLevelsResponse,
+    QueryKey
+  >
+) => {
+  const queryKey = [DASHBOARD_QUERY_KEY, "feed-stock-levels"];
+  const { data, ...rest } = useQuery({
+    queryKey,
+    queryFn: () =>
+      getRequest<FeedStockLevelsResponse>("/dashboard/feed-stock-levels"),
+    ...options,
+  });
+
+  return {
+    feedStockLevels: data?.data?.data || [],
+    total: data?.data?.total || 0,
+    ...rest,
+  };
+};
+
+export const useFeedUsage = (
+  options?: UseQueryOptions<
+    FeedUsageResponse,
+    Error,
+    FeedUsageResponse,
+    QueryKey
+  >
+) => {
+  const queryKey = [DASHBOARD_QUERY_KEY, "feed-usage"];
+  const { data, ...rest } = useQuery({
+    queryKey,
+    queryFn: () =>
+      getRequest<FeedUsageResponse>("/dashboard/feed-usage"),
+    ...options,
+  });
+
+  return {
+    feedUsage: data?.data?.data || [],
+    total: data?.data?.total || 0,
+    ...rest,
+  };
+};
+
+export const useDietPlansStatus = (
+  options?: UseQueryOptions<
+    DietPlansStatusResponse,
+    Error,
+    DietPlansStatusResponse,
+    QueryKey
+  >
+) => {
+  const queryKey = [DASHBOARD_QUERY_KEY, "diet-plans-status"];
+  const { data, ...rest } = useQuery({
+    queryKey,
+    queryFn: () =>
+      getRequest<DietPlansStatusResponse>("/dashboard/diet-plans-status"),
+    ...options,
+  });
+
+  return {
+    dietPlansStatus: data?.data?.data || [],
+    total: data?.data?.total || 0,
+    compliance: data?.data?.compliance || 0,
+    ...rest,
+  };
+};
+
+export const useUserRoles = (
+  options?: UseQueryOptions<
+    UserRolesResponse,
+    Error,
+    UserRolesResponse,
+    QueryKey
+  >
+) => {
+  const queryKey = [DASHBOARD_QUERY_KEY, "user-roles"];
+  const { data, ...rest } = useQuery({
+    queryKey,
+    queryFn: () =>
+      getRequest<UserRolesResponse>("/dashboard/user-roles"),
+    ...options,
+  });
+
+  return {
+    userRoles: data?.data?.data || [],
+    total: data?.data?.total || 0,
+    ...rest,
+  };
+};
+
+export const useVerificationStatus = (
+  options?: UseQueryOptions<
+    VerificationStatusResponse,
+    Error,
+    VerificationStatusResponse,
+    QueryKey
+  >
+) => {
+  const queryKey = [DASHBOARD_QUERY_KEY, "verification-status"];
+  const { data, ...rest } = useQuery({
+    queryKey,
+    queryFn: () =>
+      getRequest<VerificationStatusResponse>("/dashboard/verification-status"),
+    ...options,
+  });
+
+  return {
+    verificationStatus: data?.data?.data || [],
+    total: data?.data?.total || 0,
+    verificationRate: data?.data?.verificationRate || 0,
+    ...rest,
+  };
+};
+
+export const useActivity = (
+  options?: UseQueryOptions<
+    ActivityResponse,
+    Error,
+    ActivityResponse,
+    QueryKey
+  >
+) => {
+  const queryKey = [DASHBOARD_QUERY_KEY, "activity"];
+  const { data, ...rest } = useQuery({
+    queryKey,
+    queryFn: () =>
+      getRequest<ActivityResponse>("/dashboard/activity"),
+    ...options,
+  });
+
+  return {
+    activity: data?.data?.data || [],
     total: data?.data?.total || 0,
     ...rest,
   };

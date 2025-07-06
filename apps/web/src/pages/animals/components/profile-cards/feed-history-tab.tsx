@@ -15,7 +15,6 @@ import {
 import {
   differenceInDays,
   format,
-  isAfter,
   isBefore,
   isWithinInterval,
 } from "date-fns";
@@ -404,7 +403,7 @@ export const DietPlanCard: React.FC<DietPlanCardProps> = ({
               </CardHeader>
               <CardContent className="pt-0">
                 <div className="space-y-3">
-                  {dietPlan.recipes.map((recipe, index) => (
+                  {dietPlan.recipes.map((recipe) => (
                     <div
                       key={recipe.id}
                       className="flex items-center justify-between p-3 bg-white rounded-lg border"
