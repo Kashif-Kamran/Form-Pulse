@@ -8,6 +8,7 @@ import {
   Body,
   Param,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import {
   GetUsersList,
@@ -72,8 +73,9 @@ export class UserController {
   @RolesAllowed(RoleType.Admin)
   async deleteUser(
     @Param('userId') userId: string,
+    @Request() request: any,
   ): Promise<DeleteUserResponse> {
-    return this.deleteUserUsecase.execute(userId);
+    return this.deleteUserUsecase.execute(userId, request.user.id);
   }
 
   // Keep the existing public endpoint for backwards compatibility

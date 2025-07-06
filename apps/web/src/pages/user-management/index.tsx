@@ -40,7 +40,11 @@ function UserManagement() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<PublicUser | null>(null);
 
-  const { users = [], count, isLoading } = useUsers(query, selectedRole || undefined);
+  const {
+    users = [],
+    count,
+    isLoading,
+  } = useUsers(query, selectedRole || undefined);
 
   // Check if user is an admin
   const isAdmin = currentUser?.role === RoleType.Admin;
@@ -79,15 +83,15 @@ function UserManagement() {
     if (selectedRole) {
       params.set("role", selectedRole);
     }
-    
+
     const queryString = params.toString();
     navigate(queryString ? `?${queryString}` : "");
   };
 
   const handleRoleFilter = (role: string) => {
-    const newRole = role === "all" ? "" : role as RoleType;
+    const newRole = role === "all" ? "" : (role as RoleType);
     setSelectedRole(newRole);
-    
+
     const params = new URLSearchParams();
     if (query.trim()) {
       params.set("q", query);
@@ -95,7 +99,7 @@ function UserManagement() {
     if (newRole) {
       params.set("role", newRole);
     }
-    
+
     const queryString = params.toString();
     navigate(queryString ? `?${queryString}` : "");
   };
@@ -149,7 +153,7 @@ function UserManagement() {
             onChange={(e) => setSearch(e.target.value)}
             onSearch={handleSearch}
           />
-          
+
           <Select value={selectedRole} onValueChange={handleRoleFilter}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by role" />
@@ -164,32 +168,16 @@ function UserManagement() {
             </SelectContent>
           </Select>
         </div>
-        
+
         <CreateUserModal onCreateUser={handleCreateUser} />
       </div>
-
-      {/* Admin Information Card */}
-      <Card className="border-blue-200 bg-blue-50">
-        <CardContent className="pt-4">
-          <div className="flex items-start gap-3">
-            <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-            <div>
-              <h3 className="font-semibold text-blue-800">User Management</h3>
-              <p className="text-sm text-blue-700">
-                As an Administrator, you can create, update, and manage user accounts. 
-                Users created through this interface are automatically verified and can 
-                access the system immediately.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Users Table */}
       <div className="flex-1">
         <UserManagementTable
           users={users}
           isLoading={isLoading}
+          currentUser={currentUser}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />

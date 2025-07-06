@@ -56,6 +56,15 @@ async function makeRequest<
   const response = await fetch(url, requestOptions);
 
   if (!response.ok) {
+    // Handle 401 Unauthorized - deleted/invalid user
+    if (response.status === 401) {
+      // Clear the token and redirect to login
+      localStorage.removeItem(API_TOKEN_KEY);
+      // Force page reload to redirect to login
+      window.location.href = '/auth/login';
+      return Promise.reject(new Error('Session expired. Please login again.'));
+    }
+    
     const errorData = await response.json();
     // Temp: Add a better error type
     throw errorData;

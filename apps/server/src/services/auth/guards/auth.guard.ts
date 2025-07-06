@@ -38,14 +38,24 @@ export class AuthGuard implements CanActivate {
       const decoded: { sub: string; iat: number; exp: number } =
         this.jwtService.verify(token);
       const user: IUser = await this.userModel
-        .findOne({ _id: decoded.sub })
+        .findOne({ 
+          _id: decoded.sub,
+          isDeleted: { $ne: true } // Exclude deleted users
+        })
         .select('-__v')
         .lean()
         .exec();
-      if (!user) throw new Error();
+      
+      if (!user) {
+        throw new UnauthorizedException('User not found or has been deleted');
+      }
+      
       request.user = user;
       return true;
     } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
       throw new UnauthorizedException('Invalid token');
     }
   }

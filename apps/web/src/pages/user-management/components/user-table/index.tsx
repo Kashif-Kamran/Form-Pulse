@@ -16,6 +16,7 @@ import { Loader2 } from "lucide-react";
 interface UserManagementTableProps {
   users: PublicUser[];
   isLoading: boolean;
+  currentUser: PublicUser;
   onEdit: (user: PublicUser) => void;
   onDelete: (user: PublicUser) => void;
 }
@@ -23,6 +24,7 @@ interface UserManagementTableProps {
 function UserManagementTable({
   users,
   isLoading,
+  currentUser,
   onEdit,
   onDelete,
 }: UserManagementTableProps) {
@@ -103,6 +105,7 @@ function UserManagementTable({
                   <TableCell className="text-center">
                     <UserActions
                       user={user}
+                      currentUser={currentUser}
                       onEdit={onEdit}
                       onDelete={onDelete}
                     />

@@ -10,11 +10,15 @@ import { PublicUser } from "@repo/shared";
 
 interface UserActionsProps {
   user: PublicUser;
+  currentUser: PublicUser;
   onEdit: (user: PublicUser) => void;
   onDelete: (user: PublicUser) => void;
 }
 
-function UserActions({ user, onEdit, onDelete }: UserActionsProps) {
+function UserActions({ user, currentUser, onEdit, onDelete }: UserActionsProps) {
+  const isCurrentUser = user.id === currentUser.id;
+  const canDelete = !isCurrentUser; // Cannot delete yourself
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,13 +34,15 @@ function UserActions({ user, onEdit, onDelete }: UserActionsProps) {
           <EditIcon className="mr-2 h-4 w-4" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => onDelete(user)}
-          className="cursor-pointer text-destructive focus:text-destructive"
-        >
-          <Trash2Icon className="mr-2 h-4 w-4" />
-          Delete
-        </DropdownMenuItem>
+        {canDelete && (
+          <DropdownMenuItem
+            onClick={() => onDelete(user)}
+            className="cursor-pointer text-destructive focus:text-destructive"
+          >
+            <Trash2Icon className="mr-2 h-4 w-4" />
+            Delete
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

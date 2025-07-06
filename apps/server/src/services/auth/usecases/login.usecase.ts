@@ -16,6 +16,7 @@ export class LoginUserUseCase {
   async execute(loginUserDto: LoginUserDto): Promise<AuthResponse> {
     const user: UserDocument = await this.userModel.findOne({
       email: loginUserDto.email,
+      isDeleted: { $ne: true }, // Exclude deleted users
     });
 
     if (!user) throw new UnauthorizedException('Invalid email or password');
