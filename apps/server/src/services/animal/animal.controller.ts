@@ -13,6 +13,7 @@ import { CreateAnimalUseCase } from './usecases/create-animal.usecase';
 import { ListAnimalsUseCase } from './usecases/list-animals.usecase';
 import { GETAnimalByIdUsecase } from './usecases/get-animal-by-id.usecase';
 import { DeleteAnimalByIdUseCase } from './usecases/delete-animal-by-id.usecase';
+import { UpdateAnimalUseCase } from './usecases/update-animal.usecase';
 
 @Controller('animals')
 export class AnimalController {
@@ -21,6 +22,7 @@ export class AnimalController {
     private readonly listAnimalsUseCase: ListAnimalsUseCase,
     private readonly getAnimalByIdUseCase: GETAnimalByIdUsecase,
     private readonly deleteAnimalByIdUseCase: DeleteAnimalByIdUseCase,
+    private readonly updateAnimalUseCase: UpdateAnimalUseCase,
   ) {}
 
   @Get()
@@ -37,6 +39,15 @@ export class AnimalController {
   async getAnimalById(@Param('animalId') animalId: string) {
     return this.getAnimalByIdUseCase.execute(animalId);
   }
+
+  @Put(':animalId')
+  async updateAnimal(
+    @Param('animalId') animalId: string,
+    @Body() updateAnimalDto: CreateAnimalDto
+  ) {
+    return this.updateAnimalUseCase.execute(animalId, updateAnimalDto);
+  }
+
   @Delete(':animalId')
   async deleteAnimalById(@Param('animalId') animalId: string) {
     console.log('❌ Delete Animal');

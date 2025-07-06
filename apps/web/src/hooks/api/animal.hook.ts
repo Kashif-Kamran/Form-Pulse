@@ -1,4 +1,4 @@
-import { deleteRequest, getRequest, postRequest } from "@/lib/client/common";
+import { deleteRequest, getRequest, postRequest, putRequest } from "@/lib/client/common";
 import { queryClient } from "@/lib/query-client";
 import {
   AnimalDeleteResponse,
@@ -77,6 +77,25 @@ export const useDeleteAnimalById = (
     mutationFn: ({ animalId }) => deleteRequest(`/animals/${animalId}`),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({ queryKey: [ANIMALS_QUERY_KEY, "list"] });
+      options?.onSuccess?.(data, variables, context);
+    },
+    ...options,
+  });
+};
+
+export const useUpdateAnimal = (
+  options?: MutationOptions<
+    AnimalResponse,
+    Error,
+    { animalId: string; payload: CreateAnimalReq }
+  >
+) => {
+  return useMutation({
+    mutationFn: ({ animalId, payload }) =>
+      putRequest<AnimalResponse>(`/animals/${animalId}`, payload),
+    onSuccess: (data: any, variables: any, context: any) => {
+      queryClient.invalidateQueries({ queryKey: [ANIMALS_QUERY_KEY, "list"] });
+      queryClient.invalidateQueries({ queryKey: [ANIMALS_QUERY_KEY, variables.animalId] });
       options?.onSuccess?.(data, variables, context);
     },
     ...options,

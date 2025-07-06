@@ -127,6 +127,25 @@ export async function patchRequest<
   );
 }
 
+export async function putRequest<
+  TRes,
+  TPayload extends Record<string, any> | undefined = {},
+>(
+  path: string,
+  payload?: TPayload,
+  options?: Omit<RequestInit, "body" | "method">
+): Promise<TRes> {
+  return makeRequest<TRes, Record<string, any>, undefined>(
+    path,
+    payload,
+    undefined,
+    {
+      ...options,
+      method: "PUT",
+    }
+  );
+}
+
 export async function deleteRequest<
   TRes,
   TPayload extends Record<string, any> | undefined = {},

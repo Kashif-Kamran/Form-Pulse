@@ -5,6 +5,7 @@ import { DatabaseModule } from 'src/database/database.module';
 import { ListAnimalsUseCase } from './usecases/list-animals.usecase';
 import { GETAnimalByIdUsecase } from './usecases/get-animal-by-id.usecase';
 import { DeleteAnimalByIdUseCase } from './usecases/delete-animal-by-id.usecase';
+import { UpdateAnimalUseCase } from './usecases/update-animal.usecase';
 
 @Module({
   imports: [DatabaseModule],
@@ -14,6 +15,7 @@ import { DeleteAnimalByIdUseCase } from './usecases/delete-animal-by-id.usecase'
     ListAnimalsUseCase,
     GETAnimalByIdUsecase,
     DeleteAnimalByIdUseCase,
+    UpdateAnimalUseCase,
   ],
 })
 export class AnimalModule {}

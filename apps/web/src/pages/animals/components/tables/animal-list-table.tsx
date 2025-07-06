@@ -8,18 +8,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ANIMAL_DETAIL } from "@/constants/app-routes";
 import { useDeleteAnimalById } from "@/hooks/api/animal.hook";
 import { useToast } from "@/hooks/use-toast";
 import { AnimalPublic } from "@repo/shared";
-import { Trash2Icon } from "lucide-react";
+import { Trash2Icon, Edit2Icon, MoreHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export interface AnimalListTableProps {
   results: AnimalPublic[];
+  onEdit: (animal: AnimalPublic) => void;
 }
 
-function AnimalListTable({ results }: AnimalListTableProps) {
+function AnimalListTable({ results, onEdit }: AnimalListTableProps) {
   const { mutateAsync: deleteAnimalById } = useDeleteAnimalById();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -32,7 +39,7 @@ function AnimalListTable({ results }: AnimalListTableProps) {
       {
         onSuccess: () => {
           toast({
-            title: "Animal default Successfully",
+            title: "Animal deleted Successfully",
             variant: "default",
           });
         },
@@ -45,6 +52,10 @@ function AnimalListTable({ results }: AnimalListTableProps) {
         },
       }
     );
+  }
+
+  function handleEdit(animal: AnimalPublic) {
+    onEdit(animal);
   }
   return (
     <div className="flex flex-col overflow-hidden bg-white rounded-xl">
@@ -74,16 +85,41 @@ function AnimalListTable({ results }: AnimalListTableProps) {
                   <TableCell>{animal.breed}</TableCell>
                   <TableCell>{animal.weight}</TableCell>
                   <TableCell className="p-0 text-center">
-                    <Button
-                      className="h-8 w-8 text-destructive hover:bg-destructive hover:text-destructive-foreground p-[6px]"
-                      variant="ghost"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDelete(animal.id);
-                      }}
-                    >
-                      <Trash2Icon className="h-full w-full" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          className="h-8 w-8 p-0"
+                          variant="ghost"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                          }}
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleEdit(animal);
+                          }}
+                          className="cursor-pointer"
+                        >
+                          <Edit2Icon className="mr-2 h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleDelete(animal.id);
+                          }}
+                          className="cursor-pointer text-destructive focus:text-destructive"
+                        >
+                          <Trash2Icon className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
