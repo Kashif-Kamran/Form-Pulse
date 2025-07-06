@@ -36,16 +36,23 @@ export class GetDietPlansStatusUseCase {
       {
         status: 'with_diet_plan' as const,
         count: withDietPlan,
-        percentage: totalAnimals > 0 ? Math.round((withDietPlan / totalAnimals) * 100) : 0,
+        percentage:
+          totalAnimals > 0
+            ? Math.round((withDietPlan / totalAnimals) * 100)
+            : 0,
       },
       {
         status: 'without_diet_plan' as const,
         count: withoutDietPlan,
-        percentage: totalAnimals > 0 ? Math.round((withoutDietPlan / totalAnimals) * 100) : 0,
+        percentage:
+          totalAnimals > 0
+            ? Math.round((withoutDietPlan / totalAnimals) * 100)
+            : 0,
       },
     ];
 
-    const compliance = totalAnimals > 0 ? Math.round((withDietPlan / totalAnimals) * 100) : 0;
+    const compliance =
+      totalAnimals > 0 ? Math.round((withDietPlan / totalAnimals) * 100) : 0;
 
     return {
       success: true,

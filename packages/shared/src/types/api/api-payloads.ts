@@ -15,9 +15,35 @@ export type VerifyOtpReq = { email: string; otp: number };
 // Users
 export type CreateUserReq = Omit<
   IUser,
-  "id" | "_id" | "isVerified" | "verificationOtp"
+  | "id"
+  | "_id"
+  | "isVerified"
+  | "verificationOtp"
+  | "isDeleted"
+  | "deletedAt"
+  | "createdAt"
+  | "updatedAt"
 >;
 export type RegisterUserReq = CreateUserReq;
+export type UpdateUserReq = Partial<
+  Pick<IUser, "name" | "email" | "role" | "isVerified">
+>;
+export type CreateUserByAdminReq = Omit<
+  IUser,
+  | "id"
+  | "_id"
+  | "verificationOtp"
+  | "isDeleted"
+  | "deletedAt"
+  | "createdAt"
+  | "updatedAt"
+>;
+export type GetUsersListQueryDto = {
+  role?: string;
+  q?: string;
+  page?: number;
+  limit?: number;
+};
 
 // Animals
 export type CreateAnimalReq = Omit<

@@ -43,7 +43,7 @@ export class AnimalController {
   @Put(':animalId')
   async updateAnimal(
     @Param('animalId') animalId: string,
-    @Body() updateAnimalDto: CreateAnimalDto
+    @Body() updateAnimalDto: CreateAnimalDto,
   ) {
     return this.updateAnimalUseCase.execute(animalId, updateAnimalDto);
   }

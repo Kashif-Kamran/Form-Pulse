@@ -57,8 +57,8 @@ export class GetTopVaccinesUseCase {
     ];
 
     const vaccines = await this.animalHealthRecordModel.aggregate(pipeline);
-    
-    const data = vaccines.map(vaccine => ({
+
+    const data = vaccines.map((vaccine) => ({
       vaccineId: vaccine.vaccineId.toString(),
       vaccineName: vaccine.vaccineName,
       count: Number(vaccine.count),

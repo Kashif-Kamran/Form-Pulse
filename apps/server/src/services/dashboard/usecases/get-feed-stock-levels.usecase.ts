@@ -15,12 +15,17 @@ export class GetFeedStockLevelsUseCase {
   async execute(): Promise<FeedStockLevelsResponse> {
     this.logger.log('Fetching feed stock levels');
 
-    const feedInventory = await this.feedInventoryModel.find().sort({ name: 1 });
+    const feedInventory = await this.feedInventoryModel
+      .find()
+      .sort({ name: 1 });
 
-    const data = feedInventory.map(feed => {
+    const data = feedInventory.map((feed) => {
       const totalStock = feed.remainingStock + feed.usedStock;
-      const percentage = totalStock > 0 ? Math.round((feed.remainingStock / totalStock) * 100) : 0;
-      
+      const percentage =
+        totalStock > 0
+          ? Math.round((feed.remainingStock / totalStock) * 100)
+          : 0;
+
       let status: 'good' | 'low' | 'critical';
       if (percentage >= 70) {
         status = 'good';

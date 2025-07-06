@@ -1,11 +1,13 @@
 # 🚀 **Migration & Seeding System Documentation**
 
 ## **Overview**
+
 This project uses a comprehensive migration and seeding system to manage database schema changes and initial data setup.
 
 ## **🛠️ Available Commands**
 
 ### **Migration Commands**
+
 ```bash
 # Create a new migration
 npm run migration:create <migration-name>
@@ -24,6 +26,7 @@ npm run migrate
 ```
 
 ### **Seeding Commands**
+
 ```bash
 # Run all seeders
 npm run seed
@@ -36,6 +39,7 @@ npm run db:reset
 ```
 
 ## **📁 Directory Structure**
+
 ```
 src/database/
 ├── migrations/           # Database migration files
@@ -46,6 +50,7 @@ src/database/
 ```
 
 ## **🔐 Default Admin User**
+
 After running migrations/seeders, you'll have a default admin user:
 
 - **Email**: `admin@formpulse.com`
@@ -53,6 +58,7 @@ After running migrations/seeders, you'll have a default admin user:
 - **Role**: `Admin`
 
 ## **👥 Seeded Users**
+
 The seeder creates the following test users:
 
 1. **Admin**: admin@formpulse.com (Admin@123)
@@ -61,6 +67,7 @@ The seeder creates the following test users:
 4. **Care Taker**: caretaker@formpulse.com (Care@123)
 
 ## **📊 What Gets Seeded**
+
 - ✅ Admin and test users with different roles
 - ✅ Comprehensive vaccine library (35+ vaccines):
   - **Live Vaccines**: Mukteswar (NDV), Komarov (NDV), LaSota (NDV), etc.
@@ -75,21 +82,24 @@ The seeder creates the following test users:
 ## **🚀 Quick Start**
 
 ### **For New Database**
+
 ```bash
 # Setup everything from scratch
 npm run db:setup
 ```
 
 ### **For Development**
+
 ```bash
 # Run migrations only
 npm run migrate
 
-# Run seeders only  
+# Run seeders only
 npm run seed
 ```
 
 ### **For Production**
+
 ```bash
 # Run migrations (seeders are optional in production)
 npm run migration:up
@@ -98,38 +108,37 @@ npm run migration:up
 ## **📝 Creating New Migrations**
 
 ### **1. Using migrate-mongo**
+
 ```bash
 npm run migration:create add-new-field
 ```
 
 ### **2. Migration File Structure**
+
 ```javascript
 module.exports = {
   async up(db, client) {
     // Migration logic here
-    await db.collection('users').updateMany(
-      {},
-      { $set: { newField: 'defaultValue' } }
-    );
+    await db
+      .collection("users")
+      .updateMany({}, { $set: { newField: "defaultValue" } });
   },
 
   async down(db, client) {
     // Rollback logic here
-    await db.collection('users').updateMany(
-      {},
-      { $unset: { newField: '' } }
-    );
-  }
+    await db.collection("users").updateMany({}, { $unset: { newField: "" } });
+  },
 };
 ```
 
 ## **🔧 Adding New Seeders**
 
 ### **1. Update SeederService**
+
 ```typescript
 async seedNewData() {
   const collection = this.connection.collection('newcollection');
-  
+
   const existingCount = await collection.countDocuments();
   if (existingCount > 0) {
     this.logger.warn('Data already exists, skipping');
@@ -146,6 +155,7 @@ async seedNewData() {
 ```
 
 ### **2. Update runSeeders method**
+
 ```typescript
 async runSeeders() {
   await this.seedUsers();
@@ -165,6 +175,7 @@ async runSeeders() {
 ## **🐛 Troubleshooting**
 
 ### **Migration Failed**
+
 ```bash
 # Check migration status
 npm run migration:status
@@ -177,17 +188,20 @@ npm run migration:up
 ```
 
 ### **Connection Issues**
+
 - Verify `DATABASE_URL` in `.env`
 - Ensure MongoDB is running
 - Check network connectivity
 
 ### **Permission Issues**
+
 - Ensure database user has proper permissions
 - Check MongoDB authentication settings
 
 ## **🚀 Production Deployment**
 
 ### **1. Pre-deployment**
+
 ```bash
 # Test migrations on staging
 npm run migration:up
@@ -197,6 +211,7 @@ npm run migration:status
 ```
 
 ### **2. Production Setup**
+
 ```bash
 # Run migrations only (no seeders in production)
 npm run migration:up

@@ -47,21 +47,21 @@ export function ActivityCard() {
 
   const getActivityColor = (type: string) => {
     switch (type) {
-      case 'animals_added':
-        return 'text-green-600';
-      case 'vaccinations_given':
-        return 'text-blue-600';
-      case 'feed_orders':
-        return 'text-orange-600';
-      case 'active_users':
-        return 'text-purple-600';
+      case "animals_added":
+        return "text-green-600";
+      case "vaccinations_given":
+        return "text-blue-600";
+      case "feed_orders":
+        return "text-orange-600";
+      case "active_users":
+        return "text-purple-600";
       default:
-        return 'text-gray-600';
+        return "text-gray-600";
     }
   };
 
   const formatCount = (type: string, count: number) => {
-    if (type === 'animals_added') {
+    if (type === "animals_added") {
       return `+${count}`;
     }
     return count.toString();

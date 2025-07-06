@@ -19,7 +19,7 @@ export class GetFeedUsageUseCase {
       .find({ usedStock: { $gt: 0 } }) // Only feeds that have been used
       .sort({ usedStock: -1 }); // Sort by most used
 
-    const data = feedInventory.map(feed => {
+    const data = feedInventory.map((feed) => {
       const totalConsumption = feed.usedStock;
 
       return {

@@ -1,10 +1,17 @@
-import { CheckCircle, Loader2 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { useVerificationStatus } from "@/hooks/api/dashboard.hook"
+import { CheckCircle, Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { useVerificationStatus } from "@/hooks/api/dashboard.hook";
 
 export function VerificationCard() {
-  const { verificationStatus, verificationRate, isLoading, error } = useVerificationStatus();
+  const { verificationStatus, verificationRate, isLoading, error } =
+    useVerificationStatus();
 
   if (isLoading) {
     return (
@@ -40,8 +47,12 @@ export function VerificationCard() {
     );
   }
 
-  const verifiedCount = verificationStatus.find(status => status.status === 'verified')?.count || 0;
-  const unverifiedCount = verificationStatus.find(status => status.status === 'unverified')?.count || 0;
+  const verifiedCount =
+    verificationStatus.find((status) => status.status === "verified")?.count ||
+    0;
+  const unverifiedCount =
+    verificationStatus.find((status) => status.status === "unverified")
+      ?.count || 0;
 
   return (
     <Card>
@@ -73,11 +84,13 @@ export function VerificationCard() {
             </div>
             <div>
               <Progress value={verificationRate} className="h-2" />
-              <p className="text-sm text-gray-500 text-center mt-2">{verificationRate}% Verified</p>
+              <p className="text-sm text-gray-500 text-center mt-2">
+                {verificationRate}% Verified
+              </p>
             </div>
           </>
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

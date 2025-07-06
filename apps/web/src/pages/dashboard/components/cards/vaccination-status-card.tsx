@@ -1,7 +1,13 @@
-import { SyringeIcon, Loader2 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { useVaccinationStatus } from "@/hooks/api/dashboard.hook"
+import { SyringeIcon, Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { useVaccinationStatus } from "@/hooks/api/dashboard.hook";
 
 export function VaccinationStatusCard() {
   const { vaccinationStatus, isLoading, error } = useVaccinationStatus();
@@ -42,25 +48,25 @@ export function VaccinationStatusCard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'bg-green-500';
-      case 'pending':
-        return 'bg-yellow-400';
-      case 'overdue':
-        return 'bg-red-500';
+      case "completed":
+        return "bg-green-500";
+      case "pending":
+        return "bg-yellow-400";
+      case "overdue":
+        return "bg-red-500";
       default:
-        return 'bg-gray-400';
+        return "bg-gray-400";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed':
-        return 'Completed';
-      case 'pending':
-        return 'Pending';
-      case 'overdue':
-        return 'Overdue';
+      case "completed":
+        return "Completed";
+      case "pending":
+        return "Pending";
+      case "overdue":
+        return "Overdue";
       default:
         return status;
     }
@@ -79,7 +85,9 @@ export function VaccinationStatusCard() {
         {vaccinationStatus.map((item) => (
           <div key={item.status} className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className={`h-2.5 w-2.5 rounded-full ${getStatusColor(item.status)}`} />
+              <span
+                className={`h-2.5 w-2.5 rounded-full ${getStatusColor(item.status)}`}
+              />
               <span>{getStatusLabel(item.status)}</span>
             </div>
             <div className="flex items-center gap-3">
@@ -90,5 +98,5 @@ export function VaccinationStatusCard() {
         ))}
       </CardContent>
     </Card>
-  )
+  );
 }

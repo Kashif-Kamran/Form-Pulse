@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TypedConfigService, ConfigurationModule } from 'src/configuration/configuration.module';
+import {
+  TypedConfigService,
+  ConfigurationModule,
+} from 'src/configuration/configuration.module';
 // Schemas
 import { UserSchema } from './models/user.model';
 import { AnimalSchema } from './models/animal.model';

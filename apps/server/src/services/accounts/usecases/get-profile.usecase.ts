@@ -14,6 +14,10 @@ export class GetProfileUseCase {
       isVerified: userDocument.isVerified,
       name: userDocument.name,
       role: userDocument.role,
+      isDeleted: userDocument.isDeleted,
+      deletedAt: userDocument.deletedAt,
+      createdAt: userDocument.createdAt,
+      updatedAt: userDocument.updatedAt,
     };
   }
 }

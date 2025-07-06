@@ -25,7 +25,7 @@ export class GetActivityUseCase {
     this.logger.log('Fetching activity data');
 
     const now = new Date();
-    
+
     // Calculate date ranges
     const last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
     const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -33,37 +33,38 @@ export class GetActivityUseCase {
 
     // Animals added in last 30 days
     const animalsAdded = await this.animalModel.countDocuments({
-      createdAt: { $gte: last30Days }
+      createdAt: { $gte: last30Days },
     });
 
     // Vaccinations given in last 7 days
     const vaccinationsGiven = await this.animalHealthRecordModel.aggregate([
       {
-        $unwind: '$schedule'
+        $unwind: '$schedule',
       },
       {
         $match: {
           'schedule.administeredDate': { $gte: last7Days },
-          'schedule.status': 'Completed'
-        }
+          'schedule.status': 'Completed',
+        },
       },
       {
-        $count: 'totalVaccinations'
-      }
+        $count: 'totalVaccinations',
+      },
     ]);
 
-    const vaccinationCount = vaccinationsGiven.length > 0 ? vaccinationsGiven[0].totalVaccinations : 0;
+    const vaccinationCount =
+      vaccinationsGiven.length > 0 ? vaccinationsGiven[0].totalVaccinations : 0;
 
     // Feed orders/additions in last 7 days (new feed inventory items)
     const feedOrders = await this.feedInventoryModel.countDocuments({
-      createdAt: { $gte: last7Days }
+      createdAt: { $gte: last7Days },
     });
 
     // Active users in last 24 hours (users who have logged in recently)
     // Note: This would require tracking last login time in user model
     // For now, we'll use recently created users as a proxy
     const activeUsers = await this.userModel.countDocuments({
-      createdAt: { $gte: last24Hours }
+      createdAt: { $gte: last24Hours },
     });
 
     const data = [

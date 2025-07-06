@@ -5,15 +5,15 @@ import { Logger } from '@nestjs/common';
 
 async function runMigrations() {
   const logger = new Logger('DevMigrations');
-  
+
   try {
     logger.log('🚀 Running development migrations...');
-    
+
     const app = await NestFactory.createApplicationContext(AppModule);
     const migrationService = app.get(MigrationService);
-    
+
     await migrationService.runMigrations();
-    
+
     await app.close();
     logger.log('✅ Development migrations completed!');
   } catch (error) {

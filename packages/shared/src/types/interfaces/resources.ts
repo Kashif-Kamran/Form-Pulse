@@ -20,6 +20,10 @@ export interface IUser {
   role: RoleType;
   verificationOtp?: Number | null;
   isVerified: boolean;
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IAnimal {

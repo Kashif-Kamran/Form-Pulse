@@ -31,6 +31,18 @@ export class User implements IUser {
   @Prop({ default: null })
   verificationOtp?: Number | null;
 
+  @Prop({ default: false })
+  isDeleted?: boolean;
+
+  @Prop({ default: null })
+  deletedAt?: Date | null;
+
+  @Prop({ default: Date.now })
+  createdAt: Date;
+
+  @Prop({ default: Date.now })
+  updatedAt: Date;
+
   get id(): string {
     return this._id.toString();
   }

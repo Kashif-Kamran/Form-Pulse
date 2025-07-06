@@ -21,6 +21,12 @@ export type AuthResponse = ResourceResponse<IAccessAndRefreshTokens>;
 export type PublicUser = Omit<IUser, "_id" | "password" | "verificationOtp">;
 export type UserResponse = ResourceResponse<PublicUser>;
 export type VerifyOtpResponse = SingleItemResponse<{ message: string }>;
+export type CreateUserResponse = ResourceResponse<PublicUser>;
+export type UpdateUserResponse = ResourceResponse<PublicUser>;
+export type DeleteUserResponse = DeleteResponse & {
+  userId: string;
+};
+export type UsersListResponse = ResourceListResponse<PublicUser>;
 
 // Profile
 export type UserProfileResponse = ResourceResponse<PublicUser>;

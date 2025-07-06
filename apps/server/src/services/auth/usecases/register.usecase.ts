@@ -58,6 +58,10 @@ export class RegisterUserUseCase {
       role: creationDbResponse.role,
       email: creationDbResponse.email,
       isVerified: creationDbResponse.isVerified,
+      isDeleted: creationDbResponse.isDeleted,
+      deletedAt: creationDbResponse.deletedAt,
+      createdAt: creationDbResponse.createdAt,
+      updatedAt: creationDbResponse.updatedAt,
     };
   }
 }

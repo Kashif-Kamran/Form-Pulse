@@ -14,6 +14,7 @@ import {
   LOGIN,
   REPORTS,
   SETTINGS,
+  USER_MANAGEMENT,
 } from "@/constants/app-routes";
 import FallbackSpinnerScreen from "@/components/custom-ui/fallback-spinner";
 import { useMe } from "@/hooks/api/profile.hook";
@@ -41,6 +42,7 @@ const AnimalList = lazy(
 const HealthMonitoring = lazy(
   () => import("@/pages/health-monitoring/health-list")
 );
+const UserManagement = lazy(() => import("@/pages/user-management"));
 
 const ProtectedRoute = () => {
   const { data, isLoading } = useMe();
@@ -132,6 +134,14 @@ const privateRoutes: RouteObject[] = [
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
                 <HealthMonitoring />
+              </Suspense>
+            ),
+          },
+          {
+            path: USER_MANAGEMENT,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <UserManagement />
               </Suspense>
             ),
           },

@@ -15,7 +15,9 @@ function AnimalList() {
   const [search, setSearch] = useState(initialSearch);
   const [query, setQuery] = useState(initialSearch);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [selectedAnimal, setSelectedAnimal] = useState<AnimalPublic | null>(null);
+  const [selectedAnimal, setSelectedAnimal] = useState<AnimalPublic | null>(
+    null
+  );
 
   const { results = [] } = useAnimals(query);
 
@@ -50,7 +52,7 @@ function AnimalList() {
         <CreateAnimalModel />
       </div>
       <AnimalListTable results={results} onEdit={handleEdit} />
-      
+
       <UpdateAnimalModal
         isOpen={isUpdateModalOpen}
         onClose={handleCloseUpdateModal}

@@ -1,6 +1,12 @@
-import { SyringeIcon, Loader2 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { useTopVaccines } from "@/hooks/api/dashboard.hook"
+import { SyringeIcon, Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { useTopVaccines } from "@/hooks/api/dashboard.hook";
 
 export function TopVaccinesCard() {
   const { topVaccines, isLoading, error } = useTopVaccines();
@@ -61,5 +67,5 @@ export function TopVaccinesCard() {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

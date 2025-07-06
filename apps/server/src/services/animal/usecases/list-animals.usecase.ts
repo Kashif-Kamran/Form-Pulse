@@ -13,7 +13,7 @@ export class ListAnimalsUseCase {
   async execute(searchQuery?: string): Promise<AnimalListResponse> {
     let resultDocs: AnimalDocument[] = [];
     const baseQuery = { isDeleted: { $ne: true } }; // Exclude soft-deleted records
-    
+
     if (!searchQuery) {
       resultDocs = await this.animalModel.find(baseQuery).exec();
     } else {

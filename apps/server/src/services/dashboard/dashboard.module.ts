@@ -17,7 +17,7 @@ import { GetActivityUseCase } from './usecases/get-activity.usecase';
   imports: [DatabaseModule],
   controllers: [DashboardController],
   providers: [
-    GetSpeciesDistributionUseCase, 
+    GetSpeciesDistributionUseCase,
     GetAgeDistributionUseCase,
     GetVaccinationStatusUseCase,
     GetTopVaccinesUseCase,

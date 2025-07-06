@@ -11,12 +11,15 @@ export class UpdateAnimalUseCase {
     @InjectModel('Animal') private readonly animalModel: AnimalModel,
   ) {}
 
-  async execute(animalId: string, updateAnimalDto: CreateAnimalDto): Promise<AnimalResponse> {
-    const existingAnimal = await this.animalModel.findOne({ 
-      _id: animalId, 
-      isDeleted: { $ne: true } 
+  async execute(
+    animalId: string,
+    updateAnimalDto: CreateAnimalDto,
+  ): Promise<AnimalResponse> {
+    const existingAnimal = await this.animalModel.findOne({
+      _id: animalId,
+      isDeleted: { $ne: true },
     });
-    
+
     if (!existingAnimal) {
       throw new NotFoundException('Animal not found or has been deleted');
     }
@@ -24,7 +27,7 @@ export class UpdateAnimalUseCase {
     const updatedAnimal = await this.animalModel.findOneAndUpdate(
       { _id: animalId, isDeleted: { $ne: true } },
       updateAnimalDto,
-      { new: true }
+      { new: true },
     );
 
     return mapDocumentToResponse(updatedAnimal!);

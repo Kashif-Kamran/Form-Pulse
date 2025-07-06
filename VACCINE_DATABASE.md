@@ -5,6 +5,7 @@
 The migration system now includes a comprehensive vaccine database with **35 vaccines** across **5 categories**:
 
 ### **🦠 Live Vaccines (6 vaccines)**
+
 - Mukteswar (NDV)
 - Komarov (NDV)
 - LaSota (NDV)
@@ -13,6 +14,7 @@ The migration system now includes a comprehensive vaccine database with **35 vac
 - ND + IB + Fowl Pox + IB
 
 ### **💀 Killed Vaccines (11 vaccines)**
+
 - ND + Hydro Vaccine
 - Hydro Clear (Angara)
 - AI Plain (Aqua Base)
@@ -26,6 +28,7 @@ The migration system now includes a comprehensive vaccine database with **35 vac
 - ND + IB + H9 Oil Emulsion
 
 ### **🐄 Livestock Vaccines (6 vaccines)**
+
 - HS Vaccine (Aqua Base & Oil Base)
 - ET Vaccine
 - Mastitis Vaccine
@@ -34,9 +37,11 @@ The migration system now includes a comprehensive vaccine database with **35 vac
 - PPR Vaccine
 
 ### **🧪 Bactrin (1 vaccine)**
+
 - E. coli Vaccine (Aqua Base)
 
 ### **🧽 Biologics (8 items)**
+
 - Sterile Diluent
 - Normal Saline
 - Distilled Water
@@ -49,6 +54,7 @@ The migration system now includes a comprehensive vaccine database with **35 vac
 ## **💾 Database Structure**
 
 Each vaccine record includes:
+
 ```json
 {
   "_id": "ObjectId",
@@ -62,6 +68,7 @@ Each vaccine record includes:
 ## **🔍 Database Indexes**
 
 The following indexes are created for optimal performance:
+
 - `vaccines.type` - For filtering by vaccine type
 - `vaccines.name` - For vaccine name searches
 - `vaccines.name (text)` - For text search capabilities
@@ -69,11 +76,12 @@ The following indexes are created for optimal performance:
 ## **🚀 Usage in Application**
 
 ### **Frontend Vaccine Selection**
+
 ```typescript
 // Available vaccine types
 enum VaccineTypes {
   LIVE = "Live",
-  KILLED = "Killed", 
+  KILLED = "Killed",
   LIVESTOCK = "Livestock",
   BACTRIN = "Bactrin",
   BIOLOGICS = "Biologics",
@@ -81,6 +89,7 @@ enum VaccineTypes {
 ```
 
 ### **API Filtering**
+
 ```bash
 # Get all live vaccines
 GET /vaccines?type=Live
@@ -95,6 +104,7 @@ GET /vaccines?type=Livestock
 ## **✅ Migration Status**
 
 After running migrations, you'll have:
+
 - ✅ 35 vaccines seeded across 5 categories
 - ✅ Proper indexing for fast searches
 - ✅ Type-safe enum values

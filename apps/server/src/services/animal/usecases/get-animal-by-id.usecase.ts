@@ -12,9 +12,9 @@ export class GETAnimalByIdUsecase {
   ) {}
 
   async execute(id: string): Promise<AnimalResponse> {
-    const animal: AnimalDocument = await this.animalModel.findOne({ 
-      _id: id, 
-      isDeleted: { $ne: true } 
+    const animal: AnimalDocument = await this.animalModel.findOne({
+      _id: id,
+      isDeleted: { $ne: true },
     });
 
     if (!animal) {

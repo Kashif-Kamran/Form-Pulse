@@ -12,12 +12,7 @@ import {
   Leaf,
   Timer,
 } from "lucide-react";
-import {
-  differenceInDays,
-  format,
-  isBefore,
-  isWithinInterval,
-} from "date-fns";
+import { differenceInDays, format, isBefore, isWithinInterval } from "date-fns";
 import {
   Card,
   CardContent,

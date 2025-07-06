@@ -1,6 +1,6 @@
 export enum VaccineTypes {
   LIVE = "Live",
-  KILLED = "Killed", 
+  KILLED = "Killed",
   LIVESTOCK = "Livestock",
   BACTRIN = "Bactrin",
   BIOLOGICS = "Biologics",

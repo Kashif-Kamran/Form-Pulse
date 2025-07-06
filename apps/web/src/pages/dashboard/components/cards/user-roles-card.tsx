@@ -1,6 +1,12 @@
-import { Users, Loader2 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { useUserRoles } from "@/hooks/api/dashboard.hook"
+import { Users, Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { useUserRoles } from "@/hooks/api/dashboard.hook";
 
 export function UserRolesCard() {
   const { userRoles, isLoading, error } = useUserRoles();
@@ -41,29 +47,29 @@ export function UserRolesCard() {
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case 'Admin':
-        return 'bg-green-500';
-      case 'Veterinarian':
-        return 'bg-purple-500';
-      case 'Nutritionist':
-        return 'bg-orange-500';
-      case 'Care Taker':
-        return 'bg-blue-500';
+      case "Admin":
+        return "bg-green-500";
+      case "Veterinarian":
+        return "bg-purple-500";
+      case "Nutritionist":
+        return "bg-orange-500";
+      case "Care Taker":
+        return "bg-blue-500";
       default:
-        return 'bg-gray-500';
+        return "bg-gray-500";
     }
   };
 
   const formatRoleName = (role: string) => {
     switch (role) {
-      case 'Care Taker':
-        return 'Caretakers';
-      case 'Veterinarian':
-        return 'Veterinarians';
-      case 'Nutritionist':
-        return 'Nutritionists';
-      case 'Admin':
-        return 'Admins';
+      case "Care Taker":
+        return "Caretakers";
+      case "Veterinarian":
+        return "Veterinarians";
+      case "Nutritionist":
+        return "Nutritionists";
+      case "Admin":
+        return "Admins";
       default:
         return role;
     }
@@ -85,7 +91,9 @@ export function UserRolesCard() {
           userRoles.map((role) => (
             <div key={role.role} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className={`h-2.5 w-2.5 ${getRoleColor(role.role)} rounded-full`} />
+                <span
+                  className={`h-2.5 w-2.5 ${getRoleColor(role.role)} rounded-full`}
+                />
                 <span>{formatRoleName(role.role)}</span>
               </div>
               <span className="font-medium">{role.count}</span>
@@ -94,5 +102,5 @@ export function UserRolesCard() {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

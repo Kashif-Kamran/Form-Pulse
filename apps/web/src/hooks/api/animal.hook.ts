@@ -1,4 +1,9 @@
-import { deleteRequest, getRequest, postRequest, putRequest } from "@/lib/client/common";
+import {
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest,
+} from "@/lib/client/common";
 import { queryClient } from "@/lib/query-client";
 import {
   AnimalDeleteResponse,
@@ -95,7 +100,9 @@ export const useUpdateAnimal = (
       putRequest<AnimalResponse>(`/animals/${animalId}`, payload),
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({ queryKey: [ANIMALS_QUERY_KEY, "list"] });
-      queryClient.invalidateQueries({ queryKey: [ANIMALS_QUERY_KEY, variables.animalId] });
+      queryClient.invalidateQueries({
+        queryKey: [ANIMALS_QUERY_KEY, variables.animalId],
+      });
       options?.onSuccess?.(data, variables, context);
     },
     ...options,

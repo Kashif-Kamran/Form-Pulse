@@ -1,5 +1,5 @@
 import { getRequest } from "@/lib/client/common";
-import { 
+import {
   VaccinationStatusResponse,
   TopVaccinesResponse,
   HealthAlertsResponse,
@@ -8,7 +8,7 @@ import {
   DietPlansStatusResponse,
   UserRolesResponse,
   VerificationStatusResponse,
-  ActivityResponse
+  ActivityResponse,
 } from "@repo/shared";
 import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
 
@@ -126,8 +126,7 @@ export const useTopVaccines = (
   const queryKey = [DASHBOARD_QUERY_KEY, "top-vaccines"];
   const { data, ...rest } = useQuery({
     queryKey,
-    queryFn: () =>
-      getRequest<TopVaccinesResponse>("/dashboard/top-vaccines"),
+    queryFn: () => getRequest<TopVaccinesResponse>("/dashboard/top-vaccines"),
     ...options,
   });
 
@@ -149,8 +148,7 @@ export const useHealthAlerts = (
   const queryKey = [DASHBOARD_QUERY_KEY, "health-alerts"];
   const { data, ...rest } = useQuery({
     queryKey,
-    queryFn: () =>
-      getRequest<HealthAlertsResponse>("/dashboard/health-alerts"),
+    queryFn: () => getRequest<HealthAlertsResponse>("/dashboard/health-alerts"),
     ...options,
   });
 
@@ -195,8 +193,7 @@ export const useFeedUsage = (
   const queryKey = [DASHBOARD_QUERY_KEY, "feed-usage"];
   const { data, ...rest } = useQuery({
     queryKey,
-    queryFn: () =>
-      getRequest<FeedUsageResponse>("/dashboard/feed-usage"),
+    queryFn: () => getRequest<FeedUsageResponse>("/dashboard/feed-usage"),
     ...options,
   });
 
@@ -242,8 +239,7 @@ export const useUserRoles = (
   const queryKey = [DASHBOARD_QUERY_KEY, "user-roles"];
   const { data, ...rest } = useQuery({
     queryKey,
-    queryFn: () =>
-      getRequest<UserRolesResponse>("/dashboard/user-roles"),
+    queryFn: () => getRequest<UserRolesResponse>("/dashboard/user-roles"),
     ...options,
   });
 
@@ -279,18 +275,12 @@ export const useVerificationStatus = (
 };
 
 export const useActivity = (
-  options?: UseQueryOptions<
-    ActivityResponse,
-    Error,
-    ActivityResponse,
-    QueryKey
-  >
+  options?: UseQueryOptions<ActivityResponse, Error, ActivityResponse, QueryKey>
 ) => {
   const queryKey = [DASHBOARD_QUERY_KEY, "activity"];
   const { data, ...rest } = useQuery({
     queryKey,
-    queryFn: () =>
-      getRequest<ActivityResponse>("/dashboard/activity"),
+    queryFn: () => getRequest<ActivityResponse>("/dashboard/activity"),
     ...options,
   });
 

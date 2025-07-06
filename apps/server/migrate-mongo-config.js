@@ -16,7 +16,7 @@ module.exports = {
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    }
+    },
   },
   // The migrations dir, can be an relative or absolute path
   migrationsDir: 'src/database/migrations',

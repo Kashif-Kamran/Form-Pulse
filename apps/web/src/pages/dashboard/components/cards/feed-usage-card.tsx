@@ -1,6 +1,12 @@
-import { BarChart, Loader2 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { useFeedUsage } from "@/hooks/api/dashboard.hook"
+import { BarChart, Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { useFeedUsage } from "@/hooks/api/dashboard.hook";
 
 export function FeedUsageCard() {
   const { feedUsage, isLoading, error } = useFeedUsage();
@@ -61,5 +67,5 @@ export function FeedUsageCard() {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

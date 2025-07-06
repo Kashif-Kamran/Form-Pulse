@@ -1,10 +1,17 @@
-import { FileText, Loader2 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { useDietPlansStatus } from "@/hooks/api/dashboard.hook"
+import { FileText, Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { useDietPlansStatus } from "@/hooks/api/dashboard.hook";
 
 export function DietPlansCard() {
-  const { dietPlansStatus, compliance, total, isLoading, error } = useDietPlansStatus();
+  const { dietPlansStatus, compliance, total, isLoading, error } =
+    useDietPlansStatus();
 
   if (isLoading) {
     return (
@@ -40,8 +47,12 @@ export function DietPlansCard() {
     );
   }
 
-  const withDietPlan = dietPlansStatus.find(status => status.status === 'with_diet_plan')?.count || 0;
-  const withoutDietPlan = dietPlansStatus.find(status => status.status === 'without_diet_plan')?.count || 0;
+  const withDietPlan =
+    dietPlansStatus.find((status) => status.status === "with_diet_plan")
+      ?.count || 0;
+  const withoutDietPlan =
+    dietPlansStatus.find((status) => status.status === "without_diet_plan")
+      ?.count || 0;
 
   return (
     <Card>
@@ -59,19 +70,25 @@ export function DietPlansCard() {
           <>
             <div className="flex justify-between items-center">
               <span>With Diet Plans</span>
-              <span className="font-bold text-green-600">{withDietPlan} animals</span>
+              <span className="font-bold text-green-600">
+                {withDietPlan} animals
+              </span>
             </div>
             <div className="flex justify-between items-center">
               <span>No Diet Plans</span>
-              <span className="font-bold text-red-600">{withoutDietPlan} animals</span>
+              <span className="font-bold text-red-600">
+                {withoutDietPlan} animals
+              </span>
             </div>
             <div>
               <Progress value={compliance} className="h-2" />
-              <p className="text-sm text-gray-500 text-center mt-2">{compliance}% Compliance</p>
+              <p className="text-sm text-gray-500 text-center mt-2">
+                {compliance}% Compliance
+              </p>
             </div>
           </>
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

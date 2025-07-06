@@ -8,9 +8,7 @@ import { RoleType } from '@repo/shared';
 export class SeederService {
   private readonly logger = new Logger(SeederService.name);
 
-  constructor(
-    @InjectConnection() private readonly connection: Connection,
-  ) {}
+  constructor(@InjectConnection() private readonly connection: Connection) {}
 
   /**
    * Seed users
@@ -18,10 +16,10 @@ export class SeederService {
   async seedUsers() {
     try {
       const userCollection = this.connection.collection('users');
-      
+
       // Check if users already exist
       const existingUsersCount = await userCollection.countDocuments();
-      
+
       if (existingUsersCount > 0) {
         this.logger.warn('Users already exist, skipping user seeding');
         return;
@@ -84,9 +82,9 @@ export class SeederService {
   async seedVaccines() {
     try {
       const vaccineCollection = this.connection.collection('vaccines');
-      
+
       const existingVaccinesCount = await vaccineCollection.countDocuments();
-      
+
       if (existingVaccinesCount > 0) {
         this.logger.warn('Vaccines already exist, skipping vaccine seeding');
         return;
@@ -130,7 +128,7 @@ export class SeederService {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        
+
         // Killed Vaccines
         {
           name: 'ND + Hydro Vaccine',
@@ -198,7 +196,7 @@ export class SeederService {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        
+
         // Livestock Vaccines
         {
           name: 'HS Vaccine (Aqua Base & Oil Base)',
@@ -236,7 +234,7 @@ export class SeederService {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        
+
         // Bactrin
         {
           name: 'E. coli Vaccine (Aqua Base)',
@@ -244,7 +242,7 @@ export class SeederService {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        
+
         // Biologics
         {
           name: 'Sterile Diluent',
@@ -310,11 +308,13 @@ export class SeederService {
   async seedFeedInventory() {
     try {
       const feedCollection = this.connection.collection('feedinventories');
-      
+
       const existingFeedCount = await feedCollection.countDocuments();
-      
+
       if (existingFeedCount > 0) {
-        this.logger.warn('Feed inventory already exists, skipping feed seeding');
+        this.logger.warn(
+          'Feed inventory already exists, skipping feed seeding',
+        );
         return;
       }
 
@@ -382,12 +382,12 @@ export class SeederService {
    */
   async runSeeders() {
     this.logger.log('🌱 Starting database seeding...');
-    
+
     try {
       await this.seedUsers();
       await this.seedVaccines();
       await this.seedFeedInventory();
-      
+
       this.logger.log('🎉 All seeders completed successfully!');
     } catch (error) {
       this.logger.error('❌ Seeding failed:', error);

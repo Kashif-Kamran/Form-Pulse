@@ -48,7 +48,11 @@ interface UpdateAnimalModalProps {
   animal?: AnimalPublic;
 }
 
-export function UpdateAnimalModal({ isOpen, onClose, animal }: UpdateAnimalModalProps) {
+export function UpdateAnimalModal({
+  isOpen,
+  onClose,
+  animal,
+}: UpdateAnimalModalProps) {
   const form = useForm<AnimalFormData>({
     resolver: zodResolver(AnimalSchema),
     defaultValues: {
@@ -81,9 +85,9 @@ export function UpdateAnimalModal({ isOpen, onClose, animal }: UpdateAnimalModal
 
     try {
       await updateAnimal({ animalId: animal.id, payload: data });
-      toast({ 
+      toast({
         title: "Animal Information Updated Successfully",
-        variant: "default"
+        variant: "default",
       });
       form.reset();
       onClose();

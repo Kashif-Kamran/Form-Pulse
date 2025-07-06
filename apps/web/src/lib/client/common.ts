@@ -1,10 +1,9 @@
 import { stringify } from "qs";
 import { apiUrl as API_URL } from "@/utils/common.utils";
 
-
 const { API_TOKEN_KEY, apiUrl } = {
   API_TOKEN_KEY: "token",
-  apiUrl:API_URL,
+  apiUrl: API_URL,
 };
 
 const commonHeaders = {

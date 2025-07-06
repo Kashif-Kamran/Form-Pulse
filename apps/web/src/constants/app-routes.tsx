@@ -10,6 +10,7 @@ const HOME = "/";
 const ANIMALS_PROFILE = "/animal-profiles";
 const ANIMAL_DETAIL = (animalId?: string) =>
   `/animal-profiles/${animalId ?? ":animalId"}`;
+const USER_MANAGEMENT = "/user-management";
 const DIET_MANAGEMENT = "/diet-management";
 const FEED_INVENTORY = "/feed-inventory";
 const HEALTH_MONITORING = "/monitor-health";
@@ -29,6 +30,7 @@ export {
   VERIFY_OTP,
   CONFIRM_PASSWORD,
   ANIMALS_PROFILE,
+  USER_MANAGEMENT,
   DIET_MANAGEMENT,
   FEED_INVENTORY,
   HEALTH_MONITORING,

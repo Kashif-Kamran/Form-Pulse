@@ -1,7 +1,13 @@
-import { Wheat, Loader2 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { useFeedStockLevels } from "@/hooks/api/dashboard.hook"
+import { Wheat, Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { useFeedStockLevels } from "@/hooks/api/dashboard.hook";
 
 export function FeedStockLevelsCard() {
   const { feedStockLevels, isLoading, error } = useFeedStockLevels();
@@ -42,14 +48,14 @@ export function FeedStockLevelsCard() {
 
   const getProgressColor = (status: string) => {
     switch (status) {
-      case 'good':
-        return '[&>div]:bg-green-500';
-      case 'low':
-        return '[&>div]:bg-yellow-400';
-      case 'critical':
-        return '[&>div]:bg-red-500';
+      case "good":
+        return "[&>div]:bg-green-500";
+      case "low":
+        return "[&>div]:bg-yellow-400";
+      case "critical":
+        return "[&>div]:bg-red-500";
       default:
-        return '[&>div]:bg-gray-400';
+        return "[&>div]:bg-gray-400";
     }
   };
 
@@ -72,14 +78,14 @@ export function FeedStockLevelsCard() {
                 <span>{feed.feedName}</span>
                 <span className="font-medium">{feed.remainingStock}kg</span>
               </div>
-              <Progress 
-                value={feed.percentage} 
-                className={`h-2 ${getProgressColor(feed.status)}`} 
+              <Progress
+                value={feed.percentage}
+                className={`h-2 ${getProgressColor(feed.status)}`}
               />
             </div>
           ))
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
