@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
+import { MigrationModule } from './database/migration.module';
 import { AuthModule } from './services/auth/auth.module';
 import { ConfigurationModule } from './configuration/configuration.module';
 import { AnimalModule } from './services/animal/animal.module';
@@ -14,6 +15,7 @@ import { DashboardModule } from './services/dashboard/dashboard.module';
   imports: [
     ConfigurationModule,
     DatabaseModule,
+    MigrationModule,
     AuthModule,
     AnimalModule,
     AccountsModule,

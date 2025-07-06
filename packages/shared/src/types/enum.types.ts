@@ -1,10 +1,11 @@
 export enum VaccineTypes {
-  KILLED_VACCINE = "Killed Vaccine",
-  LIVE_VACCINE = "Live Vaccine",
-  LIVESTOCK_VACCINE = "LiveStock Vaccine",
-  BACTARIAN = "Bactarian",
-  BIO_LOGICS = "BioLogics",
+  LIVE = "Live",
+  KILLED = "Killed", 
+  LIVESTOCK = "Livestock",
+  BACTRIN = "Bactrin",
+  BIOLOGICS = "Biologics",
 }
+
 export enum VaccineStatuses {
   PENDING = "Pending",
   COMPLETED = "Completed",

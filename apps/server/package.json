@@ -17,7 +17,15 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migration:create": "migrate-mongo create",
+    "migration:up": "migrate-mongo up",
+    "migration:down": "migrate-mongo down",
+    "migration:status": "migrate-mongo status",
+    "migrate": "ts-node -r tsconfig-paths/register src/migrate.ts",
+    "seed": "ts-node -r tsconfig-paths/register src/database/seeders/seed.ts",
+    "db:setup": "npm run migration:up && npm run seed",
+    "db:reset": "migrate-mongo down && npm run migration:up && npm run seed"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -33,6 +41,7 @@
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "migrate-mongo": "^12.1.3",
     "moment": "^2.30.1",
     "mongoose": "^8.9.5",
     "nodemailer": "^6.10.0",
