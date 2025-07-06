@@ -12,14 +12,17 @@ export class UpdateAnimalUseCase {
   ) {}
 
   async execute(animalId: string, updateAnimalDto: CreateAnimalDto): Promise<AnimalResponse> {
-    const existingAnimal = await this.animalModel.findById(animalId);
+    const existingAnimal = await this.animalModel.findOne({ 
+      _id: animalId, 
+      isDeleted: { $ne: true } 
+    });
     
     if (!existingAnimal) {
-      throw new NotFoundException('Animal not found');
+      throw new NotFoundException('Animal not found or has been deleted');
     }
 
-    const updatedAnimal = await this.animalModel.findByIdAndUpdate(
-      animalId,
+    const updatedAnimal = await this.animalModel.findOneAndUpdate(
+      { _id: animalId, isDeleted: { $ne: true } },
       updateAnimalDto,
       { new: true }
     );

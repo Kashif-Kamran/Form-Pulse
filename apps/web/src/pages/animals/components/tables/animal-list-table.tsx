@@ -37,9 +37,10 @@ function AnimalListTable({ results, onEdit }: AnimalListTableProps) {
     deleteAnimalById(
       { animalId },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           toast({
             title: "Animal deleted Successfully",
+            description: data?.message || "Animal and related records have been deleted",
             variant: "default",
           });
         },

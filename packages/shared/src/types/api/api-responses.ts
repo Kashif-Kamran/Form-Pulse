@@ -29,7 +29,9 @@ export type UserProfileResponse = ResourceResponse<PublicUser>;
 export type AnimalPublic = Omit<IAnimal, "createdAt" | "updatedAt">;
 export type AnimalResponse = ResourceResponse<AnimalPublic>;
 export type AnimalListResponse = ResourceListResponse<AnimalPublic>;
-export type AnimalDeleteResponse = DeleteResponse;
+export type AnimalDeleteResponse = DeleteResponse & {
+  animalId: string;
+};
 
 // Feed Inventory
 export type FeedItemPublic = ResourceResponse<IFeedInventory>;

@@ -31,6 +31,12 @@ export class Animal implements IAnimal {
   @Prop({ required: true })
   weight: number;
 
+  @Prop({ default: false })
+  isDeleted: boolean;
+
+  @Prop({ default: null })
+  deletedAt: Date | null;
+
   get id(): string {
     return this._id.toString();
   }

@@ -15,7 +15,7 @@ export class GetHealthRecordByIdUseCase {
     recordId: string,
   ): Promise<{ data: PopulatedAnimalHealthRecord }> {
     const healthRecord = await this.animalHealthRecordModel
-      .findById(recordId)
+      .findOne({ _id: recordId, isDeleted: { $ne: true } })
       .populate('animal')
       .populate('veterinarian')
       .populate('vaccine')
@@ -23,7 +23,7 @@ export class GetHealthRecordByIdUseCase {
 
     if (!healthRecord) {
       throw new NotFoundException(
-        `Health record with ID ${recordId} not found`,
+        `Health record with ID ${recordId} not found or has been deleted`,
       );
     }
 

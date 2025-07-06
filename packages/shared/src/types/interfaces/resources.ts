@@ -32,6 +32,8 @@ export interface IAnimal {
   weight: number;
   createdAt: Date;
   updatedAt: Date;
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
 }
 
 export interface IFeedInventory {
@@ -66,6 +68,8 @@ export interface IDietPlan {
     _id?: any;
     id: string;
   }[];
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
 }
 
 export interface IVaccine {
@@ -92,4 +96,6 @@ export interface IAnimalHealthRecord {
   }[];
   createdAt?: Date;
   updatedAt?: Date;
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
 }

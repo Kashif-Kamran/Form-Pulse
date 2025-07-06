@@ -50,7 +50,7 @@ export class AnimalController {
 
   @Delete(':animalId')
   async deleteAnimalById(@Param('animalId') animalId: string) {
-    console.log('❌ Delete Animal');
+    console.log('🗑️ Soft Delete Animal and Related Records');
     return this.deleteAnimalByIdUseCase.execute(animalId);
   }
 }

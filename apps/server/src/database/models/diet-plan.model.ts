@@ -28,6 +28,12 @@ export class DietPlan implements IDietPlan {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   careTaker: Types.ObjectId;
 
+  @Prop({ default: false })
+  isDeleted: boolean;
+
+  @Prop({ default: null })
+  deletedAt: Date | null;
+
   @Prop({
     type: [
       {

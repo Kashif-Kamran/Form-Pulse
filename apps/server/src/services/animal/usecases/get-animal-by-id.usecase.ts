@@ -12,10 +12,13 @@ export class GETAnimalByIdUsecase {
   ) {}
 
   async execute(id: string): Promise<AnimalResponse> {
-    const animal: AnimalDocument = await this.animalModel.findById(id);
+    const animal: AnimalDocument = await this.animalModel.findOne({ 
+      _id: id, 
+      isDeleted: { $ne: true } 
+    });
 
     if (!animal) {
-      throw new Error('Animal not found');
+      throw new Error('Animal not found or has been deleted');
     }
     return mapDocumentToResponse(animal);
   }

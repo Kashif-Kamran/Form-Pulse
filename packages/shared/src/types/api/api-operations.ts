@@ -12,4 +12,7 @@ export type SingleItemResponse<T> = {
 
 export type ResourceResponse<T> = SingleItemResponse<T>;
 export type ResourceListResponse<T> = ListResponse<T>;
-export type DeleteResponse = void;
+export type DeleteResponse = {
+  message: string;
+  deletedAt: string;
+};

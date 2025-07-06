@@ -48,6 +48,12 @@ export class AnimalHealthRecord implements IAnimalHealthRecord {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   veterinarian: string;
 
+  @Prop({ default: false })
+  isDeleted: boolean;
+
+  @Prop({ default: null })
+  deletedAt: Date | null;
+
   @Prop({ type: [Schedule], default: [] }) // Embedded array with its own _id
   schedule: Schedule[];
 

@@ -19,8 +19,8 @@ export class GetAnimalHealthRecordsList {
     );
 
     const matchStage = animalId
-      ? { $match: { animal: new Types.ObjectId(animalId) } }
-      : { $match: {} };
+      ? { $match: { animal: new Types.ObjectId(animalId), isDeleted: { $ne: true } } }
+      : { $match: { isDeleted: { $ne: true } } };
 
     const pipeline: PipelineStage[] = [
       matchStage,

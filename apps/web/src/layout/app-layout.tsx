@@ -9,7 +9,7 @@ function AppLayout() {
     <div className="w-screen h-full py-2 flex justify-evenly">
       {/* Sidebar */}
       <div
-        className={`transition-all duration-300 ${isSidebarCollapsed ? "w-[5%]" : "w-[21%]"}`}
+        className={`transition-all duration-300 ${isSidebarCollapsed ? "w-[5%] min-w-[70px]" : "w-[21%]"}`}
       >
         <Sidebar
           isCollapsed={isSidebarCollapsed}

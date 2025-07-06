@@ -17,7 +17,10 @@ export class GetAnimalDietPlanUseCase {
 
   async execute(animalId: string): Promise<AnimalDietPlanListResponse> {
     const animalDietPlans = await this.dietPlanModel
-      .find({ animal: new Types.ObjectId(animalId) })
+      .find({ 
+        animal: new Types.ObjectId(animalId), 
+        isDeleted: { $ne: true } 
+      })
       .populate(['animal', 'careTaker', 'recipes.feed']);
 
     const transformedDietPlans = animalDietPlans.map((dietPlan) => ({

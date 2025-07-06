@@ -12,11 +12,15 @@ export class ListAnimalsUseCase {
   ) {}
   async execute(searchQuery?: string): Promise<AnimalListResponse> {
     let resultDocs: AnimalDocument[] = [];
-    if (!searchQuery) resultDocs = await this.animalModel.find().exec();
-    else {
+    const baseQuery = { isDeleted: { $ne: true } }; // Exclude soft-deleted records
+    
+    if (!searchQuery) {
+      resultDocs = await this.animalModel.find(baseQuery).exec();
+    } else {
       const regex = new RegExp(`^${searchQuery}`, 'i'); // case-insensitive prefix search
       resultDocs = await this.animalModel
         .find({
+          ...baseQuery,
           $or: [{ name: { $regex: regex } }, { breed: { $regex: regex } }],
         })
         .exec();
