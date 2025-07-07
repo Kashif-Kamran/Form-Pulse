@@ -45,15 +45,15 @@ const HealthMonitoring = lazy(
 const UserManagement = lazy(() => import("@/pages/user-management"));
 
 const ProtectedRoute = () => {
-  const { data, isLoading } = useMe();
-
+  const { data, isLoading, error } = useMe();
   const location = useLocation();
 
   if (isLoading) {
     return <FallbackSpinnerScreen />;
   }
 
-  if (!data) {
+  // If there's an error (like 401) or no data, redirect to login
+  if (error || !data) {
     return <Navigate to={LOGIN} state={{ from: location }} replace />;
   }
 

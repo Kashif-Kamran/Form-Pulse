@@ -15,11 +15,11 @@ import {
 
 import { client } from "@/lib/client/client";
 import { postRequest, getRequest } from "@/lib/client/common";
-const API_TOKEN_KEY = "token";
+import { setAuthToken } from "@/utils/auth.utils";
 
 const handleAuthSuccess = async (data: AuthResponse) => {
   if (data.access.token) {
-    localStorage.setItem(API_TOKEN_KEY, data.access.token);
+    setAuthToken(data.access.token);
   }
 };
 

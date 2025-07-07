@@ -16,13 +16,19 @@ const VerifyOtp = lazy(() => import("@/pages/auth/verify-otp"));
 const ConfirmPassword = lazy(() => import("@/pages/auth/confirm-password"));
 
 const PublicRouteGuard = () => {
-  const { data, isLoading } = useMe();
+  const { data, isLoading, error } = useMe();
   const location = useLocation();
 
   if (isLoading) {
     return <FallbackSpinner />;
   }
 
+  // If there's an error (like 401) or no data, allow access to public routes
+  if (error || !data) {
+    return <Outlet />;
+  }
+
+  // If user is authenticated, redirect to home
   if (data) {
     return <Navigate to={HOME} state={{ from: location }} replace />;
   }

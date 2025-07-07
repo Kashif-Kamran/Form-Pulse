@@ -13,6 +13,8 @@ export const useMe = (
   const { data, ...rest } = useQuery({
     queryKey: ["accounts/me"],
     queryFn: () => getRequest<UserProfileResponse>("/accounts/me"),
+    retry: false, // Don't retry on auth failures
+    staleTime: 5 * 60 * 1000, // 5 minutes
     ...options,
   });
 

@@ -1,8 +1,8 @@
 import { stringify } from "qs";
 import { apiUrl as API_URL } from "@/utils/common.utils";
+import { getAuthToken, removeAuthToken } from "@/utils/auth.utils";
 
-const { API_TOKEN_KEY, apiUrl } = {
-  API_TOKEN_KEY: "token",
+const { apiUrl } = {
   apiUrl: API_URL,
 };
 
@@ -32,7 +32,7 @@ function getOptions(
     headers: {
       ...commonHeaders,
       ...options?.headers,
-      Authorization: `Bearer ${localStorage.getItem(API_TOKEN_KEY) || ""}`,
+      Authorization: `Bearer ${getAuthToken() || ""}`,
     },
     body,
     // TODO: enable it back when cookies are implemented
@@ -58,10 +58,8 @@ async function makeRequest<
   if (!response.ok) {
     // Handle 401 Unauthorized - deleted/invalid user
     if (response.status === 401) {
-      // Clear the token and redirect to login
-      localStorage.removeItem(API_TOKEN_KEY);
-      // Force page reload to redirect to login
-      window.location.href = '/auth/login';
+      // Clear the token - let React Router handle the redirect
+      removeAuthToken();
       return Promise.reject(new Error('Session expired. Please login again.'));
     }
     
