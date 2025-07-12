@@ -10,9 +10,13 @@ const data = [
 
 const COLORS = ["#4CAF50", "#F44336", "#FF9800", "#2196F3"];
 
-export function Animals() {
+interface AnimalsProps {
+  className?: string;
+}
+
+export function Animals({ className }: AnimalsProps) {
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader>
         <CardTitle>Animals</CardTitle>
       </CardHeader>
@@ -27,8 +31,9 @@ export function Animals() {
               outerRadius={100}
               fill="#8884d8"
               dataKey="value"
+              label={(entry) => `${entry.name} (${entry.value})`}
             >
-              {data.map((entry, index) => (
+              {data.map((_entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>

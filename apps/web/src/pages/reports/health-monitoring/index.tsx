@@ -10,9 +10,13 @@ const data = [
 
 const COLORS = ["#4CAF50", "#F44336", "#FF9800", "#2196F3"];
 
-export function HealthMonitoring() {
+interface HealthMonitoringProps {
+  className?: string;
+}
+
+export function HealthMonitoring({ className }: HealthMonitoringProps) {
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader>
         <CardTitle>Health Monitoring</CardTitle>
       </CardHeader>
@@ -27,6 +31,7 @@ export function HealthMonitoring() {
               outerRadius={100}
               fill="#8884d8"
               dataKey="value"
+              label = {(entry) => `${entry.name} (${entry.value})`}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

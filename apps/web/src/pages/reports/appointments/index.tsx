@@ -7,33 +7,46 @@ const appointments = [
   { animal: "Baby Horses", date: "9/24/2024", with: "Veteran" },
   { animal: "Baby Horses", date: "9/24/2024", with: "Veteran" },
   { animal: "Baby Horses", date: "9/24/2024", with: "Veteran" },
+  { animal: "Baby Horses", date: "9/24/2024", with: "Veteran" },
+  { animal: "Baby Horses", date: "9/24/2024", with: "Veteran" },
+  { animal: "Baby Horses", date: "9/24/2024", with: "Veteran" },
+  { animal: "Baby Horses", date: "9/24/2024", with: "Veteran" },
+  { animal: "Baby Horses", date: "9/24/2024", with: "Veteran" }
 ];
 
-export function Appointments() {
+interface AppointmentsProps {
+  className?: string;
+}
+
+
+// If the component overflowws then it should scroll vertically.
+export function Appointments({ className }: AppointmentsProps) {
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader>
         <CardTitle>Appointments</CardTitle>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Animal(s)</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>With</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {appointments.map((appointment, index) => (
-              <TableRow key={index}>
-                <TableCell>{appointment.animal}</TableCell>
-                <TableCell>{appointment.date}</TableCell>
-                <TableCell>{appointment.with}</TableCell>
+        <div className="max-h-[250px] overflow-y-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Animal</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>With</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {appointments.map((appointment, index) => (
+                <TableRow key={index}>
+                  <TableCell>{appointment.animal}</TableCell>
+                  <TableCell>{appointment.date}</TableCell>
+                  <TableCell>{appointment.with}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </CardContent>
     </Card>
   );
