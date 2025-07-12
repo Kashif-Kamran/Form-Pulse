@@ -27,10 +27,9 @@ export function Appointments({ className }: AppointmentsProps) {
         <CardTitle>Appointments</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="max-h-[250px] overflow-y-auto">
+        <div className="max-h-[150px] overflow-y-auto">
           <Table>
             <TableHeader>
-              {/* If I scroll the content in the table it shold not look under the table head */}
               <TableRow className="sticky top-0 bg-white z-10">
                 <TableHead>Animal</TableHead>
                 <TableHead>Date</TableHead>
