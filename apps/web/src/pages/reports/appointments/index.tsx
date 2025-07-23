@@ -19,6 +19,8 @@ interface AppointmentsProps {
 }
 
 
+
+
 // If the component overflowws then it should scroll vertically.
 export function Appointments({ className }: AppointmentsProps) {
   return (
