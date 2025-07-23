@@ -17,7 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { PublicUser } from "@repo/shared";
-import { Trash2Icon, Edit2Icon, MoreHorizontal, Loader2 } from "lucide-react";
+import { Trash2Icon, Edit2Icon, MoreHorizontal } from "lucide-react";
 
 export interface UserListTableProps {
   results: PublicUser[];
@@ -26,7 +26,7 @@ export interface UserListTableProps {
   isLoading?: boolean;
 }
 
-function UserListTable({ results, onEdit, onDelete, isLoading }: UserListTableProps) {
+function UserListTable({ results, onEdit, onDelete }: UserListTableProps) {
   const { toast } = useToast();
 
   function handleDelete(userId: string, userName: string) {

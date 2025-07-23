@@ -31,7 +31,7 @@ export function ChooseUserDialog({
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
 
-  const { results: users = [] } = useUsers(query, role);
+  const { users = [] } = useUsers(query, role);
 
   const handleSearch = () => {
     setQuery(search);

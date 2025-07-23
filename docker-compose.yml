@@ -1,0 +1,75 @@
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: form-pulse-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: form-pulse
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - form-pulse-network
+
+  # Backend API
+  api:
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile
+    container_name: form-pulse-api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: mongodb://root:password@mongodb:27017/form-pulse?authSource=admin
+      JWT_SECRET: your-super-secret-jwt-key-here-change-in-production
+      JWT_ACCESS_SECRET: your-super-secret-jwt-access-key-here
+      JWT_REFRESH_SECRET: your-super-secret-jwt-refresh-key-here
+      JWT_EXPIRES_IN: 2d
+      JWT_ACCESS_EXPIRY: 15m
+      JWT_REFRESH_EXPIRY: 7d
+      EMAIL_HOST: smtp.gmail.com
+      EMAIL_PORT: 587
+      EMAIL_SECURE: false
+      EMAIL_FROM: your-email@gmail.com
+      EMAIL_CLIENT_PASSWORD: your-app-password
+    depends_on:
+      - mongodb
+    networks:
+      - form-pulse-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Web App
+  web:
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    container_name: form-pulse-web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      VITE_API_URL: http://localhost:3001
+    depends_on:
+      - api
+    networks:
+      - form-pulse-network
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  form-pulse-network:
+    driver: bridge

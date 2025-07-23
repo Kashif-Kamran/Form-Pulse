@@ -1,0 +1,80 @@
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: form-pulse-mongodb-dev
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: form-pulse
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_dev_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - form-pulse-network
+
+  # Backend API (Development)
+  api-dev:
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile.dev
+    container_name: form-pulse-api-dev
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: mongodb://root:password@mongodb:27017/form-pulse?authSource=admin
+      JWT_SECRET: dev-super-secret-jwt-key-here
+      JWT_ACCESS_SECRET: dev-super-secret-jwt-access-key-here
+      JWT_REFRESH_SECRET: dev-super-secret-jwt-refresh-key-here
+      JWT_EXPIRES_IN: 2d
+      JWT_ACCESS_EXPIRY: 15m
+      JWT_REFRESH_EXPIRY: 7d
+      EMAIL_HOST: smtp.gmail.com
+      EMAIL_PORT: 587
+      EMAIL_SECURE: false
+      EMAIL_FROM: dev@example.com
+      EMAIL_CLIENT_PASSWORD: dev-password
+    volumes:
+      - ./apps/server:/app/apps/server
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/server/node_modules
+    depends_on:
+      - mongodb
+    networks:
+      - form-pulse-network
+
+  # Frontend Web App (Development)
+  web-dev:
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile.dev
+    container_name: form-pulse-web-dev
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      VITE_API_URL: http://localhost:3001
+    volumes:
+      - ./apps/web:/app/apps/web
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/web/node_modules
+    depends_on:
+      - api-dev
+    networks:
+      - form-pulse-network
+
+volumes:
+  mongodb_dev_data:
+    driver: local
+
+networks:
+  form-pulse-network:
+    driver: bridge

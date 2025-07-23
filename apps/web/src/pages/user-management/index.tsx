@@ -10,7 +10,7 @@ import { UpdateUserModal } from "./components/update-user-modal";
 import { DeleteUserDialog } from "./components/delete-user-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
-import { Info, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 import {
   Select,
   SelectContent,
