@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateAnimalDietPlanUseCase } from '../diet-plan/usecases/create-animal-diet-plan.usecase';
 import {
   CreateAnimalHealthRecordDto,
@@ -14,6 +23,9 @@ import { GetHealthRecordByIdUseCase } from './usecase/get-health-record-by-id.us
 import { UpdateHealthRecordUseCase } from './usecase/update-health-record.usecase';
 import { MongooseIdValidationPipe } from 'src/common/interceptors/pipes/is-mongoose-object-id.pipe';
 import { Request } from 'express';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { RolesAllowed } from '../auth/decorators/roles-allowed.decorator';
+import { RoleType } from '@repo/shared';
 
 @Controller('animal-health-record')
 export class AnimalHealthRecordController {
@@ -27,6 +39,8 @@ export class AnimalHealthRecordController {
   ) {}
 
   @Post()
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin, RoleType.Veterinarian)
   async createRecord(@Body() dto: CreateAnimalHealthRecordDto) {
     return this.createAnimalHealthRecordUC.execute(dto);
   }
@@ -49,6 +63,8 @@ export class AnimalHealthRecordController {
   }
 
   @Patch(':recordId')
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin, RoleType.Veterinarian)
   async updateHealthRecord(
     @Param('recordId', MongooseIdValidationPipe) recordId: string,
     @Body() dto: CreateAnimalHealthRecordDto,
@@ -57,6 +73,8 @@ export class AnimalHealthRecordController {
   }
 
   @Patch(':recordId/schedule/:scheduleId')
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin, RoleType.Veterinarian)
   async updateHealthRecordStatus(
     @Param('recordId', MongooseIdValidationPipe) recordId: string,
     @Param('scheduleId', MongooseIdValidationPipe) scheduleId: string,

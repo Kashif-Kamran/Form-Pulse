@@ -31,9 +31,10 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { RoleType } from "@repo/shared";
+import { RoleType, CreateUserWithCredentialsResponse } from "@repo/shared";
 import { useCreateUser } from "@/hooks/api/user.hook";
 import { Plus } from "lucide-react";
+import { CredentialsModal } from "../credentials-modal";
 
 // Validation Schema using Zod
 const UserSchema = z.object({
@@ -60,6 +61,8 @@ interface CreateUserModalProps {
 
 export function CreateUserModal({ onCreateUser }: CreateUserModalProps) {
   const [open, setOpen] = useState(false);
+  const [credentialsModalOpen, setCredentialsModalOpen] = useState(false);
+  const [userCredentials, setUserCredentials] = useState<CreateUserWithCredentialsResponse | null>(null);
   const { toast } = useToast();
   const { mutateAsync: createUser } = useCreateUser();
 
@@ -76,7 +79,10 @@ export function CreateUserModal({ onCreateUser }: CreateUserModalProps) {
 
   const onSubmit = async (data: UserFormData) => {
     try {
-      await createUser(data);
+      const response = await createUser(data);
+
+      // Store the response for credentials display
+      setUserCredentials(response);
 
       toast({
         title: "User Created Successfully",
@@ -86,6 +92,10 @@ export function CreateUserModal({ onCreateUser }: CreateUserModalProps) {
 
       form.reset();
       setOpen(false);
+      
+      // Show credentials modal
+      setCredentialsModalOpen(true);
+      
       onCreateUser();
     } catch (error: any) {
       toast({
@@ -97,53 +107,54 @@ export function CreateUserModal({ onCreateUser }: CreateUserModalProps) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Add User
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Add New User</DialogTitle>
-          <DialogDescription>
-            Create a new user account. The user will be verified by default.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <InputField placeholder="Enter full name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button className="flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            Add User
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add New User</DialogTitle>
+            <DialogDescription>
+              Create a new user account. The user will be verified by default.
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <InputField placeholder="Enter full name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <InputField
-                      type="email"
-                      placeholder="Enter email address"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <InputField
+                        type="email"
+                        placeholder="Enter email address"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
             <FormField
               control={form.control}
@@ -159,49 +170,58 @@ export function CreateUserModal({ onCreateUser }: CreateUserModalProps) {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Role</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a role" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.values(RoleType).map((role) => (
-                        <SelectItem key={role} value={role}>
-                          {role}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(RoleType).map((role) => (
+                          <SelectItem key={role} value={role}>
+                            {role}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? "Creating..." : "Create User"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? "Creating..." : "Create User"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Credentials Modal */}
+      <CredentialsModal
+        open={credentialsModalOpen}
+        onOpenChange={setCredentialsModalOpen}
+        credentials={userCredentials?.credentials || null}
+        userName={userCredentials?.name}
+      />
+    </>
   );
 }

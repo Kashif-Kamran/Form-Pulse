@@ -1,10 +1,20 @@
-import { Body, Controller, Get, Param, Post, Patch, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Patch,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateDietPlanDto } from './diet-plan.dto';
 import { CreateAnimalDietPlanUseCase } from './usecases/create-animal-diet-plan.usecase';
 import { GetAnimalDietPlanUseCase } from './usecases/get-animal-diet-plan.usecase';
 import { GetAllDietPlans } from './usecases/get-all-diet-plans.usecase';
 import { GetDietPlanByIdUseCase } from './usecases/get-diet-plan-by-id.usecase';
 import { UpdateDietPlanUseCase } from './usecases/update-diet-plan.usecase';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { RolesAllowed } from '../auth/decorators/roles-allowed.decorator';
 import { RoleType } from '@repo/shared';
 import { Request } from 'express';
@@ -18,7 +28,8 @@ export class AnimalDietPlanController {
   ) {}
 
   @Post()
-  @RolesAllowed(RoleType.Nutritionist)
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin, RoleType.Nutritionist)
   async createDietPlan(
     @Param('animalId')
     animalId: string,
@@ -58,7 +69,8 @@ export class DietPlanController {
   }
 
   @Patch(':dietPlanId')
-  @RolesAllowed(RoleType.Nutritionist)
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin, RoleType.Nutritionist)
   async updateDietPlan(
     @Param('dietPlanId') dietPlanId: string,
     @Body() updateDietPlanDto: CreateDietPlanDto,

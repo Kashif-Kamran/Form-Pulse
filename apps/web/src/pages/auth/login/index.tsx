@@ -13,8 +13,8 @@ import { Button } from "@/components/ui/button";
 import PasswordFeild from "@/components/custom-ui/form-feilds/password-field";
 
 import InputField from "@/components/custom-ui/form-feilds/input-field";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { REGISTER, VERIFY_OTP, HOME } from "@/constants/app-routes";
+import { useNavigate, useLocation } from "react-router-dom";
+import { HOME } from "@/constants/app-routes";
 import { useEmailPassLogin } from "@/hooks/api/auth.hook";
 import { useToast } from "@/hooks/use-toast";
 
@@ -41,19 +41,7 @@ const Login = () => {
     },
   });
 
-  const { getValues, setError } = form;
-
-  const handleForgotPassword = async () => {
-    const email = getValues("email");
-    const isValid = LoginSchema.pick({ email: true }).safeParse({ email });
-
-    if (!isValid.success)
-      return setError("email", {
-        type: "manual",
-        message: "Please enter a valid email address",
-      });
-    navigate(VERIFY_OTP(email));
-  };
+  // Removed unused destructuring and forgot password functionality
 
   const handleSubmit = async (data: LoginData) => {
     try {
@@ -112,25 +100,14 @@ const Login = () => {
                   </FormItem>
                 )}
               />
-              <p className="text-right">
-                Forgot Password?{" "}
-                <Button
-                  onClick={handleForgotPassword}
-                  variant={"link"}
-                  type="button"
-                >
-                  Reset Password
-                </Button>
-              </p>
+              
+              {/* Removed forgot password and sign up options - admin-only user management */}
               <Button className="w-full py-6" type="submit">
                 Login
               </Button>
 
-              <p className="text-center">
-                Don't have an account?{" "}
-                <Link to={REGISTER} className="text-primary">
-                  Sign Up
-                </Link>
+              <p className="text-center text-sm text-gray-600">
+                Contact your administrator for account access
               </p>
             </form>
           </Form>

@@ -1,10 +1,7 @@
 import {
   AuthResponse,
   EmailPassReq,
-  RegisterUserReq,
   UserResponse,
-  VerifyOtpReq,
-  VerifyOtpResponse,
 } from "@repo/shared";
 
 import {
@@ -14,7 +11,7 @@ import {
 } from "@tanstack/react-query";
 
 import { client } from "@/lib/client/client";
-import { postRequest, getRequest } from "@/lib/client/common";
+import { getRequest } from "@/lib/client/common";
 import { setAuthToken } from "@/utils/auth.utils";
 
 const handleAuthSuccess = async (data: AuthResponse) => {
@@ -36,32 +33,9 @@ export const useEmailPassLogin = (
   });
 };
 
-export const useRegisterUser = (
-  options?: UseMutationOptions<UserResponse, Error, RegisterUserReq>
-) => {
-  return useMutation({
-    mutationFn: (payload: RegisterUserReq) =>
-      postRequest<UserResponse>("/auth/register", payload),
-    onSuccess: async (data, variables, context) => {
-      options?.onSuccess?.(data, variables, context);
-    },
-    ...options,
-  });
-};
-
-export const useVerifyOtp = (
-  options?: UseMutationOptions<VerifyOtpResponse, Error, VerifyOtpReq>
-) => {
-  return useMutation({
-    mutationFn: (payload: VerifyOtpReq) =>
-      postRequest<VerifyOtpResponse>("/auth/verify-otp", payload),
-    onSuccess: async (data, variables, context) => {
-      // VerifyOtpResponse doesn't contain auth tokens, just verification status
-      options?.onSuccess?.(data, variables, context);
-    },
-    ...options,
-  });
-};
+// Registration and OTP verification hooks removed - admin-only user creation now
+// export const useRegisterUser = ...
+// export const useVerifyOtp = ...
 
 export const useCurrentUser = () => {
   return useQuery({

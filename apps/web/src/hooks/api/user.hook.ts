@@ -1,19 +1,24 @@
-import { getRequest, postRequest, putRequest, deleteRequest } from "@/lib/client/common";
-import { 
-  RoleType, 
-  UsersListResponse, 
+import {
+  getRequest,
+  postRequest,
+  putRequest,
+  deleteRequest,
+} from "@/lib/client/common";
+import {
+  RoleType,
+  UsersListResponse,
   CreateUserByAdminReq,
-  CreateUserResponse,
+  CreateUserWithCredentialsResponse,
   UpdateUserReq,
   UpdateUserResponse,
-  DeleteUserResponse
+  DeleteUserResponse,
 } from "@repo/shared";
-import { 
-  QueryKey, 
-  useQuery, 
-  UseQueryOptions, 
-  useMutation, 
-  UseMutationOptions 
+import {
+  QueryKey,
+  useQuery,
+  UseQueryOptions,
+  useMutation,
+  UseMutationOptions,
 } from "@tanstack/react-query";
 import { queryClient } from "@/lib/query-client";
 
@@ -24,10 +29,22 @@ export const useUsers = (
   role?: RoleType,
   page?: number,
   limit?: number,
-  options?: UseQueryOptions<UsersListResponse, Error, UsersListResponse, QueryKey>
+  options?: UseQueryOptions<
+    UsersListResponse,
+    Error,
+    UsersListResponse,
+    QueryKey
+  >
 ) => {
-  const queryKey = [USERS_QUERY_KEY, "list", role ?? "", searchQuery ?? "", page ?? 1, limit ?? 10];
-  
+  const queryKey = [
+    USERS_QUERY_KEY,
+    "list",
+    role ?? "",
+    searchQuery ?? "",
+    page ?? 1,
+    limit ?? 10,
+  ];
+
   // Url Construction
   let url = "/users/list";
   const params = new URLSearchParams();
@@ -39,7 +56,7 @@ export const useUsers = (
   if (queryString) {
     url += `?${queryString}`;
   }
-  
+
   // Calling the api
   const { data, ...rest } = useQuery({
     queryFn: () => {
@@ -48,20 +65,24 @@ export const useUsers = (
     queryKey: queryKey,
     ...options,
   });
-  
-  return { 
-    users: data?.results || [], 
+
+  return {
+    users: data?.results || [],
     count: data?.count || 0,
-    ...rest 
+    ...rest,
   };
 };
 
 export const useCreateUser = (
-  options?: UseMutationOptions<CreateUserResponse, Error, CreateUserByAdminReq>
+  options?: UseMutationOptions<
+    CreateUserWithCredentialsResponse,
+    Error,
+    CreateUserByAdminReq
+  >
 ) => {
   return useMutation({
     mutationFn: (payload: CreateUserByAdminReq) =>
-      postRequest<CreateUserResponse>("/users/create", payload),
+      postRequest<CreateUserWithCredentialsResponse>("/users/create", payload),
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEY] });
       options?.onSuccess?.(data, variables, context);
@@ -71,13 +92,26 @@ export const useCreateUser = (
 };
 
 export const useUpdateUser = (
-  options?: UseMutationOptions<UpdateUserResponse, Error, { userId: string; payload: UpdateUserReq }>
+  options?: UseMutationOptions<
+    UpdateUserResponse,
+    Error,
+    { userId: string; payload: UpdateUserReq }
+  >
 ) => {
   return useMutation({
-    mutationFn: ({ userId, payload }: { userId: string; payload: UpdateUserReq }) =>
-      putRequest<UpdateUserResponse>(`/users/${userId}`, payload),
+    mutationFn: ({
+      userId,
+      payload,
+    }: {
+      userId: string;
+      payload: UpdateUserReq;
+    }) => putRequest<UpdateUserResponse>(`/users/${userId}`, payload),
     onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEY] });
+      // Add a small delay to prevent UI freezing during query invalidation
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: [USERS_QUERY_KEY] });
+      }, 100);
+
       options?.onSuccess?.(data, variables, context);
     },
     ...options,

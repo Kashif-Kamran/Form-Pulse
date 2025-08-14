@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateFeedItemUseCase } from './usecases/create-feed-item.usecase';
 import { UpdateFeedInventoryUseCase } from './usecases/update-feed-inventory.usecase';
 import { CreateFeedItemDto } from './feed-ingentory.dtos';
 import { ListFeedInventoryUseCase } from './usecases/list-feed-inventory.usecase';
+import { RolesGuard } from '../auth/guards/roles.guard';
 import { RolesAllowed } from '../auth/decorators/roles-allowed.decorator';
 import { RoleType } from '@repo/shared';
 
@@ -23,7 +25,8 @@ export class FeedInventoryController {
   ) {}
 
   @Post()
-  @RolesAllowed(RoleType.CareTaker)
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin, RoleType.CareTaker)
   async createInventoryItem(@Body() createFeedItemDto: CreateFeedItemDto) {
     return this.createFeedItemUC.execute(createFeedItemDto);
   }
@@ -34,7 +37,8 @@ export class FeedInventoryController {
   }
 
   @Patch(':feedInventoryId')
-  @RolesAllowed(RoleType.CareTaker)
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin, RoleType.CareTaker)
   async updateInventoryItem(
     @Param('feedInventoryId') feedInventoryId: string,
     @Body() updateFeedItemDto: CreateFeedItemDto,

@@ -25,7 +25,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { RolesAllowed } from '../auth/decorators/roles-allowed.decorator';
 import { RoleType } from '@repo/shared';
 import {
-  CreateUserResponse,
+  CreateUserWithCredentialsResponse,
   UpdateUserResponse,
   DeleteUserResponse,
   UsersListResponse,
@@ -54,7 +54,7 @@ export class UserController {
   @RolesAllowed(RoleType.Admin)
   async createUser(
     @Body() createUserDto: CreateUserByAdminDto,
-  ): Promise<CreateUserResponse> {
+  ): Promise<CreateUserWithCredentialsResponse> {
     return this.createUserByAdmin.execute(createUserDto);
   }
 

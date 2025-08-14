@@ -1,9 +1,7 @@
 import { Outlet, RouteObject, Navigate, useLocation } from "react-router-dom";
 import {
   LOGIN,
-  REGISTER,
   HOME,
-  VERIFY_OTP,
   CONFIRM_PASSWORD,
 } from "@/constants/app-routes";
 import { lazy, Suspense } from "react";
@@ -11,8 +9,9 @@ import { useMe } from "@/hooks/api/profile.hook";
 import FallbackSpinner from "@/components/custom-ui/fallback-spinner";
 
 const Login = lazy(() => import("@/pages/auth/login"));
-const Register = lazy(() => import("@/pages/auth/register"));
-const VerifyOtp = lazy(() => import("@/pages/auth/verify-otp"));
+// Registration and OTP verification components removed - admin-only user creation
+// const Register = lazy(() => import("@/pages/auth/register"));
+// const VerifyOtp = lazy(() => import("@/pages/auth/verify-otp"));
 const ConfirmPassword = lazy(() => import("@/pages/auth/confirm-password"));
 
 const PublicRouteGuard = () => {
@@ -48,22 +47,23 @@ const publicRoutes: RouteObject[] = [
           </Suspense>
         ),
       },
-      {
-        path: REGISTER,
-        element: (
-          <Suspense fallback={<FallbackSpinner />}>
-            <Register />
-          </Suspense>
-        ),
-      },
-      {
-        path: VERIFY_OTP(),
-        element: (
-          <Suspense fallback={<FallbackSpinner />}>
-            <VerifyOtp />
-          </Suspense>
-        ),
-      },
+      // Registration and OTP verification routes removed - admin-only user creation
+      // {
+      //   path: REGISTER,
+      //   element: (
+      //     <Suspense fallback={<FallbackSpinner />}>
+      //       <Register />
+      //     </Suspense>
+      //   ),
+      // },
+      // {
+      //   path: VERIFY_OTP(),
+      //   element: (
+      //     <Suspense fallback={<FallbackSpinner />}>
+      //       <VerifyOtp />
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: CONFIRM_PASSWORD(),
         element: (

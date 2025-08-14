@@ -6,18 +6,18 @@ import {
   TypedConfigService,
 } from 'src/configuration/configuration.module';
 import { LoginUserUseCase } from './usecases/login.usecase';
-import { RegisterUserUseCase } from './usecases/register.usecase';
+// import { RegisterUserUseCase } from './usecases/register.usecase'; // Removed - admin-only user creation
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
-import { EmailModule } from '../email/email.module';
-import { VerifyOtpUseCase } from './usecases/verify-otp.usecase';
+// import { EmailModule } from '../emailemail.module'; // Removed email dependency for auth
+// import { VerifyOtpUseCase } from './usecases/verify-otp.usecase'; // Removed - no email verification
 
 @Module({
   imports: [
     DatabaseModule,
-    EmailModule,
+    // EmailModule, // Removed - no email verification for auth now
     JwtModule.registerAsync({
       imports: [ConfigurationModule],
       inject: [TypedConfigService],
@@ -33,8 +33,8 @@ import { VerifyOtpUseCase } from './usecases/verify-otp.usecase';
   controllers: [AuthController],
   providers: [
     LoginUserUseCase,
-    RegisterUserUseCase,
-    VerifyOtpUseCase,
+    // RegisterUserUseCase, // Removed - admin-only user creation
+    // VerifyOtpUseCase, // Removed - no email verification
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

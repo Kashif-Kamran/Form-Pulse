@@ -1,5 +1,4 @@
 import {
-  VaccineStatuses,
   VaccineStatusValues,
   VaccineTypeValues,
 } from "../enum.types";

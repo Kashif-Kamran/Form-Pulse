@@ -99,10 +99,16 @@ export const useUpdateAnimal = (
     mutationFn: ({ animalId, payload }) =>
       putRequest<AnimalResponse>(`/animals/${animalId}`, payload),
     onSuccess: (data: any, variables: any, context: any) => {
-      queryClient.invalidateQueries({ queryKey: [ANIMALS_QUERY_KEY, "list"] });
-      queryClient.invalidateQueries({
-        queryKey: [ANIMALS_QUERY_KEY, variables.animalId],
-      });
+      // Add a small delay to prevent UI freezing during query invalidation
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: [ANIMALS_QUERY_KEY, "list"],
+        });
+        queryClient.invalidateQueries({
+          queryKey: [ANIMALS_QUERY_KEY, variables.animalId],
+        });
+      }, 100);
+
       options?.onSuccess?.(data, variables, context);
     },
     ...options,

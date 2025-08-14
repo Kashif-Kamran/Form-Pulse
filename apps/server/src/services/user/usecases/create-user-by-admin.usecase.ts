@@ -6,7 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import {
   CreateUserByAdminReq,
-  CreateUserResponse,
+  CreateUserWithCredentialsResponse,
   PublicUser,
 } from '@repo/shared';
 import { User, UserModel } from 'src/database';
@@ -49,8 +49,11 @@ export class CreateUserByAdmin {
 
   async execute(
     createUserDto: CreateUserByAdminDto,
-  ): Promise<CreateUserResponse> {
+  ): Promise<CreateUserWithCredentialsResponse> {
     try {
+      // Store the original password before hashing
+      const originalPassword = createUserDto.password;
+      
       // Check if user with email already exists
       const existingUser = await this.userModel.findOne({
         email: createUserDto.email,
@@ -94,7 +97,15 @@ export class CreateUserByAdmin {
         updatedAt: savedUser.updatedAt,
       };
 
-      return publicUser;
+      // Return response with credentials for admin to copy
+      return {
+        ...publicUser,
+        credentials: {
+          email: savedUser.email,
+          password: originalPassword,
+          temporaryPassword: true,
+        },
+      } as CreateUserWithCredentialsResponse;
     } catch (error) {
       if (error instanceof ConflictException) {
         throw error;

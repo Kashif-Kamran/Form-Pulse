@@ -13,10 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import {
-  VaccineTypes,
-  VaccineTypeValues,
-} from "@repo/shared/dist/cjs/types/enum.types";
+import { VaccineTypes, VaccineTypeValues } from "@repo/shared";
 import {
   Select,
   SelectContent,

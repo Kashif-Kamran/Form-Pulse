@@ -1,4 +1,8 @@
-import { HealthRecordResponseItem } from "@repo/shared";
+import { 
+  HealthRecordResponseItem, 
+  VaccineStatuses, 
+  VaccineStatusValues 
+} from "@repo/shared";
 import {
   Calendar,
   Clock,
@@ -14,10 +18,6 @@ import {
   PawPrint,
 } from "lucide-react";
 import { differenceInDays, format } from "date-fns";
-import {
-  VaccineStatuses,
-  VaccineStatusValues,
-} from "@repo/shared/dist/cjs/types/enum.types";
 import React, { useState } from "react";
 import {
   Card,

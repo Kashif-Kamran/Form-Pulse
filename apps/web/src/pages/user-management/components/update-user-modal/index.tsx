@@ -84,6 +84,13 @@ export function UpdateUserModal({
     }
   }, [user, open, form]);
 
+  // Reset form when modal closes
+  useEffect(() => {
+    if (!open) {
+      form.reset();
+    }
+  }, [open, form]);
+
   const onSubmit = async (data: UpdateUserFormData) => {
     if (!user) return;
 
@@ -99,11 +106,14 @@ export function UpdateUserModal({
         variant: "default",
       });
 
+      // Call the callback to close modal and refresh data
       onUpdateUser();
     } catch (error: any) {
       toast({
         title: "Error Updating User",
-        description: error.message || "There was an error updating the user. Please try again.",
+        description:
+          error.message ||
+          "There was an error updating the user. Please try again.",
         variant: "destructive",
       });
     }
@@ -158,10 +168,7 @@ export function UpdateUserModal({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Role</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a role" />
@@ -202,6 +209,14 @@ export function UpdateUserModal({
             />
 
             <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                disabled={form.formState.isSubmitting}
+              >
+                Cancel
+              </Button>
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? "Updating..." : "Update User"}
               </Button>

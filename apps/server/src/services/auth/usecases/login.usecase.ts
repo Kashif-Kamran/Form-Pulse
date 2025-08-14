@@ -27,8 +27,9 @@ export class LoginUserUseCase {
     if (!isPasswordValid)
       throw new UnauthorizedException('Invalid email or password');
 
-    if (!user.isVerified)
-      throw new UnauthorizedException('Please verify your email first');
+    // Email verification check removed - users can login without verification
+    // Admin-created users are automatically verified, and we allow unverified users to login
+    
     const jwtPayload = {
       sub: user._id,
     };

@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateAnimalDto } from './dtos';
 import { CreateAnimalUseCase } from './usecases/create-animal.usecase';
@@ -14,6 +15,9 @@ import { ListAnimalsUseCase } from './usecases/list-animals.usecase';
 import { GETAnimalByIdUsecase } from './usecases/get-animal-by-id.usecase';
 import { DeleteAnimalByIdUseCase } from './usecases/delete-animal-by-id.usecase';
 import { UpdateAnimalUseCase } from './usecases/update-animal.usecase';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { RolesAllowed } from '../auth/decorators/roles-allowed.decorator';
+import { RoleType } from '@repo/shared';
 
 @Controller('animals')
 export class AnimalController {
@@ -31,6 +35,8 @@ export class AnimalController {
   }
 
   @Post()
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin, RoleType.CareTaker)
   async createAnimal(@Body() createAnimalDto: CreateAnimalDto) {
     return this.createAnimalUseCase.execute(createAnimalDto);
   }
@@ -41,6 +47,8 @@ export class AnimalController {
   }
 
   @Put(':animalId')
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin, RoleType.CareTaker)
   async updateAnimal(
     @Param('animalId') animalId: string,
     @Body() updateAnimalDto: CreateAnimalDto,
@@ -49,6 +57,8 @@ export class AnimalController {
   }
 
   @Delete(':animalId')
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin)
   async deleteAnimalById(@Param('animalId') animalId: string) {
     console.log('🗑️ Soft Delete Animal and Related Records');
     return this.deleteAnimalByIdUseCase.execute(animalId);

@@ -69,7 +69,7 @@ export function UpdateAnimalModal({
 
   // Update form values when animal data changes
   useEffect(() => {
-    if (animal) {
+    if (animal && isOpen) {
       form.reset({
         name: animal.name,
         breed: animal.breed,
@@ -78,7 +78,14 @@ export function UpdateAnimalModal({
         weight: animal.weight,
       });
     }
-  }, [animal, form]);
+  }, [animal, isOpen, form]);
+
+  // Reset form when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      form.reset();
+    }
+  }, [isOpen, form]);
 
   const handleSubmit = async (data: AnimalFormData) => {
     if (!animal?.id) return;
@@ -89,6 +96,8 @@ export function UpdateAnimalModal({
         title: "Animal Information Updated Successfully",
         variant: "default",
       });
+
+      // Reset form and close modal
       form.reset();
       onClose();
     } catch (error: any) {

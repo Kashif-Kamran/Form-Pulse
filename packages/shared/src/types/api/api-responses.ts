@@ -22,6 +22,13 @@ export type PublicUser = Omit<IUser, "_id" | "password" | "verificationOtp">;
 export type UserResponse = ResourceResponse<PublicUser>;
 export type VerifyOtpResponse = SingleItemResponse<{ message: string }>;
 export type CreateUserResponse = ResourceResponse<PublicUser>;
+export type CreateUserWithCredentialsResponse = ResourceResponse<PublicUser> & {
+  credentials: {
+    email: string;
+    password: string;
+    temporaryPassword: boolean;
+  };
+};
 export type UpdateUserResponse = ResourceResponse<PublicUser>;
 export type DeleteUserResponse = DeleteResponse & {
   userId: string;
