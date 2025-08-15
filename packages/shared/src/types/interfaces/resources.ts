@@ -1,8 +1,4 @@
-import {
-  VaccineStatuses,
-  VaccineStatusValues,
-  VaccineTypeValues,
-} from "../enum.types";
+import { VaccineStatusValues, VaccineTypeValues } from "../enum.types";
 import { RoleType } from "../roles.types";
 
 export type IAccessAndRefreshTokens = {

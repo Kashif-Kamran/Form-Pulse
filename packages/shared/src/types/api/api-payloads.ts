@@ -53,7 +53,7 @@ export type CreateAnimalReq = Omit<
 
 // Feed Inventory
 
-type CreateFeedInventoryBase = Omit<
+export type CreateFeedInventoryBase = Omit<
   IFeedInventory,
   "_id" | "id" | "remainingStock" | "usedStock"
 >;
