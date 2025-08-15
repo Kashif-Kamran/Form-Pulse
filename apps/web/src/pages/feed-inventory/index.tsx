@@ -28,8 +28,12 @@ function InventoryList() {
 
   const { results = [] } = useFeedInventory(query);
 
-  // Check if user is a caretaker
+  // Check if user is a caretaker or admin
   const isCareTaker = currentUser?.role === RoleType.CareTaker;
+  const isAdmin =
+    currentUser?.role === RoleType.Admin ||
+    currentUser?.role === RoleType.SuperAdmin;
+  const canManageInventory = isCareTaker || isAdmin;
 
   const handleSearch = () => {
     setQuery(search);
@@ -62,16 +66,16 @@ function InventoryList() {
           onChange={(e) => setSearch(e.target.value)}
           onSearch={handleSearch}
         />
-        {isCareTaker && <CreateFeedInventoryItemModel />}
+        {canManageInventory && <CreateFeedInventoryItemModel />}
       </div>
       <InventoryTable
         results={results}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        showActions={isCareTaker}
+        showActions={canManageInventory}
       />
 
-      {isCareTaker && (
+      {canManageInventory && (
         <UpdateFeedInventoryDialog
           feedItem={selectedFeedItem}
           open={updateDialogOpen}

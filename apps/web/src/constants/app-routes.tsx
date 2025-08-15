@@ -1,8 +1,5 @@
 // Authentication Routes
 const LOGIN = "/auth/login";
-// REGISTER and VERIFY_OTP routes removed - admin-only user creation now
-// const REGISTER = "/auth/register";
-// const VERIFY_OTP = (email?: string) => `/auth/verify-otp/${email ?? ":email"}`;
 const CONFIRM_PASSWORD = (email?: string) =>
   `/auth/confirm-password/${email ?? ":email"}`;
 
@@ -26,9 +23,7 @@ const EDIT_HEALTH_RECORD = (healthRecordId?: string) =>
   `${HEALTH_MONITORING}/edit/${healthRecordId ?? ":healthRecordId"}`;
 export {
   LOGIN,
-  // REGISTER, // Removed - admin-only user creation
   HOME,
-  // VERIFY_OTP, // Removed - no email verification needed
   CONFIRM_PASSWORD,
   ANIMALS_PROFILE,
   USER_MANAGEMENT,

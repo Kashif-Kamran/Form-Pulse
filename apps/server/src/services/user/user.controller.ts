@@ -42,7 +42,7 @@ export class UserController {
 
   @Get('/list')
   @UseGuards(RolesGuard)
-  @RolesAllowed(RoleType.Admin)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin)
   async getUsers(
     @Query() queryDto: GetUsersListQueryDto,
   ): Promise<UsersListResponse> {
@@ -51,7 +51,7 @@ export class UserController {
 
   @Post('/create')
   @UseGuards(RolesGuard)
-  @RolesAllowed(RoleType.Admin)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin)
   async createUser(
     @Body() createUserDto: CreateUserByAdminDto,
   ): Promise<CreateUserWithCredentialsResponse> {
@@ -60,7 +60,7 @@ export class UserController {
 
   @Put('/:userId')
   @UseGuards(RolesGuard)
-  @RolesAllowed(RoleType.Admin)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin)
   async updateUser(
     @Param('userId') userId: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -70,7 +70,7 @@ export class UserController {
 
   @Delete('/:userId')
   @UseGuards(RolesGuard)
-  @RolesAllowed(RoleType.Admin)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin)
   async deleteUser(
     @Param('userId') userId: string,
     @Request() request: any,

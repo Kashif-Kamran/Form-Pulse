@@ -25,14 +25,17 @@ function AnimalList() {
   const isNutritionist = currentUser?.role === RoleType.Nutritionist;
   const isCareTaker = currentUser?.role === RoleType.CareTaker;
   const isVeterinarian = currentUser?.role === RoleType.Veterinarian;
+  const isAdmin =
+    currentUser?.role === RoleType.Admin ||
+    currentUser?.role === RoleType.SuperAdmin;
 
   return (
     <div className="space-y-4 flex flex-col h-full">
       <div className="flex justify-center items-center gap-2">
         <SearchInputFeild placeholder="Search Animal..." />
 
-        {/* Show Create Diet Plan button only for Nutritionists */}
-        {isNutritionist && (
+        {/* Show Create Diet Plan button for Nutritionists and Admins */}
+        {(isNutritionist || isAdmin) && (
           <Link className="h-full" to={CREATE_DIET_PLAN}>
             <Button className="h-full flex items-center gap-2">
               <Plus className="h-4 w-4" />
@@ -41,8 +44,8 @@ function AnimalList() {
           </Link>
         )}
 
-        {/* Show Notify button only for Care Takers */}
-        {isCareTaker && (
+        {/* Show Notify button for Care Takers and Admins */}
+        {(isCareTaker || isAdmin) && (
           <Button
             className="h-full flex items-center gap-2"
             onClick={openNotifyDialog}
@@ -54,22 +57,7 @@ function AnimalList() {
         )}
       </div>
 
-      {/* Role-specific information alerts */}
-      {isVeterinarian && (
-        <Card className="border-amber-200 bg-amber-50">
-          <CardContent className="pt-4">
-            <div className="flex items-start gap-3">
-              <Info className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-amber-800">
-                As a Veterinarian, you can view all diet plans to understand
-                animal nutrition as part of your medical assessments.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {isNutritionist && (
+      {isNutritionist && !isAdmin && (
         <Card className="border-green-200 bg-green-50">
           <CardContent className="pt-4">
             <div className="flex items-start gap-3">
@@ -83,9 +71,6 @@ function AnimalList() {
           </CardContent>
         </Card>
       )}
-
-      {/* Show NotifyNutritionistCard only for Care Takers */}
-      {isCareTaker && <NotifyNutritionistCard />}
 
       <DietListTable results={results} />
 

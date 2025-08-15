@@ -180,28 +180,6 @@ function Sidebar({
         <div className="flex-1 overflow-y-auto mb-4">
           <Navbar isCollapsed={isCollapsed} />
         </div>
-
-        {/* Help Center Button */}
-        <div className={`${isCollapsed ? "flex justify-center" : ""}`}>
-          {isCollapsed ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 hover:bg-gray-400"
-                >
-                  <HelpCircle className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right">Help Center</TooltipContent>
-            </Tooltip>
-          ) : (
-            <Button className="text-black w-full" variant={"link"}>
-              Help Center
-            </Button>
-          )}
-        </div>
       </div>
     </TooltipProvider>
   );

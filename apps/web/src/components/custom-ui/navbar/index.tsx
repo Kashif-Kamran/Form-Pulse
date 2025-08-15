@@ -38,25 +38,21 @@ const navItems: NavItem[] = [
     label: "Animal Profiles",
     to: ANIMALS_PROFILE,
     icon: Users,
-    allowedRoles: [RoleType.SuperAdmin, RoleType.Admin, RoleType.CareTaker],
   },
   {
     label: "Diet Management",
     to: DIET_MANAGEMENT,
     icon: UtensilsCrossed,
-    allowedRoles: [RoleType.SuperAdmin, RoleType.Admin, RoleType.Nutritionist],
   },
   {
     label: "Feed Inventory",
     to: FEED_INVENTORY,
     icon: Package,
-    allowedRoles: [RoleType.SuperAdmin, RoleType.Admin, RoleType.CareTaker],
   },
   {
     label: "Health Monitoring",
     to: HEALTH_MONITORING,
     icon: Heart,
-    allowedRoles: [RoleType.SuperAdmin, RoleType.Admin, RoleType.Veterinarian],
   },
   {
     label: "User Management",
@@ -69,11 +65,11 @@ const navItems: NavItem[] = [
     to: EDUCATIONAL_RESOURCERS,
     icon: BookOpen,
   },
-  {
-    label: "Settings",
-    to: SETTINGS,
-    icon: SettingsIcon,
-  },
+  // {
+  //   label: "Settings",
+  //   to: SETTINGS,
+  //   icon: SettingsIcon,
+  // },
 ];
 
 interface NavbarProps {
@@ -85,9 +81,17 @@ export default function Navbar({ isCollapsed = false }: NavbarProps) {
   const userRole = profileInfo?.role;
 
   const isAccessAllowed = (item: NavItem): boolean => {
+    const isAdmin =
+      userRole === RoleType.Admin || userRole === RoleType.SuperAdmin;
+
+    // Admins have access to everything
+    if (isAdmin) {
+      return true;
+    }
+
     // If adminOnly is set (for backward compatibility), check admin access
     if (item.adminOnly) {
-      return userRole === RoleType.Admin || userRole === RoleType.SuperAdmin;
+      return isAdmin;
     }
 
     // If allowedRoles is specified, check if user role is in the list
