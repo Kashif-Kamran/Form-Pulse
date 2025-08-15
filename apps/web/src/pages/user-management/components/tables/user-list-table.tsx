@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { PublicUser } from "@repo/shared";
 import { Trash2Icon, Edit2Icon, MoreHorizontal } from "lucide-react";
+import { useState } from "react";
 
 export interface UserListTableProps {
   results: PublicUser[];
@@ -28,8 +29,12 @@ export interface UserListTableProps {
 
 function UserListTable({ results, onEdit, onDelete }: UserListTableProps) {
   const { toast } = useToast();
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   function handleDelete(userId: string, userName: string) {
+    // Close dropdown first
+    setOpenDropdown(null);
+
     // Show confirmation toast
     toast({
       title: "User Deleted",
@@ -40,7 +45,13 @@ function UserListTable({ results, onEdit, onDelete }: UserListTableProps) {
   }
 
   function handleEdit(user: PublicUser) {
-    onEdit(user);
+    // Close dropdown first
+    setOpenDropdown(null);
+
+    // Small delay to ensure dropdown is closed before modal opens
+    setTimeout(() => {
+      onEdit(user);
+    }, 100);
   }
 
   const getRoleColor = (role: string) => {
@@ -98,7 +109,12 @@ function UserListTable({ results, onEdit, onDelete }: UserListTableProps) {
                     </Badge>
                   </TableCell>
                   <TableCell className="p-0 text-center">
-                    <DropdownMenu>
+                    <DropdownMenu
+                      open={openDropdown === user.id}
+                      onOpenChange={(isOpen) => {
+                        setOpenDropdown(isOpen ? user.id : null);
+                      }}
+                    >
                       <DropdownMenuTrigger asChild>
                         <Button className="h-8 w-8 p-0" variant="ghost">
                           <MoreHorizontal className="h-4 w-4" />

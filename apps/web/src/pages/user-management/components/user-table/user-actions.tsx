@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EditIcon, EllipsisVertical, Trash2Icon } from "lucide-react";
 import { PublicUser } from "@repo/shared";
+import { useState } from "react";
 
 interface UserActionsProps {
   user: PublicUser;
@@ -15,12 +16,35 @@ interface UserActionsProps {
   onDelete: (user: PublicUser) => void;
 }
 
-function UserActions({ user, currentUser, onEdit, onDelete }: UserActionsProps) {
+function UserActions({
+  user,
+  currentUser,
+  onEdit,
+  onDelete,
+}: UserActionsProps) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const isCurrentUser = user.id === currentUser.id;
   const canDelete = !isCurrentUser; // Cannot delete yourself
 
+  function handleEdit(user: PublicUser) {
+    // Close dropdown first
+    setIsDropdownOpen(false);
+
+    // Small delay to ensure dropdown is closed before modal opens
+    setTimeout(() => {
+      onEdit(user);
+    }, 100);
+  }
+
+  function handleDelete(user: PublicUser) {
+    // Close dropdown first
+    setIsDropdownOpen(false);
+
+    onDelete(user);
+  }
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-8 w-8 p-0">
           <EllipsisVertical className="h-4 w-4" />
@@ -28,7 +52,7 @@ function UserActions({ user, currentUser, onEdit, onDelete }: UserActionsProps) 
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-          onClick={() => onEdit(user)}
+          onClick={() => handleEdit(user)}
           className="cursor-pointer"
         >
           <EditIcon className="mr-2 h-4 w-4" />
@@ -36,7 +60,7 @@ function UserActions({ user, currentUser, onEdit, onDelete }: UserActionsProps) 
         </DropdownMenuItem>
         {canDelete && (
           <DropdownMenuItem
-            onClick={() => onDelete(user)}
+            onClick={() => handleDelete(user)}
             className="cursor-pointer text-destructive focus:text-destructive"
           >
             <Trash2Icon className="mr-2 h-4 w-4" />

@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { AnimalPublic } from "@repo/shared";
 import { Trash2Icon, Edit2Icon, MoreHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export interface AnimalListTableProps {
   results: AnimalPublic[];
@@ -30,10 +31,16 @@ function AnimalListTable({ results, onEdit }: AnimalListTableProps) {
   const { mutateAsync: deleteAnimalById } = useDeleteAnimalById();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
   function rowClick(animalId: string) {
     navigate(ANIMAL_DETAIL(animalId));
   }
+
   function handleDelete(animalId: string) {
+    // Close dropdown first
+    setOpenDropdown(null);
+
     deleteAnimalById(
       { animalId },
       {
@@ -57,8 +64,14 @@ function AnimalListTable({ results, onEdit }: AnimalListTableProps) {
   }
 
   function handleEdit(animal: AnimalPublic) {
-    onEdit(animal);
+    // Close dropdown first, then open modal
+    setOpenDropdown(null);
+    // Small delay to ensure dropdown is closed before modal opens
+    setTimeout(() => {
+      onEdit(animal);
+    }, 100);
   }
+
   return (
     <div className="flex flex-col overflow-hidden bg-white rounded-xl">
       <ScrollArea className="h-full">
@@ -87,7 +100,12 @@ function AnimalListTable({ results, onEdit }: AnimalListTableProps) {
                   <TableCell>{animal.breed}</TableCell>
                   <TableCell>{animal.weight}</TableCell>
                   <TableCell className="p-0 text-center">
-                    <DropdownMenu>
+                    <DropdownMenu
+                      open={openDropdown === animal.id}
+                      onOpenChange={(isOpen) => {
+                        setOpenDropdown(isOpen ? animal.id : null);
+                      }}
+                    >
                       <DropdownMenuTrigger asChild>
                         <Button
                           className="h-8 w-8 p-0"
