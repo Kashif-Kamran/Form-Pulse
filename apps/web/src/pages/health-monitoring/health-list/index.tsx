@@ -19,7 +19,6 @@ export const HealthMonitoring = () => {
           <Button className="h-full">Add Health Record</Button>
         </Link>
       </div>
-      <VaccinationBar />
       <HealthMonitoringTable results={results} />
     </div>
   );
