@@ -2,13 +2,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Navbar from "@/components/custom-ui/navbar";
 import { Button } from "@/components/ui/button";
 import { useMe } from "@/hooks/api/profile.hook";
-import { Menu, X, HelpCircle } from "lucide-react";
+import { Menu, X, HelpCircle, LogOut } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { removeAuthToken } from "@/utils/auth.utils";
+import { queryClient } from "@/lib/query-client";
+import { useNavigate } from "react-router-dom";
+import { LOGIN } from "@/constants/app-routes";
 
 interface SidebarProps {
   className?: string;
@@ -21,7 +31,30 @@ function Sidebar({
   isCollapsed = false,
   onToggleCollapse,
 }: SidebarProps) {
-  const { data: profileInfo } = useMe();
+  const { data: profileInfo, refetch } = useMe();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      // Remove token from localStorage
+      removeAuthToken();
+
+      // Clear all queries from the cache
+      queryClient.clear();
+
+      // Navigate to login screen
+      navigate(LOGIN, { replace: true });
+
+      // Refetch the profile to trigger auth check (optional since we're navigating)
+      await refetch();
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Even if there's an error, remove the token, clear cache, and navigate
+      removeAuthToken();
+      queryClient.clear();
+      navigate(LOGIN, { replace: true });
+    }
+  };
 
   return (
     <TooltipProvider>
@@ -58,21 +91,40 @@ function Sidebar({
         <div
           className={`flex gap-4 p-2 mb-4 ${isCollapsed ? "justify-center" : ""}`}
         >
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Avatar className="w-[50px] h-[50px]">
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
-                <AvatarFallback>
-                  {profileInfo?.name
-                    ? profileInfo.name.substring(0, 2).toUpperCase()
-                    : "CN"}
-                </AvatarFallback>
-              </Avatar>
-            </TooltipTrigger>
-            {isCollapsed && (
+          {isCollapsed ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="focus:outline-none">
+                      <Avatar className="w-[50px] h-[50px] cursor-pointer hover:opacity-80 transition-opacity">
+                        <AvatarImage
+                          src="https://github.com/shadcn.png"
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>
+                          {profileInfo?.name
+                            ? profileInfo.name.substring(0, 2).toUpperCase()
+                            : "CN"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="start"
+                    side="right"
+                    className="w-48"
+                  >
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="cursor-pointer"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TooltipTrigger>
               <TooltipContent side="right">
                 <div className="text-center">
                   <p className="font-semibold">
@@ -83,17 +135,43 @@ function Sidebar({
                   </p>
                 </div>
               </TooltipContent>
-            )}
-          </Tooltip>
-
-          {!isCollapsed && (
-            <div className="flex-1 flex flex-col justify-center overflow-hidden">
-              <h1 className="font-bold p-0 truncate">
-                {profileInfo?.name ?? "No Name"}
-              </h1>
-              <h1 className="text-xs p-0 opacity-75 truncate">
-                {profileInfo?.role ?? "No Info found"}
-              </h1>
+            </Tooltip>
+          ) : (
+            <div className="flex gap-4 items-center w-full">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex gap-4 items-center w-full focus:outline-none p-2 rounded-lg hover:bg-gray-400 transition-colors">
+                    <Avatar className="w-[50px] h-[50px]">
+                      <AvatarImage
+                        src="https://github.com/shadcn.png"
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>
+                        {profileInfo?.name
+                          ? profileInfo.name.substring(0, 2).toUpperCase()
+                          : "CN"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 flex flex-col justify-center overflow-hidden text-left">
+                      <h1 className="font-bold p-0 truncate">
+                        {profileInfo?.name ?? "No Name"}
+                      </h1>
+                      <h1 className="text-xs p-0 opacity-75 truncate">
+                        {profileInfo?.role ?? "No Info found"}
+                      </h1>
+                    </div>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48">
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="cursor-pointer"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           )}
         </div>
