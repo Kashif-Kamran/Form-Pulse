@@ -1,5 +1,4 @@
 import SearchInputFeild from "@/components/custom-ui/search-input-feild";
-import NotifyNutritionistCard from "../components/notify-nutritionist-card";
 import DietListTable from "../components/diet-table";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -24,7 +23,6 @@ function AnimalList() {
 
   const isNutritionist = currentUser?.role === RoleType.Nutritionist;
   const isCareTaker = currentUser?.role === RoleType.CareTaker;
-  const isVeterinarian = currentUser?.role === RoleType.Veterinarian;
   const isAdmin =
     currentUser?.role === RoleType.Admin ||
     currentUser?.role === RoleType.SuperAdmin;

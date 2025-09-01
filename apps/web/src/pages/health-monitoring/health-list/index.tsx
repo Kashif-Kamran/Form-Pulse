@@ -1,5 +1,4 @@
 import SearchInputFeild from "@/components/custom-ui/search-input-feild";
-import VaccinationBar from "../components/vaccination-bar";
 import HealthMonitoringTable from "../components/health-table";
 import { Button } from "@/components/ui/button";
 import { CreateVaccineModel } from "../components/create-vaccine-model";

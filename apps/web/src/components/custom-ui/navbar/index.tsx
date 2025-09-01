@@ -7,7 +7,6 @@ import {
   HEALTH_MONITORING,
   HOME,
   // REPORTS, // Temporarily removed
-  SETTINGS,
   USER_MANAGEMENT,
 } from "@/constants/app-routes";
 import {
@@ -18,7 +17,6 @@ import {
   Heart,
   // FileText, // Temporarily removed
   BookOpen,
-  Settings as SettingsIcon,
   UserCog,
 } from "lucide-react";
 import { useMe } from "@/hooks/api/profile.hook";

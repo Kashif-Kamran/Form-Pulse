@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Navbar from "@/components/custom-ui/navbar";
 import { Button } from "@/components/ui/button";
 import { useMe } from "@/hooks/api/profile.hook";
-import { Menu, X, HelpCircle, LogOut } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
