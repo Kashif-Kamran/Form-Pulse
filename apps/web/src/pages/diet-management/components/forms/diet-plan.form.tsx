@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { CircleMinus } from "lucide-react";
+import { CircleMinus, Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ChooseFeedItemDialog from "../dialogs/choose-products.dialog";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -54,9 +54,13 @@ function DietPlanForm({
   dietPlan,
   dietPlanId,
 }: DietPlanFormProps) {
-  const { mutateAsync: createDietPlan } = useCreateDietPlan();
-  const { mutateAsync: updateDietPlan } = useUpdateDietPlan();
+  const { mutateAsync: createDietPlan, isPending: isCreating } =
+    useCreateDietPlan();
+  const { mutateAsync: updateDietPlan, isPending: isUpdating } =
+    useUpdateDietPlan();
   const { toast } = useToast();
+
+  const isLoading = isCreating || isUpdating;
 
   const form = useForm<DietPlanData>({
     resolver: zodResolver(DietPlanSchema),
@@ -98,73 +102,92 @@ function DietPlanForm({
     }
   }, [mode, dietPlan, form]);
 
+  const getValidationErrorMessage = (fieldName: string, error: any): string => {
+    // Handle nested field errors (e.g., careTaker.id, animal.name, etc.)
+    const baseFieldName = fieldName.split(".")[0];
+
+    // Always use our custom messages for main fields
+    switch (baseFieldName) {
+      case "animal":
+        return "Please select an animal for this diet plan";
+      case "careTaker":
+        return "Please select a care taker for this diet plan";
+      case "noOfTimesPerDay":
+        return "Please enter how many times per day to feed (minimum 1)";
+      case "recipes":
+        return "Please add at least one feed item to the diet plan";
+      case "startTime":
+        return "Please select a start date for the diet plan";
+      case "endTime":
+        return "Please select an end date for the diet plan";
+      default:
+        // If error has custom message and it's not a main field, use it
+        if (error?.message) {
+          return error.message;
+        }
+        return `Please provide a valid value for ${fieldName}`;
+    }
+  };
+
   const onSubmit = form.handleSubmit(
     async (formData: DietPlanData) => {
-      const transformedData = transformDietPlanForBackend(formData);
+      try {
+        const transformedData = transformDietPlanForBackend(formData);
 
-      if (mode === "create") {
-        createDietPlan(
-          {
+        if (mode === "create") {
+          await createDietPlan({
             animalId: formData.animal.id,
             payload: transformedData,
-          },
-          {
-            onSuccess: () => {
-              toast({
-                title: "Diet plan created successfully!",
-                variant: "default",
-              });
-            },
-            onError: (error) => {
-              console.log("Error on Diet Plan Creation :", error);
-              toast({
-                title: "Unable to create diet plan",
-                description: error.message,
-                variant: "destructive",
-              });
-            },
-          }
-        );
-      } else if (mode === "edit" && dietPlanId) {
-        updateDietPlan(
-          {
+          });
+
+          toast({
+            title: "Diet plan created successfully!",
+            description: "The diet plan has been saved and is now active.",
+            variant: "default",
+          });
+
+          // Reset form after successful creation
+          form.reset();
+        } else if (mode === "edit" && dietPlanId) {
+          await updateDietPlan({
             dietPlanId: dietPlanId,
             payload: transformedData,
-          },
-          {
-            onSuccess: () => {
-              toast({
-                title: "Diet plan updated successfully!",
-                variant: "default",
-              });
-            },
-            onError: (error) => {
-              console.log("Error on Diet Plan Update :", error);
-              toast({
-                title: "Unable to update diet plan",
-                description: error.message,
-                variant: "destructive",
-              });
-            },
-          }
+          });
+
+          toast({
+            title: "Diet plan updated successfully!",
+            description: "All changes have been saved.",
+            variant: "default",
+          });
+        }
+      } catch (error: any) {
+        console.log(
+          `Error on Diet Plan ${mode === "create" ? "Creation" : "Update"}:`,
+          error
         );
+        toast({
+          title: `Unable to ${mode === "create" ? "create" : "update"} diet plan`,
+          description:
+            error.message || "An unexpected error occurred. Please try again.",
+          variant: "destructive",
+        });
       }
     },
     (errors) => {
-      // Handle validation errors
-      Object.entries(errors).forEach(([fieldName, error]) => {
-        console.log({ fieldName, error });
-        if (fieldName === "animal" && error) {
-          console.log("Should Be selected ");
-          return toast({
-            title: "Please Select Animal",
-            variant: "destructive",
-          });
-        }
-        toast({
-          title: error.message,
-          variant: "destructive",
-        });
+      // Handle validation errors - show only the first error
+      const errorEntries = Object.entries(errors);
+
+      if (errorEntries.length === 0) return;
+
+      // Get the first error from the list
+      const [fieldName, error] = errorEntries[0];
+      const errorMessage = getValidationErrorMessage(fieldName, error);
+
+      // Show only the first validation error
+      toast({
+        title: "Validation Error",
+        description: errorMessage,
+        variant: "destructive",
       });
     }
   );
@@ -187,8 +210,17 @@ function DietPlanForm({
         </Card>
         <FeedItemsTable form={form} />
         <div className="px-4 flex justify-end">
-          <Button type="submit" className="p-6 px-16">
-            {mode === "create" ? "Save" : "Update"}
+          <Button type="submit" className="p-6 px-16" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                {mode === "create" ? "Saving..." : "Updating..."}
+              </>
+            ) : mode === "create" ? (
+              "Save"
+            ) : (
+              "Update"
+            )}
           </Button>
         </div>
       </form>
