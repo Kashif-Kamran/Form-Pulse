@@ -8,8 +8,10 @@ import {
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import {
   HealthRecordFormType,
+  HealthRecordSchema,
   transformHealthRecordForBackend,
 } from "./schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Card,
   CardContent,
@@ -33,7 +35,7 @@ import { ChooseVaccineDialog } from "@/dialogs/choose-vaccine-dialog-box";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import DatePicker from "@/components/date-picker";
-import { CircleMinus } from "lucide-react";
+import { CircleMinus, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   useCreateAnimalHealthRecord,
@@ -53,12 +55,40 @@ export function HealthRecordForm({
   healthRecord,
   mode = "create",
 }: HealthRecordFormProps) {
-  const { mutateAsync: createHealthRecord } = useCreateAnimalHealthRecord();
-  const { mutateAsync: updateHealthRecord } = useUpdateHealthRecord();
+  const { mutateAsync: createHealthRecord, isPending: isCreating } = useCreateAnimalHealthRecord();
+  const { mutateAsync: updateHealthRecord, isPending: isUpdating } = useUpdateHealthRecord();
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const isLoading = isCreating || isUpdating;
+
+  const getValidationErrorMessage = (fieldName: string, error: any): string => {
+    // Handle nested field errors (e.g., veterinarian.id, animal.name, etc.)
+    const baseFieldName = fieldName.split(".")[0];
+
+    // Always use our custom messages for main fields
+    switch (baseFieldName) {
+      case "animal":
+        return "Please select an animal for this health record";
+      case "veterinarian":
+        return "Please assign a veterinarian to this health record";
+      case "vaccination":
+        return "Please select a vaccine for this health record";
+      case "vaccinationType":
+        return "Please select the type of vaccination";
+      case "medicationDoses":
+        return "Please add at least one vaccination schedule";
+      default:
+        // If error has custom message and it's not a main field, use it
+        if (error?.message) {
+          return error.message;
+        }
+        return `Please provide a valid value for ${fieldName}`;
+    }
+  };
+
   const form = useForm<HealthRecordFormType>({
+    resolver: zodResolver(HealthRecordSchema),
     defaultValues: {
       animal: {
         id: "",
@@ -105,52 +135,60 @@ export function HealthRecordForm({
 
   const handleSubmit = form.handleSubmit(
     async (formData: HealthRecordFormType) => {
-      console.log(mode === "edit" ? "Update : " : "Creation : ", formData);
-      const transformedData = transformHealthRecordForBackend(formData);
+      try {
+        console.log(mode === "edit" ? "Update : " : "Creation : ", formData);
+        const transformedData = transformHealthRecordForBackend(formData);
 
-      if (mode === "edit" && healthRecord) {
-        updateHealthRecord(
-          {
+        if (mode === "edit" && healthRecord) {
+          await updateHealthRecord({
             healthRecordId: healthRecord.id,
             payload: transformedData,
-          },
-          {
-            onSuccess: () => {
-              toast({
-                title: "Health record updated successfully!",
-                variant: "default",
-              });
-              navigate(HEALTH_MONITORING);
-            },
-            onError: (error) => {
-              console.log("Error on Health Record Update :", error);
-              toast({
-                title: "Unable to update health record",
-                description: error.message,
-                variant: "destructive",
-              });
-            },
-          }
-        );
-      } else {
-        createHealthRecord(transformedData, {
-          onSuccess: () => {
-            toast({
-              title: "Animal health record created successfully!",
-              variant: "default",
-            });
-            form.reset();
-          },
-          onError: (error) => {
-            console.log("Error on Diet Plan Creation :", error);
-            toast({
-              title: "Unable to create health record",
-              description: error.message,
-              variant: "destructive",
-            });
-          },
+          });
+          
+          toast({
+            title: "Health record updated successfully!",
+            description: "All changes have been saved.",
+            variant: "default",
+          });
+          navigate(HEALTH_MONITORING);
+          
+        } else {
+          await createHealthRecord(transformedData);
+          
+          toast({
+            title: "Animal health record created successfully!",
+            description: "The health record has been saved and scheduled.",
+            variant: "default",
+          });
+          
+          // Reset form after successful creation
+          form.reset();
+        }
+      } catch (error: any) {
+        console.log(`Error on Health Record ${mode === "edit" ? "Update" : "Creation"}:`, error);
+        toast({
+          title: `Unable to ${mode === "edit" ? "update" : "create"} health record`,
+          description: error.message || "An unexpected error occurred. Please try again.",
+          variant: "destructive",
         });
       }
+    },
+    (errors) => {
+      // Handle validation errors - show only the first error
+      const errorEntries = Object.entries(errors);
+
+      if (errorEntries.length === 0) return;
+
+      // Get the first error from the list
+      const [fieldName, error] = errorEntries[0];
+      const errorMessage = getValidationErrorMessage(fieldName, error);
+
+      // Show only the first validation error
+      toast({
+        title: "Validation Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
     }
   );
 
@@ -185,8 +223,15 @@ export function HealthRecordForm({
               Cancel
             </Button>
           )}
-          <Button type="submit" className="p-6 px-16">
-            {mode === "edit" ? "Update" : "Save"}
+          <Button type="submit" className="p-6 px-16" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                {mode === "edit" ? "Updating..." : "Saving..."}
+              </>
+            ) : (
+              mode === "edit" ? "Update" : "Save"
+            )}
           </Button>
         </div>
       </form>

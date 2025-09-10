@@ -3,41 +3,53 @@ import { AnimalSchema } from "@/pages/diet-management/components/zod-schemas";
 import { CreateAnimalHealthRecordReq } from "@repo/shared";
 
 export const UserSchema = z.object({
-  id: z.string().nonempty(),
-  name: z.string(),
-  email: z.string(),
-  role: z.string(),
+  id: z.string().min(1, "Please select a veterinarian"),
+  name: z.string().min(1, "Veterinarian name is required"),
+  email: z.string().email("Valid email is required"),
+  role: z.string().min(1, "Veterinarian role is required"),
 });
 
 export const MedicationDoseSchema = z.object({
-  id: z.string(),
-  deliveryDate: z.date(),
-  quantity: z.number(),
+  id: z.string().min(1, "Dose ID is required"),
+  deliveryDate: z.date({
+    required_error: "Delivery date is required",
+    invalid_type_error: "Please select a valid delivery date",
+  }),
+  quantity: z.number({
+    required_error: "Quantity is required",
+    invalid_type_error: "Quantity must be a valid number",
+  }).min(1, "Quantity must be at least 1"),
 });
 
 export const VaccinationSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  type: z.string(),
+  id: z.string().min(1, "Please select a vaccine"),
+  name: z.string().min(1, "Vaccine name is required"),
+  type: z.string().min(1, "Vaccine type is required"),
 });
 
 export const HealthRecordSchema = z
   .object({
     animal: AnimalSchema,
     veterinarian: UserSchema,
-    vaccinationType: z.string(),
+    vaccinationType: z.string({
+      required_error: "Vaccination type is required",
+    }).min(1, "Please select a vaccination type"),
     vaccination: VaccinationSchema,
     medicationDoses: z
       .array(MedicationDoseSchema)
-      .min(1, { message: "At least one medication dose is required" }),
+      .min(1, { message: "Please add at least one vaccination schedule" }),
   })
   .refine((data) => data.animal !== undefined, {
-    message: "Animal is required",
+    message: "Please select an animal for this health record",
     path: ["animal"],
   })
   .refine((data) => data.veterinarian !== undefined, {
-    message: "Veterinarian is required",
+    message: "Please assign a veterinarian to this health record",
     path: ["veterinarian"],
+  })
+  .refine((data) => data.vaccination !== undefined, {
+    message: "Please select a vaccine for this health record",
+    path: ["vaccination"],
   });
 
 // export const transformDietPlanForBackend = (
