@@ -36,13 +36,7 @@ export class UpdateFeedInventoryUseCase {
               updateData.totalQuentity -
               (feedInventory.remainingStock + feedInventory.usedStock),
           },
-          nutritionInfo: {
-            protein: updateData.protein,
-            carbs: updateData.carbs,
-            fats: updateData.fats,
-            fiber: updateData.fiber,
-            calories: updateData.calories,
-          },
+          // Keep nutritionInfo unchanged - it will default to 0 values
         },
         { new: true },
       );

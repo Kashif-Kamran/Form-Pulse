@@ -44,17 +44,25 @@ const Login = () => {
   // Removed unused destructuring and forgot password functionality
 
   const handleSubmit = async (data: LoginData) => {
+    console.log("Form Data:", data);
     try {
       await mutateAsync(data, {
         onError: (error: any) => {
+          console.log("Login failed:", JSON.stringify(error));
+
           toast({
             title: error.message,
             variant: "destructive",
           });
         },
+        onSuccess: () => {
+          console.log("Login successful");
+          navigate(from, { replace: true });
+        },
       });
-      navigate(from, { replace: true });
+      console.log("Login attempt finished", data);
     } catch (error: any) {
+      console.log("Login error:", error);
       if (error.statusCode !== 401) {
         toast({
           title: "Something went wrong, Please try again later.",
@@ -100,7 +108,7 @@ const Login = () => {
                   </FormItem>
                 )}
               />
-              
+
               {/* Removed forgot password and sign up options - admin-only user management */}
               <Button className="w-full py-6" type="submit">
                 Login

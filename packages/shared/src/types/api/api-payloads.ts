@@ -62,11 +62,6 @@ export type CreateNewFeedItem = {
   name: string;
   totalQuentity: number;
   totalPrice: number;
-  protein: number;
-  carbs: number;
-  fats: number;
-  fiber: number;
-  calories: number;
   description?: string;
 };
 export type CreateNewFeedItemReq = CreateNewFeedItem;

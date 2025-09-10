@@ -26,7 +26,7 @@ import { Label } from "@/components/ui/label";
 import { useUpdateFeedInventory } from "@/hooks/api/feed-inventory.hook";
 import { IFeedInventory } from "@repo/shared";
 
-// Use the same schema as create
+// Updated schema without nutrition fields
 export const FeedInventoryItemSchema = z.object({
   name: z
     .string()
@@ -46,45 +46,6 @@ export const FeedInventoryItemSchema = z.object({
       invalid_type_error: "Total Price must be a valid number",
     })
     .min(0, { message: "Total Price must be a positive number" }),
-
-  protein: z
-    .number({
-      required_error: "Protein is required",
-      invalid_type_error: "Protein must be a valid number",
-    })
-    .min(0, { message: "Protein must be 0 or more" })
-    .max(100, { message: "Protein must be at most 100%" }),
-
-  carbs: z
-    .number({
-      required_error: "Carbs is required",
-      invalid_type_error: "Carbs must be a valid number",
-    })
-    .min(0, { message: "Carbs must be 0 or more" })
-    .max(100, { message: "Carbs must be at most 100%" }),
-
-  fats: z
-    .number({
-      required_error: "Fats is required",
-      invalid_type_error: "Fats must be a valid number",
-    })
-    .min(0, { message: "Fats must be 0 or more" })
-    .max(100, { message: "Fats must be at most 100%" }),
-
-  fiber: z
-    .number({
-      required_error: "Fiber is required",
-      invalid_type_error: "Fiber must be a valid number",
-    })
-    .min(0, { message: "Fiber must be 0 or more" })
-    .max(100, { message: "Fiber must be at most 100%" }),
-
-  calories: z
-    .number({
-      required_error: "Calories is required",
-      invalid_type_error: "Calories must be a valid number",
-    })
-    .min(0, { message: "Calories must be a positive number" }),
 
   description: z.string().optional(),
 });
@@ -111,11 +72,6 @@ export function UpdateFeedInventoryDialog({
       name: "",
       totalQuentity: undefined,
       totalPrice: undefined,
-      protein: undefined,
-      carbs: undefined,
-      fats: undefined,
-      fiber: undefined,
-      calories: undefined,
       description: "",
     },
   });
@@ -128,11 +84,6 @@ export function UpdateFeedInventoryDialog({
       const totalQuantity = feedItem.remainingStock + feedItem.usedStock;
       form.setValue("totalQuentity", totalQuantity);
       form.setValue("totalPrice", feedItem.totalPrice);
-      form.setValue("protein", feedItem.nutritionInfo.protein);
-      form.setValue("carbs", feedItem.nutritionInfo.carbs);
-      form.setValue("fats", feedItem.nutritionInfo.fats);
-      form.setValue("fiber", feedItem.nutritionInfo.fiber);
-      form.setValue("calories", feedItem.nutritionInfo.calories);
       form.setValue("description", feedItem.description || "");
     }
   }, [feedItem, open, form]);
@@ -233,145 +184,6 @@ export function UpdateFeedInventoryDialog({
                       type="number"
                       min={0}
                       step="0.01"
-                      {...field}
-                      value={field.value ?? ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        field.onChange(
-                          value === "" ? undefined : Number(value)
-                        );
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Nutrition Fields */}
-            <FormField
-              control={form.control}
-              name="protein"
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <Label>Protein (%) *</Label>
-                  <FormControl>
-                    <InputField
-                      type="number"
-                      min={0}
-                      max={100}
-                      step="0.1"
-                      placeholder="0-100"
-                      {...field}
-                      value={field.value ?? ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        field.onChange(
-                          value === "" ? undefined : Number(value)
-                        );
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="carbs"
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <Label>Carbohydrates (%) *</Label>
-                  <FormControl>
-                    <InputField
-                      type="number"
-                      min={0}
-                      max={100}
-                      step="0.1"
-                      placeholder="0-100"
-                      {...field}
-                      value={field.value ?? ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        field.onChange(
-                          value === "" ? undefined : Number(value)
-                        );
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="fats"
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <Label>Fats (%) *</Label>
-                  <FormControl>
-                    <InputField
-                      type="number"
-                      min={0}
-                      max={100}
-                      step="0.1"
-                      placeholder="0-100"
-                      {...field}
-                      value={field.value ?? ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        field.onChange(
-                          value === "" ? undefined : Number(value)
-                        );
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="fiber"
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <Label>Fiber (%) *</Label>
-                  <FormControl>
-                    <InputField
-                      type="number"
-                      min={0}
-                      max={100}
-                      step="0.1"
-                      placeholder="0-100"
-                      {...field}
-                      value={field.value ?? ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        field.onChange(
-                          value === "" ? undefined : Number(value)
-                        );
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="calories"
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <Label>Calories (kcal/kg) *</Label>
-                  <FormControl>
-                    <InputField
-                      type="number"
-                      min={0}
-                      placeholder="Enter calories"
                       {...field}
                       value={field.value ?? ""}
                       onChange={(e) => {

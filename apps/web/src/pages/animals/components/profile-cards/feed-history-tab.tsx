@@ -212,25 +212,7 @@ export const DietPlanCard: React.FC<DietPlanCardProps> = ({
     return Math.max(0, Math.min(100, (elapsed / totalDuration) * 100));
   };
 
-  const calculateTotalNutrition = () => {
-    return dietPlan.recipes.reduce(
-      (total, recipe) => {
-        const nutrition = recipe.feed.nutritionInfo;
-        if (nutrition) {
-          total.calories += (nutrition.calories * recipe.quantity) / 100;
-          total.protein += (nutrition.protein * recipe.quantity) / 100;
-          total.carbs += (nutrition.carbs * recipe.quantity) / 100;
-          total.fats += (nutrition.fats * recipe.quantity) / 100;
-        }
-        total.weight += recipe.quantity;
-        return total;
-      },
-      { calories: 0, protein: 0, carbs: 0, fats: 0, weight: 0 }
-    );
-  };
-
   const statusInfo = getStatusVariant(dietPlan.startTime, dietPlan.endTime);
-  const totalNutrition = calculateTotalNutrition();
 
   const handleCardClick = () => {
     setIsExpanded(!isExpanded);
@@ -255,19 +237,12 @@ export const DietPlanCard: React.FC<DietPlanCardProps> = ({
                       <span className="truncate">
                         Diet Plan ({dietPlan.recipes.length} ingredients)
                       </span>
-                      <Badge variant="outline" className="text-xs">
-                        {Math.round(totalNutrition.weight)}g total
-                      </Badge>
                     </CardTitle>
                     <CardDescription className="flex items-center gap-4 mt-1">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {format(new Date(dietPlan.startTime), "MMM dd")} -{" "}
                         {format(new Date(dietPlan.endTime), "MMM dd, yyyy")}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Scale className="h-3 w-3" />
-                        {Math.round(totalNutrition.calories)} kcal
                       </span>
                     </CardDescription>
                   </div>
@@ -352,42 +327,6 @@ export const DietPlanCard: React.FC<DietPlanCardProps> = ({
               </CardHeader>
             </Card>
 
-            {/* Nutrition Overview */}
-            <Card className="border-green-200 bg-green-50/50 mb-4">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Scale className="h-4 w-4 text-green-600" />
-                  Nutrition Overview
-                </CardTitle>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                  <div className="text-center">
-                    <p className="font-semibold text-lg">
-                      {Math.round(totalNutrition.calories)}
-                    </p>
-                    <p className="text-muted-foreground">Calories</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="font-semibold text-lg">
-                      {Math.round(totalNutrition.protein)}g
-                    </p>
-                    <p className="text-muted-foreground">Protein</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="font-semibold text-lg">
-                      {Math.round(totalNutrition.carbs)}g
-                    </p>
-                    <p className="text-muted-foreground">Carbs</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="font-semibold text-lg">
-                      {Math.round(totalNutrition.fats)}g
-                    </p>
-                    <p className="text-muted-foreground">Fat</p>
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
-
             {/* Recipe Details */}
             <Card className="border-purple-200 bg-purple-50/50">
               <CardHeader className="pb-3">
@@ -417,18 +356,8 @@ export const DietPlanCard: React.FC<DietPlanCardProps> = ({
                       </div>
                       <div className="text-right">
                         <p className="font-semibold text-sm">
-                          {recipe.quantity}g
+                          {recipe.quantity}kg
                         </p>
-                        {recipe.feed.nutritionInfo && (
-                          <p className="text-xs text-muted-foreground">
-                            {Math.round(
-                              (recipe.feed.nutritionInfo.calories *
-                                recipe.quantity) /
-                                100
-                            )}{" "}
-                            kcal
-                          </p>
-                        )}
                       </div>
                     </div>
                   ))}

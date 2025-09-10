@@ -1,6 +1,7 @@
 import { stringify } from "qs";
 import { apiUrl as API_URL } from "@/utils/common.utils";
 import { getAuthToken, removeAuthToken } from "@/utils/auth.utils";
+import { LOGIN } from "@/constants/app-routes";
 
 const { apiUrl } = {
   apiUrl: API_URL,
@@ -57,12 +58,11 @@ async function makeRequest<
 
   if (!response.ok) {
     // Handle 401 Unauthorized - deleted/invalid user
-    if (response.status === 401) {
-      // Clear the token - let React Router handle the redirect
+    if (response.status === 401 && path !== LOGIN) {
       removeAuthToken();
-      return Promise.reject(new Error('Session expired. Please login again.'));
+      return Promise.reject(new Error("Session expired. Please login again."));
     }
-    
+
     const errorData = await response.json();
     // Temp: Add a better error type
     throw errorData;

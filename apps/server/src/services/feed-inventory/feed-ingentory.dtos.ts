@@ -23,35 +23,6 @@ export class CreateFeedItemDto implements CreateNewFeedItemReq {
   @Min(0)
   totalPrice: number;
 
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
-  @Max(100)
-  protein: number; // percentage
-
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
-  @Max(100)
-  carbs: number; // percentage
-
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
-  @Max(100)
-  fats: number; // percentage
-
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
-  @Max(100)
-  fiber: number; // percentage
-
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
-  calories: number; // kcal/kg
-
   @IsOptional()
   @IsString()
   description?: string;

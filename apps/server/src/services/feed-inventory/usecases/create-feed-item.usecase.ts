@@ -24,11 +24,11 @@ export class CreateFeedItemUseCase {
         usedStock: 0,
         totalPrice: createFeedItemDto.totalPrice,
         nutritionInfo: {
-          calories: createFeedItemDto.calories,
-          carbs: createFeedItemDto.carbs,
-          fats: createFeedItemDto.fats,
-          fiber: createFeedItemDto.fiber,
-          protein: createFeedItemDto.protein,
+          calories: 0,
+          carbs: 0,
+          fats: 0,
+          fiber: 0,
+          protein: 0,
         },
       },
     );

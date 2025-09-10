@@ -19,17 +19,18 @@ export class LoginUserUseCase {
       isDeleted: { $ne: true }, // Exclude deleted users
     });
 
-    if (!user) throw new UnauthorizedException('Invalid email or password');
+    if (!user)
+      throw new UnauthorizedException(
+        'Please provide valid email and password',
+      );
     const isPasswordValid = await bcrypt.compare(
       loginUserDto.password,
       user.password,
     );
     if (!isPasswordValid)
-      throw new UnauthorizedException('Invalid email or password');
-
-    // Email verification check removed - users can login without verification
-    // Admin-created users are automatically verified, and we allow unverified users to login
-    
+      throw new UnauthorizedException(
+        'Please provide valid email and password',
+      );
     const jwtPayload = {
       sub: user._id,
     };
