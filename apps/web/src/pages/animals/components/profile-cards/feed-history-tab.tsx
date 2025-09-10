@@ -3,7 +3,6 @@ import {
   Calendar,
   Clock,
   Utensils,
-  Scale,
   CheckCircle,
   AlertTriangle,
   ChevronUp,
