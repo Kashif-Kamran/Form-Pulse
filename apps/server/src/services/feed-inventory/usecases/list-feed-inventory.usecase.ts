@@ -14,15 +14,22 @@ export class ListFeedInventoryUseCase {
   ) {}
   async execute(searchQuery?: string): Promise<FeedInventoryListResponse> {
     let feedItems: FeedInventoryDocument[] = [];
-    if (!searchQuery) feedItems = await this.feedInventoryModel.find();
-    else {
+
+    // Base query to exclude soft deleted items
+    const baseQuery = { isDeleted: { $ne: true } };
+
+    if (!searchQuery) {
+      feedItems = await this.feedInventoryModel.find(baseQuery);
+    } else {
       const regex = new RegExp(`^${searchQuery}`, 'i');
       feedItems = await this.feedInventoryModel
         .find({
+          ...baseQuery,
           $or: [{ name: { $regex: regex } }],
         })
         .exec();
     }
+
     const results: IFeedInventory[] = feedItems.map((item) => item.toObject());
 
     return { results, count: results.length };

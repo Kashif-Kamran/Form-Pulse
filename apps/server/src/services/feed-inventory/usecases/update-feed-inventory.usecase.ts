@@ -17,7 +17,7 @@ export class UpdateFeedInventoryUseCase {
     const feedInventory =
       await this.feedInventoryModel.findById(feedInventoryId);
 
-    if (!feedInventory) {
+    if (!feedInventory || feedInventory.isDeleted) {
       throw new NotFoundException('Feed inventory item not found');
     }
 

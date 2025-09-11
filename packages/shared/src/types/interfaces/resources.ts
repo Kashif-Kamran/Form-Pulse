@@ -51,6 +51,8 @@ export interface IFeedInventory {
     fiber: number;
     calories: number;
   };
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
 }
 
 export interface IDietPlan {

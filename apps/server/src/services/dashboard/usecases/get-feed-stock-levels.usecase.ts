@@ -16,7 +16,7 @@ export class GetFeedStockLevelsUseCase {
     this.logger.log('Fetching feed stock levels');
 
     const feedInventory = await this.feedInventoryModel
-      .find()
+      .find({ isDeleted: { $ne: true } }) // Exclude soft deleted items
       .sort({ name: 1 });
 
     const data = feedInventory.map((feed) => {

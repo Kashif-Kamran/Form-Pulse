@@ -52,11 +52,12 @@ export class UpdateDietPlanUseCase {
     const feedIds = updateDietPlanDto.recipes.map((recipe) => recipe.feed);
     const feedItems = await this.feedInventoryModel.find({
       _id: { $in: feedIds },
+      isDeleted: { $ne: true }, // Exclude deleted items
     });
 
     if (feedItems.length !== feedIds.length) {
       throw new BadRequestException(
-        'Some feed items are not available in the inventory',
+        'Some feed items are not available in the inventory or have been deleted',
       );
     }
 
@@ -113,7 +114,7 @@ export class UpdateDietPlanUseCase {
     for (const oldRecipe of existingDietPlan.recipes) {
       bulkOperations.push({
         updateOne: {
-          filter: { _id: oldRecipe.feed },
+          filter: { _id: oldRecipe.feed, isDeleted: { $ne: true } },
           update: {
             $inc: {
               remainingStock: oldRecipe.quantity,
@@ -128,7 +129,7 @@ export class UpdateDietPlanUseCase {
     for (const newRecipe of processedRecipes) {
       bulkOperations.push({
         updateOne: {
-          filter: { _id: newRecipe.feed },
+          filter: { _id: newRecipe.feed, isDeleted: { $ne: true } },
           update: {
             $inc: {
               remainingStock: -newRecipe.quantity,

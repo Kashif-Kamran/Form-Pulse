@@ -4,15 +4,14 @@ import { useFeedInventory } from "@/hooks/api/feed-inventory.hook";
 import { useCurrentUser } from "@/hooks/api/auth.hook";
 import { CreateFeedInventoryItemModel } from "./components/create-Inventory-item-model";
 import { UpdateFeedInventoryDialog } from "./components/update-feed-inventory-dialog";
+import { DeleteFeedInventoryDialog } from "./components/delete-feed-inventory-dialog";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { IFeedInventory, RoleType } from "@repo/shared";
-import { useToast } from "@/hooks/use-toast";
 
 function InventoryList() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   // Get current user for role-based access control
   const { data: currentUser } = useCurrentUser();
@@ -24,6 +23,11 @@ function InventoryList() {
   // Update dialog state
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [selectedFeedItem, setSelectedFeedItem] =
+    useState<IFeedInventory | null>(null);
+
+  // Delete dialog state
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [feedItemToDelete, setFeedItemToDelete] =
     useState<IFeedInventory | null>(null);
 
   const { results = [] } = useFeedInventory(query);
@@ -50,12 +54,8 @@ function InventoryList() {
   };
 
   const handleDelete = (feedItem: IFeedInventory) => {
-    // TODO: Implement delete functionality with confirmation dialog
-    toast({
-      title: "Delete functionality not implemented yet",
-      description: `Would delete ${feedItem.name}`,
-      variant: "destructive",
-    });
+    setFeedItemToDelete(feedItem);
+    setDeleteDialogOpen(true);
   };
   return (
     <div className="space-y-4 flex flex-col h-full ">
@@ -76,11 +76,18 @@ function InventoryList() {
       />
 
       {canManageInventory && (
-        <UpdateFeedInventoryDialog
-          feedItem={selectedFeedItem}
-          open={updateDialogOpen}
-          onOpenChange={setUpdateDialogOpen}
-        />
+        <>
+          <UpdateFeedInventoryDialog
+            feedItem={selectedFeedItem}
+            open={updateDialogOpen}
+            onOpenChange={setUpdateDialogOpen}
+          />
+          <DeleteFeedInventoryDialog
+            feedItem={feedItemToDelete}
+            open={deleteDialogOpen}
+            onOpenChange={setDeleteDialogOpen}
+          />
+        </>
       )}
     </div>
   );

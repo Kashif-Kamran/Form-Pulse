@@ -58,6 +58,7 @@ export class GetActivityUseCase {
     // Feed orders/additions in last 7 days (new feed inventory items)
     const feedOrders = await this.feedInventoryModel.countDocuments({
       createdAt: { $gte: last7Days },
+      isDeleted: { $ne: true }, // Exclude soft deleted items
     });
 
     // Active users in last 24 hours (users who have logged in recently)

@@ -46,11 +46,12 @@ export class CreateAnimalDietPlanUseCase {
     const feedIds = createDietPlanDto.recipes.map((recipe) => recipe.feed);
     const feedItems = await this.feedInventoryModel.find({
       _id: { $in: feedIds },
+      isDeleted: { $ne: true }, // Exclude deleted items
     });
 
     if (feedItems.length !== feedIds.length) {
       throw new BadRequestException(
-        'Some feed items are not available in the inventory',
+        'Some feed items are not available in the inventory or have been deleted',
       );
     }
 
@@ -94,7 +95,7 @@ export class CreateAnimalDietPlanUseCase {
     // 6. Update feed inventory
     const bulkOperations = processedRecipes.map((recipe) => ({
       updateOne: {
-        filter: { _id: recipe.feed },
+        filter: { _id: recipe.feed, isDeleted: { $ne: true } },
         update: {
           $inc: {
             remainingStock: -recipe.quantity,

@@ -1,4 +1,9 @@
-import { getRequest, postRequest, patchRequest } from "@/lib/client/common";
+import {
+  getRequest,
+  postRequest,
+  patchRequest,
+  deleteRequest,
+} from "@/lib/client/common";
 import { queryClient } from "@/lib/query-client";
 import {
   CreateNewFeedItemReq,
@@ -73,6 +78,30 @@ export const useUpdateFeedInventory = (
     onSuccess: (data: any, variables: any, context: any) => {
       queryClient.invalidateQueries({
         queryKey: [FEED_INVENTORY_QUERY_KEY, "list"],
+      });
+      options?.onSuccess?.(data, variables, context);
+    },
+    ...options,
+  });
+};
+
+export const useDeleteFeedInventory = (
+  options?: MutationOptions<{ message: string }, Error, string>
+) => {
+  return useMutation({
+    mutationFn: (feedItemId: string) =>
+      deleteRequest<{ message: string }>(`/feed-inventory/${feedItemId}`),
+    onSuccess: (data: any, variables: any, context: any) => {
+      // Invalidate all feed inventory related queries
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          const queryKey = query.queryKey;
+          return (
+            queryKey.includes(FEED_INVENTORY_QUERY_KEY) ||
+            queryKey.includes("feed-inventory") ||
+            queryKey.includes("feed")
+          );
+        },
       });
       options?.onSuccess?.(data, variables, context);
     },

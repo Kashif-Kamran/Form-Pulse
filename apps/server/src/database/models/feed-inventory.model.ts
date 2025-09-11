@@ -58,6 +58,12 @@ export class FeedInventory implements IFeedInventory {
   @Prop({ type: NutritionInfoSchema, required: false })
   nutritionInfo: NutritionInfo;
 
+  @Prop({ default: false })
+  isDeleted?: boolean;
+
+  @Prop({ default: null })
+  deletedAt?: Date;
+
   get id(): string {
     return this._id.toString();
   }

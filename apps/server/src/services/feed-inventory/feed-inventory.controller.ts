@@ -4,12 +4,14 @@ import {
   Get,
   Post,
   Patch,
+  Delete,
   Param,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { CreateFeedItemUseCase } from './usecases/create-feed-item.usecase';
 import { UpdateFeedInventoryUseCase } from './usecases/update-feed-inventory.usecase';
+import { DeleteFeedInventoryUseCase } from './usecases/delete-feed-inventory.usecase';
 import { CreateFeedItemDto } from './feed-ingentory.dtos';
 import { ListFeedInventoryUseCase } from './usecases/list-feed-inventory.usecase';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -21,6 +23,7 @@ export class FeedInventoryController {
   constructor(
     private readonly createFeedItemUC: CreateFeedItemUseCase,
     private readonly updateFeedInventoryUC: UpdateFeedInventoryUseCase,
+    private readonly deleteFeedInventoryUC: DeleteFeedInventoryUseCase,
     private readonly listFeedInventoryUC: ListFeedInventoryUseCase,
   ) {}
 
@@ -47,5 +50,12 @@ export class FeedInventoryController {
       feedInventoryId,
       updateFeedItemDto,
     );
+  }
+
+  @Delete(':feedInventoryId')
+  @UseGuards(RolesGuard)
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin, RoleType.CareTaker)
+  async deleteInventoryItem(@Param('feedInventoryId') feedInventoryId: string) {
+    return this.deleteFeedInventoryUC.execute(feedInventoryId);
   }
 }

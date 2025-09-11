@@ -16,7 +16,10 @@ export class GetFeedUsageUseCase {
     this.logger.log('Fetching feed usage data');
 
     const feedInventory = await this.feedInventoryModel
-      .find({ usedStock: { $gt: 0 } }) // Only feeds that have been used
+      .find({
+        usedStock: { $gt: 0 }, // Only feeds that have been used
+        isDeleted: { $ne: true }, // Exclude soft deleted items
+      })
       .sort({ usedStock: -1 }); // Sort by most used
 
     const data = feedInventory.map((feed) => {
