@@ -288,12 +288,10 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ### Upcoming Features
 
-- [ ] **📱 Mobile App** - React Native application
 - [ ] **📊 Analytics Dashboard** - Advanced reporting and insights
 - [ ] **🔔 Real-time Notifications** - WebSocket-based alerts
 - [ ] **📋 Task Management** - Daily task scheduling and tracking
-- [ ] **🌐 Multi-language Support** - Internationalization
-- [ ] **☁️ Cloud Integration** - AWS/Azure deployment options
+- [ ] **☁️ Cloud Integration** - Oracle Cloud deployment options
 
 ### Recent Updates
 
