@@ -8,7 +8,7 @@ import {
   Notification,
   NotificationModel,
 } from '../../../database/models/notification.model';
-import { NotificationPublic } from '@repo/shared';
+import { IUser, NotificationPublic } from '@repo/shared';
 import { mapLeanNotificationToResponse } from '../mappers/notification-with-relations.mapper';
 
 @Injectable()
@@ -20,7 +20,7 @@ export class GetNotificationByIdUseCase {
 
   async execute(
     notificationId: string,
-    userId: string,
+    user: IUser,
   ): Promise<NotificationPublic> {
     const notification = await this.notificationModel
       .findOne({
@@ -46,8 +46,8 @@ export class GetNotificationByIdUseCase {
     // Check if user is authorized to view this notification
     // Note: When using lean(), populated fields are objects, not strings
     if (
-      (notification.sender as any)._id.toString() !== userId &&
-      (notification.recipient as any)._id.toString() !== userId
+      (notification.sender as any)._id.toString() !== user._id.toString() &&
+      (notification.recipient as any)._id.toString() !== user._id.toString()
     ) {
       throw new ForbiddenException(
         'You are not authorized to view this notification',

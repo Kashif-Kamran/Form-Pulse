@@ -17,6 +17,7 @@ import {
 } from './dtos';
 import { CreateNotificationUseCase } from './usecases/create-notification.usecase';
 import { GetNotificationsUseCase } from './usecases/get-notifications.usecase';
+import { GetNotificationByIdUseCase } from './usecases/get-notification-by-id.usecase';
 import { UpdateNotificationStatusUseCase } from './usecases/update-notification-status.usecase';
 import { MarkAsReadUseCase } from './usecases/mark-as-read.usecase';
 import { IUser } from '@repo/shared';
@@ -26,6 +27,7 @@ export class NotificationController {
   constructor(
     private readonly createNotificationUseCase: CreateNotificationUseCase,
     private readonly getNotificationsUseCase: GetNotificationsUseCase,
+    private readonly getNotificationByIdUseCase: GetNotificationByIdUseCase,
     private readonly updateNotificationStatusUseCase: UpdateNotificationStatusUseCase,
     private readonly markAsReadUseCase: MarkAsReadUseCase,
   ) {}
@@ -37,6 +39,16 @@ export class NotificationController {
   ) {
     const user = request.user;
     return this.getNotificationsUseCase.execute(user, query);
+  }
+
+  @Get(':id')
+  @HttpCode(200)
+  async getNotificationById(
+    @Param('id') notificationId: string,
+    @Request() request: any,
+  ) {
+    const user = request.user;
+    return this.getNotificationByIdUseCase.execute(notificationId, user);
   }
 
   @Post()
