@@ -20,6 +20,7 @@ import { GetNotificationsUseCase } from './usecases/get-notifications.usecase';
 import { GetNotificationByIdUseCase } from './usecases/get-notification-by-id.usecase';
 import { UpdateNotificationStatusUseCase } from './usecases/update-notification-status.usecase';
 import { MarkAsReadUseCase } from './usecases/mark-as-read.usecase';
+import { DeleteNotificationUseCase } from './usecases/delete-notification.usecase';
 import { IUser } from '@repo/shared';
 
 @Controller('notifications')
@@ -30,6 +31,7 @@ export class NotificationController {
     private readonly getNotificationByIdUseCase: GetNotificationByIdUseCase,
     private readonly updateNotificationStatusUseCase: UpdateNotificationStatusUseCase,
     private readonly markAsReadUseCase: MarkAsReadUseCase,
+    private readonly deleteNotificationUseCase: DeleteNotificationUseCase,
   ) {}
 
   @Get()
@@ -88,5 +90,15 @@ export class NotificationController {
   ) {
     const user: IUser = request.user;
     return this.markAsReadUseCase.execute(notificationId, user);
+  }
+
+  @Delete(':id')
+  @HttpCode(200)
+  async deleteNotification(
+    @Param('id') notificationId: string,
+    @Request() request: any,
+  ) {
+    const user: IUser = request.user;
+    return this.deleteNotificationUseCase.execute(notificationId, user);
   }
 }
