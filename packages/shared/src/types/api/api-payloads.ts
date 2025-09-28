@@ -5,8 +5,14 @@ import {
   IFeedInventory,
   IUser,
   IVaccine,
+  INotification,
 } from "../interfaces/resources";
-import { VaccineStatusValues } from "../enum.types";
+import {
+  VaccineStatusValues,
+  NotificationTypeValues,
+  NotificationStatusValues,
+  NotificationPriorityValues,
+} from "../enum.types";
 
 // Auth
 export type EmailPassReq = { email: string; password: string };
@@ -95,4 +101,33 @@ export type NotifyNutritionistReq = {
   message: string;
   animalId: string;
   nutritionistId: string;
+};
+
+// Notification Management
+export type CreateNotificationReq = {
+  title: string;
+  description?: string;
+  type: NotificationTypeValues;
+  priority: NotificationPriorityValues;
+  recipient: string;
+  animal?: string;
+  dueDate?: Date;
+};
+
+export type UpdateNotificationStatusReq = {
+  status: NotificationStatusValues;
+  taskDetails?: {
+    dueDateTime: Date;
+    notes?: string;
+  };
+  rejectionReason?: string;
+};
+
+export type GetNotificationsQueryReq = {
+  status?: NotificationStatusValues;
+  type?: NotificationTypeValues;
+  priority?: NotificationPriorityValues;
+  isRead?: boolean;
+  sortBy?: "createdAt" | "dueDateTime" | "priority";
+  sortOrder?: "asc" | "desc";
 };

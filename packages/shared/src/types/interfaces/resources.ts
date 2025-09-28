@@ -1,4 +1,10 @@
-import { VaccineStatusValues, VaccineTypeValues } from "../enum.types";
+import {
+  VaccineStatusValues,
+  VaccineTypeValues,
+  NotificationTypeValues,
+  NotificationStatusValues,
+  NotificationPriorityValues,
+} from "../enum.types";
 import { RoleType } from "../roles.types";
 
 export type IAccessAndRefreshTokens = {
@@ -98,6 +104,45 @@ export interface IAnimalHealthRecord {
   }[];
   createdAt?: Date;
   updatedAt?: Date;
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
+}
+
+export interface INotification {
+  _id?: any;
+  id: string;
+
+  // Core notification data
+  title: string;
+  description?: string;
+  type: NotificationTypeValues;
+  priority: NotificationPriorityValues;
+
+  // User relationships
+  sender: any; // User ID who sent the notification
+  recipient: any; // User ID who should receive the notification
+
+  // Optional animal reference
+  animal?: any; // Animal ID (optional)
+
+  // Unified status covering entire lifecycle
+  status: NotificationStatusValues;
+
+  // Task-specific fields (when notification becomes a task)
+  taskDetails?: {
+    dueDateTime?: Date;
+    notes?: string;
+    completedAt?: Date;
+  };
+
+  // Metadata
+  readAt?: Date;
+  acceptedAt?: Date;
+  rejectedAt?: Date;
+
+  // Audit fields
+  createdAt: Date;
+  updatedAt: Date;
   isDeleted?: boolean;
   deletedAt?: Date | null;
 }

@@ -10,6 +10,7 @@ import { DietPlanModule } from './services/diet-plan/diet-plan.module';
 import { HealthModule } from './services/health/health.module';
 import { UserModule } from './services/user/user.module';
 import { DashboardModule } from './services/dashboard/dashboard.module';
+import { NotificationModule } from './services/notification/notification.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { DashboardModule } from './services/dashboard/dashboard.module';
     HealthModule,
     UserModule,
     DashboardModule,
+    NotificationModule,
   ],
 })
 export class AppModule {}

@@ -1,4 +1,9 @@
-import { VaccineStatusValues } from "../enum.types";
+import {
+  VaccineStatusValues,
+  NotificationTypeValues,
+  NotificationStatusValues,
+  NotificationPriorityValues,
+} from "../enum.types";
 import {
   IAccessAndRefreshTokens,
   IAnimal,
@@ -7,6 +12,7 @@ import {
   IFeedInventory,
   IUser,
   IVaccine,
+  INotification,
 } from "../interfaces/resources";
 import {
   DeleteResponse,
@@ -134,6 +140,56 @@ export type UpdateHealthRecordStatusResponse = SingleItemResponse<{
 export type NotifyNutritionistResponse = SingleItemResponse<{
   message: string;
   notificationId: string;
+}>;
+
+// Notifications
+export type NotificationPublic = Omit<
+  INotification,
+  "_id" | "sender" | "recipient"
+> & {
+  sender: PublicUser;
+  recipient: PublicUser;
+  animal?: AnimalPublic;
+};
+
+export type NotificationResponse = ResourceResponse<NotificationPublic>;
+export type NotificationListResponse = ResourceListResponse<NotificationPublic>;
+
+// New response type for dual notification lists
+export type NotificationDualListResponse = {
+  received: NotificationPublic[];
+  sent: NotificationPublic[];
+  counts: {
+    received: number;
+    sent: number;
+    total: number;
+  };
+};
+
+export type NotificationDeleteResponse = DeleteResponse & {
+  notificationId: string;
+};
+
+export type NotificationStatsResponse = SingleItemResponse<{
+  totalNotifications: number;
+  unreadCount: number;
+  pendingCount: number;
+  todosCount: number;
+  completedTodos: number;
+  overdueTodos: number;
+}>;
+
+export type TodoListResponse = SingleItemResponse<{
+  todos: {
+    today: NotificationPublic[];
+    upcoming: NotificationPublic[];
+    overdue: NotificationPublic[];
+  };
+  stats: {
+    totalTodos: number;
+    completedToday: number;
+    overdueCount: number;
+  };
 }>;
 
 // Dashboard Analytics
