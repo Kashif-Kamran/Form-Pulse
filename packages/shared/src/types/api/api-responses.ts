@@ -1,9 +1,4 @@
-import {
-  VaccineStatusValues,
-  NotificationTypeValues,
-  NotificationStatusValues,
-  NotificationPriorityValues,
-} from "../enum.types";
+import { VaccineStatusValues } from "../enum.types";
 import {
   IAccessAndRefreshTokens,
   IAnimal,

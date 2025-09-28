@@ -5,7 +5,6 @@ import {
   IFeedInventory,
   IUser,
   IVaccine,
-  INotification,
 } from "../interfaces/resources";
 import {
   VaccineStatusValues,
