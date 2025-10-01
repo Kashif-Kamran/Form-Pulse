@@ -6,6 +6,7 @@ import {
   FEED_INVENTORY,
   HEALTH_MONITORING,
   HOME,
+  NOTIFICATIONS,
   // REPORTS, // Temporarily removed
   USER_MANAGEMENT,
 } from "@/constants/app-routes";
@@ -15,6 +16,7 @@ import {
   UtensilsCrossed,
   Package,
   Heart,
+  Bell,
   // FileText, // Temporarily removed
   BookOpen,
   UserCog,
@@ -51,6 +53,11 @@ const navItems: NavItem[] = [
     label: "Health Monitoring",
     to: HEALTH_MONITORING,
     icon: Heart,
+  },
+  {
+    label: "Notifications",
+    to: NOTIFICATIONS,
+    icon: Bell,
   },
   {
     label: "User Management",

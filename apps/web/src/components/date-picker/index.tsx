@@ -48,7 +48,7 @@ function DatePicker({
   return (
     <div className={className}>
       {label && <Label className="block mb-3">{label}</Label>}
-      <Popover>
+      <Popover modal={false}>
         <PopoverTrigger className="flex-1 " asChild>
           <Button
             variant="outline"

@@ -12,6 +12,7 @@ import {
   HEALTH_MONITORING,
   HOME,
   LOGIN,
+  NOTIFICATIONS,
   REPORTS,
   SETTINGS,
   USER_MANAGEMENT,
@@ -43,6 +44,7 @@ const HealthMonitoring = lazy(
   () => import("@/pages/health-monitoring/health-list")
 );
 const UserManagement = lazy(() => import("@/pages/user-management"));
+const NotificationsDashboard = lazy(() => import("@/pages/notifications"));
 
 const ProtectedRoute = () => {
   const { data, isLoading, error } = useMe();
@@ -142,6 +144,14 @@ const privateRoutes: RouteObject[] = [
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
                 <UserManagement />
+              </Suspense>
+            ),
+          },
+          {
+            path: NOTIFICATIONS,
+            element: (
+              <Suspense fallback={<FallbackSpinnerScreen />}>
+                <NotificationsDashboard />
               </Suspense>
             ),
           },

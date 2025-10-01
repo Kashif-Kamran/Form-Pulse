@@ -12,6 +12,7 @@ const USER_MANAGEMENT = "/user-management";
 const DIET_MANAGEMENT = "/diet-management";
 const FEED_INVENTORY = "/feed-inventory";
 const HEALTH_MONITORING = "/monitor-health";
+const NOTIFICATIONS = "/notifications";
 const REPORTS = "/reorts";
 const EDUCATIONAL_RESOURCERS = "/educational-resources";
 const SETTINGS = "/settings";
@@ -30,6 +31,7 @@ export {
   DIET_MANAGEMENT,
   FEED_INVENTORY,
   HEALTH_MONITORING,
+  NOTIFICATIONS,
   REPORTS,
   EDUCATIONAL_RESOURCERS,
   SETTINGS,
