@@ -26,7 +26,6 @@ export class CreateNotificationUseCase {
     createNotificationDto: CreateNotificationDto,
   ): Promise<Omit<NotificationPublic, 'sender' | 'recipient' | 'animal'>> {
     // Validate sender exists
-    console.log('Sender : ', sender);
 
     // Validate recipient exists
     const recipient = await this.userModel

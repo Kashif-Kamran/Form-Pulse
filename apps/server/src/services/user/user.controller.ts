@@ -42,7 +42,6 @@ export class UserController {
 
   @Get('/list')
   @UseGuards(RolesGuard)
-  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin)
   async getUsers(
     @Query() queryDto: GetUsersListQueryDto,
   ): Promise<UsersListResponse> {

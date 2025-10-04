@@ -7,6 +7,7 @@ import { GetNotificationByIdUseCase } from './usecases/get-notification-by-id.us
 import { UpdateNotificationStatusUseCase } from './usecases/update-notification-status.usecase';
 import { MarkAsReadUseCase } from './usecases/mark-as-read.usecase';
 import { DeleteNotificationUseCase } from './usecases/delete-notification.usecase';
+import { UnreadNotificationCountUseCase } from './usecases/unread-notification-count.usecase';
 
 @Module({
   imports: [DatabaseModule],
@@ -18,6 +19,7 @@ import { DeleteNotificationUseCase } from './usecases/delete-notification.usecas
     UpdateNotificationStatusUseCase,
     MarkAsReadUseCase,
     DeleteNotificationUseCase,
+    UnreadNotificationCountUseCase,
   ],
   exports: [
     CreateNotificationUseCase,
@@ -26,6 +28,7 @@ import { DeleteNotificationUseCase } from './usecases/delete-notification.usecas
     UpdateNotificationStatusUseCase,
     MarkAsReadUseCase,
     DeleteNotificationUseCase,
+    UnreadNotificationCountUseCase,
   ],
 })
 export class NotificationModule {}

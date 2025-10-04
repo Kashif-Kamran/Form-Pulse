@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { NotificationCard } from "@/components/notifications/notification-card";
 import { CreateNotificationModal } from "@/components/notifications/create-notification-modal";
 import {
-  dummyReceivedNotifications,
-  dummySentNotifications,
-  dummyTodoNotifications,
-} from "@/data/dummy-notifications";
+  useNotificationsDualList,
+  useMarkNotificationAsRead,
+  useUpdateNotificationStatus,
+  useDeleteNotification,
+  useMarkAllNotificationsAsRead,
+} from "@/hooks/api/notification.hook";
 import {
   Bell,
   CheckCircle2,
@@ -17,25 +19,79 @@ import {
   ListTodo,
   Filter,
   XCircle,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 
 const NotificationsDashboard = () => {
   const [activeTab, setActiveTab] = useState("received");
-  const [allNotifications, setAllNotifications] = useState([
-    ...dummyReceivedNotifications,
-    ...dummyTodoNotifications,
-  ]);
+
+  // Fetch notifications from API
+  const {
+    data: notificationsData,
+    isLoading,
+    error,
+    refetch,
+  } = useNotificationsDualList();
+
+  // Mutation hooks for actions
+  const markAsReadMutation = useMarkNotificationAsRead();
+  const updateStatusMutation = useUpdateNotificationStatus();
+  const deleteNotificationMutation = useDeleteNotification();
+  const markAllAsReadMutation = useMarkAllNotificationsAsRead();
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="w-full p-6">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="flex flex-col items-center gap-4">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="text-gray-600">Loading notifications...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="w-full p-6">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <AlertCircle className="h-8 w-8 text-red-500" />
+            <h3 className="text-lg font-medium text-gray-900">
+              Failed to load notifications
+            </h3>
+            <p className="text-gray-600 max-w-md">
+              {error.message ||
+                "An error occurred while fetching notifications"}
+            </p>
+            <Button onClick={() => refetch()} variant="outline">
+              Try Again
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const allReceivedNotifications = notificationsData?.received || [];
+  const allSentNotifications = notificationsData?.sent || [];
 
   // Filter notifications based on status for each tab
   const getFilteredNotifications = () => {
     return {
-      received: allNotifications.filter((n) => n.status === "Pending"),
-      todo: allNotifications.filter(
+      received: allReceivedNotifications.filter((n) => n.status === "Pending"),
+      todo: allReceivedNotifications.filter(
         (n) => n.status === "Accepted" || n.status === "In Progress"
       ),
-      completed: allNotifications.filter((n) => n.status === "Completed"),
-      rejected: allNotifications.filter((n) => n.status === "Rejected"),
-      sent: dummySentNotifications, // Keep sent separate as they're outgoing
+      completed: allReceivedNotifications.filter(
+        (n) => n.status === "Completed"
+      ),
+      rejected: allReceivedNotifications.filter((n) => n.status === "Rejected"),
+      sent: allSentNotifications,
     };
   };
 
@@ -60,21 +116,41 @@ const NotificationsDashboard = () => {
   };
 
   const handleMarkAsRead = (id: string) => {
-    setAllNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, readAt: new Date() } : n))
-    );
+    markAsReadMutation.mutate(id, {
+      onError: (error) => {
+        console.error("Failed to mark notification as read:", error);
+      },
+    });
   };
 
   const handleUpdateStatus = (id: string, status: string) => {
-    setAllNotifications((prev) =>
-      prev.map((n) =>
-        n.id === id ? { ...n, status: status as any, updatedAt: new Date() } : n
-      )
+    updateStatusMutation.mutate(
+      {
+        id,
+        data: { status: status as any },
+      },
+      {
+        onError: (error) => {
+          console.error("Failed to update notification status:", error);
+        },
+      }
     );
   };
 
   const handleDelete = (id: string) => {
-    setAllNotifications((prev) => prev.filter((n) => n.id !== id));
+    deleteNotificationMutation.mutate(id, {
+      onError: (error) => {
+        console.error("Failed to delete notification:", error);
+      },
+    });
+  };
+
+  const handleMarkAllAsRead = () => {
+    markAllAsReadMutation.mutate(undefined, {
+      onError: (error) => {
+        console.error("Failed to mark all notifications as read:", error);
+      },
+    });
   };
 
   const EmptyState = ({
@@ -107,7 +183,8 @@ const NotificationsDashboard = () => {
         <CreateNotificationModal
           onNotificationCreated={(data) => {
             console.log("New notification created:", data);
-            // TODO: Add the new notification to the state when API is integrated
+            // Refetch notifications to show the new one
+            refetch();
           }}
         />
       </div>
@@ -181,19 +258,20 @@ const NotificationsDashboard = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => {
-                    setAllNotifications((prev) =>
-                      prev.map((n) =>
-                        notifications.received.some((rn) => rn.id === n.id) &&
-                        !n.readAt
-                          ? { ...n, readAt: new Date() }
-                          : n
-                      )
-                    );
-                  }}
+                  onClick={handleMarkAllAsRead}
+                  disabled={markAllAsReadMutation.isPending}
                 >
-                  <CheckCircle2 className="w-4 h-4 mr-2" />
-                  Mark All Read
+                  {markAllAsReadMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Marking...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 mr-2" />
+                      Mark All Read
+                    </>
+                  )}
                 </Button>
               )}
               <Button variant="outline" size="sm">

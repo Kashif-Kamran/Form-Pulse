@@ -42,13 +42,6 @@ export const CreateNotificationSchema = z.object({
       weight: z.number().min(0, "Animal weight must be valid"),
     })
     .optional(),
-
-  dueDate: z
-    .date()
-    .optional()
-    .refine((date) => !date || date > new Date(), {
-      message: "Due date must be in the future",
-    }),
 });
 
 export type CreateNotificationFormData = z.infer<
@@ -66,6 +59,5 @@ export const transformNotificationForBackend = (
     priority: formData.priority,
     recipient: formData.recipient.id,
     animal: formData.animal?.id,
-    dueDate: formData.dueDate,
   };
 };

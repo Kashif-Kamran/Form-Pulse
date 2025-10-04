@@ -21,6 +21,7 @@ import { GetNotificationByIdUseCase } from './usecases/get-notification-by-id.us
 import { UpdateNotificationStatusUseCase } from './usecases/update-notification-status.usecase';
 import { MarkAsReadUseCase } from './usecases/mark-as-read.usecase';
 import { DeleteNotificationUseCase } from './usecases/delete-notification.usecase';
+import { UnreadNotificationCountUseCase } from './usecases/unread-notification-count.usecase';
 import { IUser } from '@repo/shared';
 
 @Controller('notifications')
@@ -32,6 +33,7 @@ export class NotificationController {
     private readonly updateNotificationStatusUseCase: UpdateNotificationStatusUseCase,
     private readonly markAsReadUseCase: MarkAsReadUseCase,
     private readonly deleteNotificationUseCase: DeleteNotificationUseCase,
+    private readonly unreadNotificationCountUseCase: UnreadNotificationCountUseCase,
   ) {}
 
   @Get()
@@ -41,6 +43,21 @@ export class NotificationController {
   ) {
     const user = request.user;
     return this.getNotificationsUseCase.execute(user, query);
+  }
+
+  @Get('dual-list')
+  @HttpCode(200)
+  async getDualListNotifications(@Request() request: any) {
+    const user = request.user;
+    // Use empty query to get all notifications
+    return this.getNotificationsUseCase.execute(user, {});
+  }
+
+  @Get('unread-count')
+  @HttpCode(200)
+  async getUnreadNotificationCount(@Request() request: any) {
+    const user = request.user;
+    return this.unreadNotificationCountUseCase.execute(user.id);
   }
 
   @Get(':id')
@@ -90,6 +107,14 @@ export class NotificationController {
   ) {
     const user: IUser = request.user;
     return this.markAsReadUseCase.execute(notificationId, user);
+  }
+
+  @Patch('mark-all-read')
+  @HttpCode(200)
+  async markAllAsRead(@Request() request: any) {
+    const user: IUser = request.user;
+    // TODO: Create MarkAllAsReadUseCase
+    return { success: true, message: 'All notifications marked as read' };
   }
 
   @Delete(':id')

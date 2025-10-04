@@ -20,12 +20,14 @@ export function ChooseUserDialog({
   onClose,
   onSelectUser,
   selectedUserId,
+  specifiedUserFilter = () => true,
   role,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onSelectUser: (animal: PublicUser) => void;
   selectedUserId?: string;
+  specifiedUserFilter?: (user: PublicUser) => boolean;
   role?: RoleType;
 }) {
   const [search, setSearch] = useState("");
@@ -73,7 +75,7 @@ export function ChooseUserDialog({
                   </TableCell>
                 </TableRow>
               )}
-              {users.map((user) => (
+              {users.filter(specifiedUserFilter).map((user) => (
                 <TableRow key={user.id}>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>

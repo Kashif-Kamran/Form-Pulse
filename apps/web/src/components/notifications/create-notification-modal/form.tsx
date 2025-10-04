@@ -23,7 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
-import DatePicker from "@/components/date-picker";
 import InputField from "@/components/custom-ui/form-feilds/input-field";
 import { ChooseAnimalDialog } from "@/pages/diet-management/components/dialogs/choose-animal-dialog-box";
 import { ChooseUserDialog } from "@/dialogs/choose-user-dialog-box";
@@ -40,6 +39,7 @@ import {
   RoleType,
 } from "@repo/shared";
 import { cn } from "@/lib/utils";
+import { useMe } from "@/hooks/api/profile.hook";
 
 interface CreateNotificationFormProps {
   onSubmit?: (data: CreateNotificationFormData) => void;
@@ -68,7 +68,6 @@ export function CreateNotificationForm({
         role: "",
       },
       animal: undefined,
-      dueDate: undefined,
     },
   });
 
@@ -90,8 +89,6 @@ export function CreateNotificationForm({
         return "Please select a recipient for this notification";
       case "animal":
         return error?.message || "Please select a valid animal";
-      case "dueDate":
-        return error?.message || "Please select a valid due date";
       default:
         if (error?.message) {
           return error.message;
@@ -103,10 +100,7 @@ export function CreateNotificationForm({
   const handleSubmit = form.handleSubmit(
     async (formData: CreateNotificationFormData) => {
       try {
-        console.log("Creating notification:", formData);
-
         const transformedData = transformNotificationForBackend(formData);
-        console.log("Transformed for API:", transformedData);
 
         // Call the API
         await createNotification(transformedData);
@@ -130,7 +124,6 @@ export function CreateNotificationForm({
             role: "",
           },
           animal: undefined,
-          dueDate: undefined,
         });
 
         // Call success callback to close modal
@@ -293,27 +286,6 @@ export function CreateNotificationForm({
               <RecipientSelection form={form} />
               <AnimalSelection form={form} />
             </div>
-
-            {/* Due Date */}
-            <FormField
-              control={form.control}
-              name="dueDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Due Date (Optional)</FormLabel>
-                  <FormControl>
-                    <DatePicker
-                      label="Select Due Date"
-                      selectedDate={field.value}
-                      onSelectDate={(date) => field.onChange(date)}
-                      buttonProps={{ className: "w-full py-5" }}
-                      className="w-full"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </CardContent>
         </Card>
 
@@ -342,7 +314,7 @@ const RecipientSelection = ({
 }) => {
   const [selectedUser, setSelectedUser] = useState<PublicUser | null>(null);
   const [isUserDialogOpen, openUserDialog, closeUserDialog] = useToggleState();
-
+  const { data: me } = useMe();
   const recipientValue = form.watch("recipient");
 
   useEffect(() => {
@@ -402,6 +374,7 @@ const RecipientSelection = ({
         onClose={closeUserDialog}
         onSelectUser={handleSelectUser}
         selectedUserId={selectedUser?.id}
+        specifiedUserFilter={(user) => user.id !== me?.id}
       />
     </div>
   );
