@@ -37,6 +37,11 @@ type NavItem = {
 const navItems: NavItem[] = [
   { label: "Dashboard", to: HOME, icon: Home },
   {
+    label: "Notifications",
+    to: NOTIFICATIONS,
+    icon: Bell,
+  },
+  {
     label: "Animal Profiles",
     to: ANIMALS_PROFILE,
     icon: Users,
@@ -55,11 +60,6 @@ const navItems: NavItem[] = [
     label: "Health Monitoring",
     to: HEALTH_MONITORING,
     icon: Heart,
-  },
-  {
-    label: "Notifications",
-    to: NOTIFICATIONS,
-    icon: Bell,
   },
   {
     label: "User Management",
