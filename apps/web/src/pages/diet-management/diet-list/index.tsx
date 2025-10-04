@@ -6,16 +6,13 @@ import { CREATE_DIET_PLAN } from "@/constants/app-routes";
 import { useDietPlan } from "@/hooks/api/diet-plan.hook";
 import { useMe } from "@/hooks/api/profile.hook";
 import { RoleType } from "@repo/shared";
-import { NotifyNutritionistDialog } from "../components/notify-nutritionist-dialog";
-import { useToggleState } from "@/hooks/use-toggle-state";
+import { CreateNotificationModal } from "@/components/notifications/create-notification-modal";
 import { Bell, Info, Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 function AnimalList() {
   const { results = [] } = useDietPlan();
   const { data: currentUser, isLoading: isUserLoading } = useMe();
-  const [isNotifyDialogOpen, openNotifyDialog, closeNotifyDialog] =
-    useToggleState();
 
   if (isUserLoading) {
     return <div>Loading...</div>;
@@ -44,14 +41,17 @@ function AnimalList() {
 
         {/* Show Notify button for Care Takers and Admins */}
         {(isCareTaker || isAdmin) && (
-          <Button
-            className="h-full flex items-center gap-2"
-            onClick={openNotifyDialog}
-            variant="outline"
-          >
-            <Bell className="h-4 w-4" />
-            Notify Nutritionist
-          </Button>
+          <CreateNotificationModal
+            triggerButton={
+              <Button
+                className="h-full flex items-center gap-2"
+                variant="outline"
+              >
+                <Bell className="h-4 w-4" />
+                Notify Nutritionist
+              </Button>
+            }
+          />
         )}
       </div>
 
@@ -71,12 +71,6 @@ function AnimalList() {
       )}
 
       <DietListTable results={results} />
-
-      {/* Notify Nutritionist Dialog */}
-      <NotifyNutritionistDialog
-        isOpen={isNotifyDialogOpen}
-        onOpenChange={closeNotifyDialog}
-      />
     </div>
   );
 }

@@ -131,12 +131,6 @@ export type UpdateHealthRecordStatusResponse = SingleItemResponse<{
   };
 }>;
 
-// Nutritionist Notification
-export type NotifyNutritionistResponse = SingleItemResponse<{
-  message: string;
-  notificationId: string;
-}>;
-
 // Notifications
 export type NotificationPublic = Omit<
   INotification,

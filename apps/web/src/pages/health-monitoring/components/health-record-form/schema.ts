@@ -15,10 +15,12 @@ export const MedicationDoseSchema = z.object({
     required_error: "Delivery date is required",
     invalid_type_error: "Please select a valid delivery date",
   }),
-  quantity: z.number({
-    required_error: "Quantity is required",
-    invalid_type_error: "Quantity must be a valid number",
-  }).min(1, "Quantity must be at least 1"),
+  quantity: z
+    .number({
+      required_error: "Quantity is required",
+      invalid_type_error: "Quantity must be a valid number",
+    })
+    .min(1, "Quantity must be at least 1"),
 });
 
 export const VaccinationSchema = z.object({
@@ -31,9 +33,6 @@ export const HealthRecordSchema = z
   .object({
     animal: AnimalSchema,
     veterinarian: UserSchema,
-    vaccinationType: z.string({
-      required_error: "Vaccination type is required",
-    }).min(1, "Please select a vaccination type"),
     vaccination: VaccinationSchema,
     medicationDoses: z
       .array(MedicationDoseSchema)

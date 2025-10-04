@@ -95,13 +95,6 @@ export type UpdateHealthRecordStatusReq = {
   newStatus: VaccineStatusValues;
 };
 
-// Nutritionist Notification
-export type NotifyNutritionistReq = {
-  message: string;
-  animalId: string;
-  nutritionistId: string;
-};
-
 // Notification Management
 export type CreateNotificationReq = {
   title: string;

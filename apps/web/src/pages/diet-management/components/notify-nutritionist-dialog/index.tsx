@@ -9,14 +9,29 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useState } from "react";
 import { ChooseAnimalDialog } from "../dialogs/choose-animal-dialog-box";
 import { ChooseUserDialog } from "@/dialogs/choose-user-dialog-box";
 import { useToggleState } from "@/hooks/use-toggle-state";
-import { useNotifyNutritionist } from "@/hooks/api/notification.hook";
+import { useCreateNotification } from "@/hooks/api/notification.hook";
 import { useToast } from "@/hooks/use-toast";
-import { AnimalPublic, PublicUser, RoleType } from "@repo/shared";
+import {
+  AnimalPublic,
+  PublicUser,
+  RoleType,
+  NotificationTypes,
+  NotificationPriorities,
+  NotificationPriorityValues,
+} from "@repo/shared";
 import { Bell } from "lucide-react";
 
 interface NotifyNutritionistDialogProps {
@@ -30,7 +45,11 @@ export function NotifyNutritionistDialog({
   onOpenChange,
   trigger,
 }: NotifyNutritionistDialogProps) {
-  const [message, setMessage] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState<NotificationPriorityValues>(
+    NotificationPriorities.MEDIUM
+  );
   const [selectedAnimal, setSelectedAnimal] = useState<AnimalPublic | null>(
     null
   );
@@ -45,8 +64,8 @@ export function NotifyNutritionistDialog({
     closeNutritionistDialog,
   ] = useToggleState();
 
-  const { mutateAsync: notifyNutritionist, isPending } =
-    useNotifyNutritionist();
+  const { mutateAsync: createNotification, isPending } =
+    useCreateNotification();
   const { toast } = useToast();
 
   const handleSelectAnimal = (animal: AnimalPublic) => {
@@ -60,15 +79,18 @@ export function NotifyNutritionistDialog({
   };
 
   const handleSendNotification = async () => {
-    if (!selectedAnimal || !selectedNutritionist || !message.trim()) {
+    if (!selectedAnimal || !selectedNutritionist || !title.trim()) {
       return;
     }
 
     try {
-      await notifyNutritionist({
-        message: message.trim(),
-        animalId: selectedAnimal.id,
-        nutritionistId: selectedNutritionist.id,
+      await createNotification({
+        title: title.trim(),
+        description: description.trim() || undefined,
+        type: NotificationTypes.DIET_PLAN_REQUEST,
+        priority: priority,
+        recipient: selectedNutritionist.id,
+        animal: selectedAnimal.id,
       });
 
       toast({
@@ -77,7 +99,9 @@ export function NotifyNutritionistDialog({
       });
 
       // Reset form
-      setMessage("");
+      setTitle("");
+      setDescription("");
+      setPriority(NotificationPriorities.MEDIUM);
       setSelectedAnimal(null);
       setSelectedNutritionist(null);
 
@@ -93,7 +117,7 @@ export function NotifyNutritionistDialog({
     }
   };
 
-  const isFormValid = message.trim() && selectedAnimal && selectedNutritionist;
+  const isFormValid = title.trim() && selectedAnimal && selectedNutritionist;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -111,16 +135,54 @@ export function NotifyNutritionistDialog({
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
-          {/* Message */}
+          {/* Title */}
           <div className="grid gap-2">
-            <Label htmlFor="message">Message</Label>
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              placeholder="Diet consultation request..."
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+
+          {/* Description */}
+          <div className="grid gap-2">
+            <Label htmlFor="description">Description</Label>
             <Textarea
-              id="message"
+              id="description"
               placeholder="Describe the dietary requirements or concerns..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               className="min-h-[100px]"
             />
+          </div>
+
+          {/* Priority */}
+          <div className="grid gap-2">
+            <Label htmlFor="priority">Priority</Label>
+            <Select
+              value={priority}
+              onValueChange={(value: NotificationPriorityValues) =>
+                setPriority(value)
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select priority" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NotificationPriorities.LOW}>Low</SelectItem>
+                <SelectItem value={NotificationPriorities.MEDIUM}>
+                  Medium
+                </SelectItem>
+                <SelectItem value={NotificationPriorities.HIGH}>
+                  High
+                </SelectItem>
+                <SelectItem value={NotificationPriorities.URGENT}>
+                  Urgent
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Animal Selection */}

@@ -178,9 +178,6 @@ export function CreateNotificationForm({
         onSubmit={handleSubmit}
       >
         <Card className="pt-2 px-6 pb-6">
-          <CardTitle className="bg-primary rounded-md p-2 text-primary-foreground mt-4 text-center text-lg">
-            Create New Notification
-          </CardTitle>
           <CardContent className="space-y-4 p-0 mt-4">
             {/* Title */}
             <FormField

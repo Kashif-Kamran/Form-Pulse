@@ -55,8 +55,10 @@ export function HealthRecordForm({
   healthRecord,
   mode = "create",
 }: HealthRecordFormProps) {
-  const { mutateAsync: createHealthRecord, isPending: isCreating } = useCreateAnimalHealthRecord();
-  const { mutateAsync: updateHealthRecord, isPending: isUpdating } = useUpdateHealthRecord();
+  const { mutateAsync: createHealthRecord, isPending: isCreating } =
+    useCreateAnimalHealthRecord();
+  const { mutateAsync: updateHealthRecord, isPending: isUpdating } =
+    useUpdateHealthRecord();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -73,9 +75,7 @@ export function HealthRecordForm({
       case "veterinarian":
         return "Please assign a veterinarian to this health record";
       case "vaccination":
-        return "Please select a vaccine for this health record";
-      case "vaccinationType":
-        return "Please select the type of vaccination";
+        return "Please select a vaccine";
       case "medicationDoses":
         return "Please add at least one vaccination schedule";
       default:
@@ -96,7 +96,6 @@ export function HealthRecordForm({
       vaccination: {
         id: "",
       },
-      vaccinationType: undefined,
       medicationDoses: [],
     },
   });
@@ -123,7 +122,6 @@ export function HealthRecordForm({
           name: healthRecord.vaccine.name,
           type: healthRecord.vaccine.type,
         },
-        vaccinationType: healthRecord.vaccine.type,
         medicationDoses: healthRecord.schedule.map((schedule, index) => ({
           id: `${healthRecord.id}-${index}`,
           deliveryDate: new Date(schedule.dateTime),
@@ -144,31 +142,34 @@ export function HealthRecordForm({
             healthRecordId: healthRecord.id,
             payload: transformedData,
           });
-          
+
           toast({
             title: "Health record updated successfully!",
             description: "All changes have been saved.",
             variant: "default",
           });
           navigate(HEALTH_MONITORING);
-          
         } else {
           await createHealthRecord(transformedData);
-          
+
           toast({
             title: "Animal health record created successfully!",
             description: "The health record has been saved and scheduled.",
             variant: "default",
           });
-          
+
           // Reset form after successful creation
           form.reset();
         }
       } catch (error: any) {
-        console.log(`Error on Health Record ${mode === "edit" ? "Update" : "Creation"}:`, error);
+        console.log(
+          `Error on Health Record ${mode === "edit" ? "Update" : "Creation"}:`,
+          error
+        );
         toast({
           title: `Unable to ${mode === "edit" ? "update" : "create"} health record`,
-          description: error.message || "An unexpected error occurred. Please try again.",
+          description:
+            error.message || "An unexpected error occurred. Please try again.",
           variant: "destructive",
         });
       }
@@ -229,8 +230,10 @@ export function HealthRecordForm({
                 <Loader2 className="animate-spin mr-2 h-4 w-4" />
                 {mode === "edit" ? "Updating..." : "Saving..."}
               </>
+            ) : mode === "edit" ? (
+              "Update"
             ) : (
-              mode === "edit" ? "Update" : "Save"
+              "Save"
             )}
           </Button>
         </div>
@@ -365,7 +368,7 @@ const VaccineSelectDialog = ({
       name: vaccine.name,
       type: vaccine.type,
     });
-    form.clearErrors("veterinarian");
+    form.clearErrors("vaccination");
   };
   const { vaccination } = form.watch();
   return (
