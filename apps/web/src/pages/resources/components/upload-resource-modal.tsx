@@ -42,7 +42,9 @@ export function UploadResourceModal({
     onError: (error: any) => {
       toast({
         title: "Upload failed",
-        description: error?.message || "There was an error uploading your file. Please try again.",
+        description:
+          error?.message ||
+          "There was an error uploading your file. Please try again.",
         variant: "destructive",
       });
     },
@@ -98,7 +100,7 @@ export function UploadResourceModal({
 
   const handleUpload = async () => {
     if (!selectedFile) return;
-    
+
     uploadMutation.mutate(selectedFile);
   };
 
@@ -140,8 +142,8 @@ export function UploadResourceModal({
                 dragActive
                   ? "border-blue-500 bg-blue-50"
                   : selectedFile
-                  ? "border-green-500 bg-green-50"
-                  : "border-gray-300 hover:border-gray-400"
+                    ? "border-green-500 bg-green-50"
+                    : "border-gray-300 hover:border-gray-400"
               }`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
@@ -161,7 +163,9 @@ export function UploadResourceModal({
                 <div className="space-y-2">
                   <CheckCircle className="h-8 w-8 text-green-500 mx-auto" />
                   <div className="space-y-1">
-                    <p className="font-medium text-green-700">{selectedFile.name}</p>
+                    <p className="font-medium text-green-700">
+                      {selectedFile.name}
+                    </p>
                     <p className="text-sm text-green-600">
                       {formatFileSize(selectedFile.size)}
                     </p>
@@ -213,11 +217,15 @@ export function UploadResourceModal({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={handleClose} disabled={uploadMutation.isPending}>
+          <Button
+            variant="outline"
+            onClick={handleClose}
+            disabled={uploadMutation.isPending}
+          >
             Cancel
           </Button>
-          <Button 
-            onClick={handleUpload} 
+          <Button
+            onClick={handleUpload}
             disabled={!selectedFile || uploadMutation.isPending}
             className="min-w-[100px]"
           >

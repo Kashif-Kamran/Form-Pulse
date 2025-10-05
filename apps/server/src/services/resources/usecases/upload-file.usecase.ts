@@ -30,7 +30,9 @@ export class UploadFileUseCase {
     // Check if we already have 20 PDFs uploaded
     const existingDocuments = await this.resourceDocumentService.findAll();
     if (existingDocuments.length >= 20) {
-      throw new BadRequestException('Maximum limit of 20 PDFs reached. Please delete some files before uploading new ones.');
+      throw new BadRequestException(
+        'Maximum limit of 20 PDFs reached. Please delete some files before uploading new ones.',
+      );
     }
 
     // Create document data
@@ -45,7 +47,8 @@ export class UploadFileUseCase {
     };
 
     // Save to database
-    const savedDocument = await this.resourceDocumentService.create(documentData);
+    const savedDocument =
+      await this.resourceDocumentService.create(documentData);
     return savedDocument;
   }
 

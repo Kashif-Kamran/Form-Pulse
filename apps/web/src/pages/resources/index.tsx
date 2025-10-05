@@ -5,7 +5,10 @@ import { PDFViewerModal } from "./components/pdf-viewer-modal";
 import { Button } from "@/components/ui/button";
 import { Upload, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useResources, refreshResourcesCache } from "@/hooks/api/resources.hook";
+import {
+  useResources,
+  refreshResourcesCache,
+} from "@/hooks/api/resources.hook";
 import { useMe } from "@/hooks/api/profile.hook";
 import { ResourceDocumentPublic, RoleType } from "@repo/shared";
 
@@ -23,7 +26,9 @@ export default function ResourcesPage() {
   const { results: documents = [], isLoading } = useResources();
 
   // Check if user is admin or super admin
-  const isAdmin = currentUser?.role === RoleType.Admin || currentUser?.role === RoleType.SuperAdmin;
+  const isAdmin =
+    currentUser?.role === RoleType.Admin ||
+    currentUser?.role === RoleType.SuperAdmin;
 
   const handleUploadSuccess = () => {
     // The query will be invalidated automatically by the upload mutation
@@ -64,7 +69,9 @@ export default function ResourcesPage() {
             disabled={isLoading}
             className="w-full sm:w-auto"
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+            />
             Refresh
           </Button>
           {isAdmin && (

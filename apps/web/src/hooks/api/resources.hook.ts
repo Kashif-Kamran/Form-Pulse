@@ -25,7 +25,7 @@ export const refreshResourcesCache = async () => {
   await queryClient.invalidateQueries({
     queryKey: [RESOURCES_QUERY_KEY, "list"],
   });
-  
+
   // Then refetch the data
   await queryClient.refetchQueries({
     queryKey: [RESOURCES_QUERY_KEY, "list"],
@@ -65,7 +65,7 @@ export const useUploadResource = (
     onSuccess: async (data: any, variables: any, context: any) => {
       // Always refresh resources cache first
       await refreshResourcesCache();
-      
+
       // Then call the user's onSuccess callback if provided
       if (options?.onSuccess) {
         options.onSuccess(data, variables, context);
@@ -76,7 +76,7 @@ export const useUploadResource = (
       queryClient.invalidateQueries({
         queryKey: [RESOURCES_QUERY_KEY, "list"],
       });
-      
+
       // Call the user's onError callback if provided
       if (options?.onError) {
         options.onError(error, variables, context);
@@ -84,8 +84,8 @@ export const useUploadResource = (
     },
     // Spread other options but exclude onSuccess and onError to avoid conflicts
     ...Object.fromEntries(
-      Object.entries(options || {}).filter(([key]) => 
-        !['onSuccess', 'onError'].includes(key)
+      Object.entries(options || {}).filter(
+        ([key]) => !["onSuccess", "onError"].includes(key)
       )
     ),
   });
@@ -99,17 +99,22 @@ export const useDeleteResource = (
       deleteRequest<ResourceDocumentDeleteResponse>(`/resources/${filename}`),
     onMutate: async (filename: string) => {
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({ queryKey: [RESOURCES_QUERY_KEY, "list"] });
+      await queryClient.cancelQueries({
+        queryKey: [RESOURCES_QUERY_KEY, "list"],
+      });
 
       // Snapshot the previous value
-      const previousResources = queryClient.getQueryData([RESOURCES_QUERY_KEY, "list"]);
+      const previousResources = queryClient.getQueryData([
+        RESOURCES_QUERY_KEY,
+        "list",
+      ]);
 
       // Optimistically update to remove the item
       queryClient.setQueryData([RESOURCES_QUERY_KEY, "list"], (old: any) => {
         if (!old?.results) return old;
         return {
           ...old,
-          results: old.results.filter((doc: any) => doc.filename !== filename)
+          results: old.results.filter((doc: any) => doc.filename !== filename),
         };
       });
 
@@ -119,7 +124,7 @@ export const useDeleteResource = (
     onSuccess: async (data: any, variables: any, context: any) => {
       // Always refresh resources cache first
       await refreshResourcesCache();
-      
+
       // Then call the user's onSuccess callback if provided
       if (options?.onSuccess) {
         options.onSuccess(data, variables, context);
@@ -128,9 +133,12 @@ export const useDeleteResource = (
     onError: (error: any, variables: any, context: any) => {
       // If the mutation fails, use the context returned from onMutate to roll back
       if (context?.previousResources) {
-        queryClient.setQueryData([RESOURCES_QUERY_KEY, "list"], context.previousResources);
+        queryClient.setQueryData(
+          [RESOURCES_QUERY_KEY, "list"],
+          context.previousResources
+        );
       }
-      
+
       // Call the user's onError callback if provided
       if (options?.onError) {
         options.onError(error, variables, context);
@@ -144,8 +152,9 @@ export const useDeleteResource = (
     },
     // Spread other options but exclude callbacks to avoid conflicts
     ...Object.fromEntries(
-      Object.entries(options || {}).filter(([key]) => 
-        !['onSuccess', 'onError', 'onMutate', 'onSettled'].includes(key)
+      Object.entries(options || {}).filter(
+        ([key]) =>
+          !["onSuccess", "onError", "onMutate", "onSettled"].includes(key)
       )
     ),
   });
