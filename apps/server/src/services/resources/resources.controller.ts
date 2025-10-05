@@ -42,7 +42,13 @@ export class ResourcesController {
     FileInterceptor('file', {
       storage: diskStorage({
         destination: (req, file, cb) => {
-          const uploadPath = path.join(process.cwd(), '..', '..', 'uploads', 'resources');
+          const uploadPath = path.join(
+            process.cwd(),
+            '..',
+            '..',
+            'uploads',
+            'resources',
+          );
           cb(null, uploadPath);
         },
         filename: (req, file, cb) => {
@@ -90,11 +96,7 @@ export class ResourcesController {
     };
 
     // Process the file using our use case
-    const fileMetadata = this.uploadFileUseCase.execute(uploadedFileInfo);
-
-    // Update the metadata with the actual filename from multer
-    fileMetadata.filename = file.filename;
-    fileMetadata.url = `/resources/files/${file.filename}`;
+    const fileMetadata = await this.uploadFileUseCase.execute(uploadedFileInfo);
 
     return new UploadFileResponseDto(fileMetadata);
   }
@@ -103,8 +105,8 @@ export class ResourcesController {
   @HttpCode(200)
   @Public()
   async listFiles(): Promise<ListFilesResponseDto> {
-    const files = this.listFilesUseCase.execute();
-    const fileResponses = files.map(file => new FileResponseDto(file));
+    const files = await this.listFilesUseCase.execute();
+    const fileResponses = files.map((file) => new FileResponseDto(file));
     return new ListFilesResponseDto(fileResponses);
   }
 
@@ -115,13 +117,16 @@ export class ResourcesController {
     @Param('filename') filename: string,
     @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
-    const { filePath, stats } = this.serveFileUseCase.execute(filename);
+    const { filePath, stats, originalName } = await this.serveFileUseCase.execute(filename);
+
+    // Use original name if available, otherwise use the filename
+    const displayName = originalName || filename;
 
     // Set appropriate headers for PDF files
     res.set({
       'Content-Type': 'application/pdf',
       'Content-Length': stats.size.toString(),
-      'Content-Disposition': `inline; filename="${filename}"`,
+      'Content-Disposition': `inline; filename="${displayName}"`,
       'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
     });
 
@@ -133,8 +138,14 @@ export class ResourcesController {
   @Delete(':filename')
   @HttpCode(200)
   @Public()
-  async deleteFile(@Param('filename') filename: string): Promise<DeleteFileResponseDto> {
-    const result = this.deleteFileUseCase.execute(filename);
-    return new DeleteFileResponseDto(result.filename, result.deleted, result.message);
+  async deleteFile(
+    @Param('filename') filename: string,
+  ): Promise<DeleteFileResponseDto> {
+    const result = await this.deleteFileUseCase.execute(filename);
+    return new DeleteFileResponseDto(
+      result.filename,
+      result.deleted,
+      result.message,
+    );
   }
 }

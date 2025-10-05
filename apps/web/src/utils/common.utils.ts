@@ -16,7 +16,7 @@ export const isProd = env.PROD;
 /**
  * Check if the application is running in test mode
  */
-export const apiUrl = env.VITE_API_URL;
+export const apiUrl: string = env.VITE_API_URL;
 
 /**
  * API Token Key

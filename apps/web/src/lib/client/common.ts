@@ -170,3 +170,40 @@ export async function deleteRequest<
     }
   );
 }
+
+export async function postFormDataRequest<TRes>(
+  path: string,
+  formData: FormData,
+  options?: Omit<RequestInit, "body" | "method">
+): Promise<TRes> {
+  const url = getUrl(path);
+  
+  const response = await fetch(url, {
+    ...options,
+    method: "POST",
+    headers: {
+      // Don't set Content-Type header - let browser set it with boundary for FormData
+      Authorization: `Bearer ${getAuthToken() || ""}`,
+      ...options?.headers,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    // Handle 401 Unauthorized - deleted/invalid user
+    if (response.status === 401) {
+      removeAuthToken();
+      return Promise.reject(new Error("Session expired. Please login again."));
+    }
+
+    const errorData = await response.json();
+    throw errorData;
+  }
+
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return response.json();
+  } else {
+    return {} as TRes;
+  }
+}

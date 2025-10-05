@@ -146,3 +146,18 @@ export interface INotification {
   isDeleted?: boolean;
   deletedAt?: Date | null;
 }
+
+export interface IResourceDocument {
+  _id?: any;
+  id: string;
+  filename: string;
+  originalName: string;
+  size: number;
+  mimetype: string;
+  uploadDate: Date;
+  url: string;
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}

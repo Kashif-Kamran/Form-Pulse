@@ -12,6 +12,7 @@ import { DietPlan, DietPlanSchema } from './models/diet-plan.model';
 import { VaccineSchema } from './models/vaccine.model';
 import { AnimalHealthRecordSchema } from './models/animal-health-record.model';
 import { NotificationSchema } from './models/notification.model';
+import { ResourceDocumentSchema } from './models/resource-document.model';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { NotificationSchema } from './models/notification.model';
       { name: 'Vaccine', schema: VaccineSchema },
       { name: 'AnimalHealthRecord', schema: AnimalHealthRecordSchema },
       { name: 'Notification', schema: NotificationSchema },
+      { name: 'ResourceDocument', schema: ResourceDocumentSchema },
     ]),
   ],
   exports: [MongooseModule],

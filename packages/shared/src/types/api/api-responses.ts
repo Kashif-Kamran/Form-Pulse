@@ -8,6 +8,7 @@ import {
   IUser,
   IVaccine,
   INotification,
+  IResourceDocument,
 } from "../interfaces/resources";
 import {
   DeleteResponse,
@@ -355,4 +356,12 @@ export type ActivityResponse = {
     data: ActivityItem[];
     total: number;
   };
+};
+
+// Resource Documents
+export type ResourceDocumentPublic = Omit<IResourceDocument, "createdAt" | "updatedAt" | "_id">;
+export type ResourceDocumentResponse = ResourceResponse<ResourceDocumentPublic>;
+export type ResourceDocumentListResponse = ResourceListResponse<ResourceDocumentPublic>;
+export type ResourceDocumentDeleteResponse = DeleteResponse & {
+  filename: string;
 };

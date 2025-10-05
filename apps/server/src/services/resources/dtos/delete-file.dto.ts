@@ -1,21 +1,11 @@
 export class DeleteFileResponseDto {
-  success: boolean;
   message: string;
-  data: {
-    filename: string;
-    deleted: boolean;
-  };
+  deletedAt: string;
+  filename: string;
 
-  constructor(
-    filename: string,
-    deleted: boolean,
-    message = 'File deleted successfully'
-  ) {
-    this.success = deleted;
+  constructor(filename: string, deleted: boolean, message = 'File deleted successfully') {
     this.message = message;
-    this.data = {
-      filename,
-      deleted,
-    };
+    this.deletedAt = new Date().toISOString();
+    this.filename = filename;
   }
 }

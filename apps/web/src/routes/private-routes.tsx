@@ -45,6 +45,7 @@ const HealthMonitoring = lazy(
 );
 const UserManagement = lazy(() => import("@/pages/user-management"));
 const NotificationsDashboard = lazy(() => import("@/pages/notifications"));
+const ResourcesPage = lazy(() => import("@/pages/resources"));
 
 const ProtectedRoute = () => {
   const { data, isLoading, error } = useMe();
@@ -159,7 +160,7 @@ const privateRoutes: RouteObject[] = [
             path: EDUCATIONAL_RESOURCERS,
             element: (
               <Suspense fallback={<FallbackSpinnerScreen />}>
-                <div>Educational Resources</div>
+                <ResourcesPage />
               </Suspense>
             ),
           },

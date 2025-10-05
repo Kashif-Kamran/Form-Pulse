@@ -123,3 +123,8 @@ export type GetNotificationsQueryReq = {
   sortBy?: "createdAt" | "dueDateTime" | "priority";
   sortOrder?: "asc" | "desc";
 };
+
+// Resource Documents
+export type UploadResourceDocumentReq = {
+  file: File;
+};

@@ -1,12 +1,31 @@
-import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import * as path from 'path';
 import * as fs from 'fs';
+import { ResourceDocumentService } from '../services/resource-document.service';
 
 @Injectable()
 export class DeleteFileUseCase {
-  private readonly uploadsPath = path.join(process.cwd(), '..', '..', 'uploads', 'resources');
+  private readonly uploadsPath = path.join(
+    process.cwd(),
+    '..',
+    '..',
+    'uploads',
+    'resources',
+  );
 
-  execute(filename: string): { filename: string; deleted: boolean; message: string } {
+  constructor(
+    private readonly resourceDocumentService: ResourceDocumentService,
+  ) {}
+
+  async execute(filename: string): Promise<{
+    filename: string;
+    deleted: boolean;
+    message: string;
+  }> {
     // Validate filename to prevent path traversal attacks
     if (!this.isValidFilename(filename)) {
       throw new NotFoundException('Invalid filename');
@@ -36,8 +55,11 @@ export class DeleteFileUseCase {
     }
 
     try {
-      // Delete the file
+      // Delete the file from filesystem
       fs.unlinkSync(filePath);
+
+      // Remove from database
+      await this.resourceDocumentService.deleteByFilename(filename);
 
       return {
         filename: filename,
@@ -57,7 +79,11 @@ export class DeleteFileUseCase {
     }
 
     // Check for path traversal attempts
-    if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+    if (
+      filename.includes('..') ||
+      filename.includes('/') ||
+      filename.includes('\\')
+    ) {
       return false;
     }
 

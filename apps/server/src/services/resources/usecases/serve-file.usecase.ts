@@ -1,12 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as path from 'path';
 import * as fs from 'fs';
+import { ResourceDocumentService } from '../services/resource-document.service';
 
 @Injectable()
 export class ServeFileUseCase {
-  private readonly uploadsPath = path.join(process.cwd(), '..', '..', 'uploads', 'resources');
+  private readonly uploadsPath = path.join(
+    process.cwd(),
+    '..',
+    '..',
+    'uploads',
+    'resources',
+  );
 
-  execute(filename: string): { filePath: string; stats: fs.Stats } {
+  constructor(
+    private readonly resourceDocumentService: ResourceDocumentService,
+  ) {}
+
+  async execute(filename: string): Promise<{ filePath: string; stats: fs.Stats; originalName?: string }> {
     // Validate filename to prevent path traversal attacks
     if (!this.isValidFilename(filename)) {
       throw new NotFoundException('Invalid filename');
@@ -35,7 +46,19 @@ export class ServeFileUseCase {
       throw new NotFoundException('File type not supported');
     }
 
-    return { filePath, stats };
+    // Try to get original name from database
+    let originalName: string | undefined;
+    try {
+      const document = await this.resourceDocumentService.findByFilename(filename);
+      if (document) {
+        originalName = document.originalName;
+      }
+    } catch (error) {
+      // If database query fails, continue without original name
+      console.warn('Failed to get original name from database:', error);
+    }
+
+    return { filePath, stats, originalName };
   }
 
   private isValidFilename(filename: string): boolean {
@@ -45,7 +68,11 @@ export class ServeFileUseCase {
     }
 
     // Check for path traversal attempts
-    if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+    if (
+      filename.includes('..') ||
+      filename.includes('/') ||
+      filename.includes('\\')
+    ) {
       return false;
     }
 

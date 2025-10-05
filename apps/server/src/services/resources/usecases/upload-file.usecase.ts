@@ -1,25 +1,17 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
-import * as fs from 'fs';
-import { FileMetadata, UploadedFileInfo } from '../interfaces/file-metadata.interface';
+import { IResourceDocument } from '@repo/shared';
+import { UploadedFileInfo } from '../interfaces/file-metadata.interface';
+import { ResourceDocumentService } from '../services/resource-document.service';
 
 @Injectable()
 export class UploadFileUseCase {
-  private readonly uploadsPath = path.join(process.cwd(), '..', '..', 'uploads', 'resources');
+  constructor(
+    private readonly resourceDocumentService: ResourceDocumentService,
+  ) {}
 
-  constructor() {
-    // Ensure uploads directory exists
-    this.ensureUploadsDirectory();
-  }
-
-  private ensureUploadsDirectory(): void {
-    if (!fs.existsSync(this.uploadsPath)) {
-      fs.mkdirSync(this.uploadsPath, { recursive: true });
-    }
-  }
-
-  execute(file: UploadedFileInfo): FileMetadata {
+  async execute(file: UploadedFileInfo): Promise<IResourceDocument> {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
@@ -35,20 +27,20 @@ export class UploadFileUseCase {
       throw new BadRequestException('File size exceeds 10MB limit');
     }
 
-    // Generate unique filename
-    const uniqueFilename = this.generateUniqueFilename(file.originalname);
-    
-    // Create file metadata
-    const fileMetadata: FileMetadata = {
-      filename: uniqueFilename,
+    // Create document data
+    const documentData: Partial<IResourceDocument> = {
+      id: uuidv4(),
+      filename: file.filename,
       originalName: file.originalname,
       size: file.size,
-      uploadDate: new Date(),
-      url: `/resources/files/${uniqueFilename}`,
       mimetype: file.mimetype,
+      url: `/resources/files/${file.filename}`,
+      uploadDate: new Date(),
     };
 
-    return fileMetadata;
+    // Save to database
+    const savedDocument = await this.resourceDocumentService.create(documentData);
+    return savedDocument;
   }
 
   private isValidPdfFile(file: UploadedFileInfo): boolean {
@@ -64,12 +56,5 @@ export class UploadFileUseCase {
     }
 
     return true;
-  }
-
-  private generateUniqueFilename(originalName: string): string {
-    const ext = path.extname(originalName);
-    const timestamp = Date.now();
-    const uuid = uuidv4().split('-')[0]; // Use first part of UUID for brevity
-    return `${timestamp}-${uuid}${ext}`;
   }
 }

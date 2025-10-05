@@ -1,7 +1,18 @@
-import { IsNotEmpty, IsString, IsNumber, IsDateString, IsUrl } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsDateString,
+  IsUrl,
+} from 'class-validator';
+import { ResourceDocumentPublic } from '@repo/shared';
 import { FileMetadata } from '../interfaces/file-metadata.interface';
 
-export class FileResponseDto implements FileMetadata {
+export class FileResponseDto implements ResourceDocumentPublic {
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
   @IsString()
   @IsNotEmpty()
   filename: string;
@@ -13,17 +24,18 @@ export class FileResponseDto implements FileMetadata {
   @IsNumber()
   size: number;
 
+  @IsString()
+  @IsNotEmpty()
+  mimetype: string;
+
   uploadDate: Date;
 
   @IsString()
   @IsNotEmpty()
   url: string;
 
-  @IsString()
-  @IsNotEmpty()
-  mimetype: string;
-
   constructor(data: FileMetadata) {
+    this.id = data.id || Date.now().toString(); // Generate ID if not provided
     this.filename = data.filename;
     this.originalName = data.originalName;
     this.size = data.size;
@@ -33,14 +45,8 @@ export class FileResponseDto implements FileMetadata {
   }
 }
 
-export class UploadFileResponseDto {
-  success: boolean;
-  message: string;
-  data: FileResponseDto;
-
-  constructor(fileMetadata: FileMetadata, message = 'File uploaded successfully') {
-    this.success = true;
-    this.message = message;
-    this.data = new FileResponseDto(fileMetadata);
+export class UploadFileResponseDto extends FileResponseDto {
+  constructor(fileMetadata: FileMetadata) {
+    super(fileMetadata);
   }
 }
