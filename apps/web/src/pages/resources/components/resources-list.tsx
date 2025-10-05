@@ -21,7 +21,6 @@ const getFullUrl = (url: string) => {
 export function ResourcesList({
   documents,
   isLoading,
-  onViewDocument,
   isAdmin = false,
 }: ResourcesListProps) {
   const { toast } = useToast();
