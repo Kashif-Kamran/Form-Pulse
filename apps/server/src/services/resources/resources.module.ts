@@ -6,6 +6,7 @@ import { ListFilesUseCase } from './usecases/list-files.usecase';
 import { ServeFileUseCase } from './usecases/serve-file.usecase';
 import { DeleteFileUseCase } from './usecases/delete-file.usecase';
 import { ResourceDocumentService } from './services/resource-document.service';
+import { UploadsDirectoryService } from './services/uploads-directory.service';
 import { ResourceDocumentSchema } from '../../database/models/resource-document.model';
 
 @Module({
@@ -16,6 +17,7 @@ import { ResourceDocumentSchema } from '../../database/models/resource-document.
   ],
   controllers: [ResourcesController],
   providers: [
+    UploadsDirectoryService,
     ResourceDocumentService,
     UploadFileUseCase,
     ListFilesUseCase,
@@ -23,6 +25,7 @@ import { ResourceDocumentSchema } from '../../database/models/resource-document.
     DeleteFileUseCase,
   ],
   exports: [
+    UploadsDirectoryService,
     ResourceDocumentService,
     UploadFileUseCase,
     ListFilesUseCase,
