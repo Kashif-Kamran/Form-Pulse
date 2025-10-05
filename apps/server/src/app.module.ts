@@ -11,6 +11,7 @@ import { HealthModule } from './services/health/health.module';
 import { UserModule } from './services/user/user.module';
 import { DashboardModule } from './services/dashboard/dashboard.module';
 import { NotificationModule } from './services/notification/notification.module';
+import { ResourcesModule } from './services/resources/resources.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { NotificationModule } from './services/notification/notification.module'
     UserModule,
     DashboardModule,
     NotificationModule,
+    ResourcesModule,
   ],
 })
 export class AppModule {}
