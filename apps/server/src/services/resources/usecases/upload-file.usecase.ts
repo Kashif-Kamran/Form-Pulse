@@ -21,10 +21,16 @@ export class UploadFileUseCase {
       throw new BadRequestException('Only PDF files are allowed');
     }
 
-    // Validate file size (10MB limit)
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    // Validate file size (100MB limit)
+    const maxSize = 100 * 1024 * 1024; // 100MB
     if (file.size > maxSize) {
-      throw new BadRequestException('File size exceeds 10MB limit');
+      throw new BadRequestException('File size exceeds 100MB limit');
+    }
+
+    // Check if we already have 20 PDFs uploaded
+    const existingDocuments = await this.resourceDocumentService.findAll();
+    if (existingDocuments.length >= 20) {
+      throw new BadRequestException('Maximum limit of 20 PDFs reached. Please delete some files before uploading new ones.');
     }
 
     // Create document data

@@ -58,10 +58,10 @@ export function UploadResourceModal({
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size > 100 * 1024 * 1024) {
       toast({
         title: "File too large",
-        description: "Please select a file smaller than 10MB.",
+        description: "Please select a file smaller than 100MB.",
         variant: "destructive",
       });
       return;
@@ -126,7 +126,8 @@ export function UploadResourceModal({
             Upload Resource Document
           </DialogTitle>
           <DialogDescription>
-            Upload a PDF document to the resource library. Max file size: 10MB.
+            Upload a PDF document to the resource library. Max file size: 100MB.
+            Maximum 20 PDFs allowed.
           </DialogDescription>
         </DialogHeader>
 
@@ -186,7 +187,7 @@ export function UploadResourceModal({
                       Drop your PDF here, or click to browse
                     </p>
                     <p className="text-sm text-gray-500">
-                      Supports PDF files up to 10MB
+                      Supports PDF files up to 100MB
                     </p>
                   </div>
                 </div>
@@ -202,7 +203,8 @@ export function UploadResourceModal({
                 <p className="font-medium text-blue-800">File Requirements:</p>
                 <ul className="text-blue-700 mt-1 space-y-1">
                   <li>• Only PDF files are accepted</li>
-                  <li>• Maximum file size: 10MB</li>
+                  <li>• Maximum file size: 100MB</li>
+                  <li>• Maximum 20 PDFs total</li>
                   <li>• Files will be accessible to all users</li>
                 </ul>
               </div>

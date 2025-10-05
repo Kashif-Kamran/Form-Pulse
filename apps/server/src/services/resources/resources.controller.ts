@@ -25,6 +25,8 @@ import { ListFilesResponseDto } from './dtos/list-files.dto';
 import { DeleteFileResponseDto } from './dtos/delete-file.dto';
 import { UploadedFileInfo } from './interfaces/file-metadata.interface';
 import { Public } from '../auth/decorators/public.decorator';
+import { RolesAllowed } from '../auth/decorators/roles-allowed.decorator';
+import { RoleType } from '@repo/shared';
 
 @Controller('resources')
 export class ResourcesController {
@@ -37,7 +39,7 @@ export class ResourcesController {
 
   @Post('upload')
   @HttpCode(201)
-  @Public()
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -72,7 +74,7 @@ export class ResourcesController {
         }
       },
       limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB limit
+        fileSize: 100 * 1024 * 1024, // 100MB limit
       },
     }),
   )
@@ -117,7 +119,8 @@ export class ResourcesController {
     @Param('filename') filename: string,
     @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
-    const { filePath, stats, originalName } = await this.serveFileUseCase.execute(filename);
+    const { filePath, stats, originalName } =
+      await this.serveFileUseCase.execute(filename);
 
     // Use original name if available, otherwise use the filename
     const displayName = originalName || filename;
@@ -137,7 +140,7 @@ export class ResourcesController {
 
   @Delete(':filename')
   @HttpCode(200)
-  @Public()
+  @RolesAllowed(RoleType.SuperAdmin, RoleType.Admin)
   async deleteFile(
     @Param('filename') filename: string,
   ): Promise<DeleteFileResponseDto> {

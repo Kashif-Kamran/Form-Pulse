@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Download, Trash2, Eye } from "lucide-react";
+import { FileText, Trash2, Eye } from "lucide-react";
 import { ResourceDocumentPublic } from "@repo/shared";
 import { useDeleteResource } from "@/hooks/api/resources.hook";
 import { useToast } from "@/hooks/use-toast";
@@ -11,6 +11,7 @@ interface ResourcesListProps {
   documents: ResourceDocumentPublic[];
   isLoading: boolean;
   onViewDocument: (document: ResourceDocumentPublic) => void;
+  isAdmin?: boolean;
 }
 
 const getFullUrl = (url: string) => {
@@ -21,6 +22,7 @@ export function ResourcesList({
   documents,
   isLoading,
   onViewDocument,
+  isAdmin = false,
 }: ResourcesListProps) {
   const { toast } = useToast();
   const deleteResourceMutation = useDeleteResource({
@@ -152,15 +154,18 @@ export function ResourcesList({
                     View
                   </Button>
 
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDeleteDocument(document.filename)}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    disabled={deleteResourceMutation.isPending}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  {/* Only show delete button to admins */}
+                  {isAdmin && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDeleteDocument(document.filename)}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      disabled={deleteResourceMutation.isPending}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
